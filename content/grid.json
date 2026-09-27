@@ -4,7 +4,71 @@
   "howToRead": "Find where the client says they are, then where they behave. The gap between the two is the engagement.",
   "rowAxisLabel": "Business model",
   "columnAxisLabel": "Service scenario (Gartner)",
-  "columnSource": "Service scenarios adapted from Gartner's four field service operating scenarios. Business-model spectrum and coherence band: RSM analysis.",
+  "sources": {
+    "rows": {
+      "summary": "The business-model spectrum follows TSIA's research on field services moving from cost center to profit engine to outcome-based offers, and the four supplier levels in B4B. The self-rating statements, conversation guides, and coherence band are RSM analysis.",
+      "refs": [
+        {
+          "publisher": "TSIA",
+          "title": "Field Services as a Profit Engine in Healthcare and Industrial Technology",
+          "year": "2026",
+          "url": "https://www.tsia.com/blog/field-services-profit-engine-healthcare-industrial-technology",
+          "note": "Cost center to profit engine to strategic contributor."
+        },
+        {
+          "publisher": "TSIA",
+          "title": "B4B: How Technology and Big Data Are Reinventing the Customer-Supplier Relationship (Wood, Hewlin, Lah)",
+          "year": "2013",
+          "url": "https://www.tsia.com/blog/success-in-the-new-b4b-era",
+          "note": "Four supplier levels, from make-sell-ship to charging only for outcomes."
+        },
+        {
+          "publisher": "TSIA",
+          "title": "The State of Field Services 2025",
+          "year": "2025",
+          "url": "https://www.tsia.com/blog/state-of-field-services-2025"
+        },
+        {
+          "publisher": "TSIA",
+          "title": "Field Services research area",
+          "year": "2026",
+          "url": "https://www.tsia.com/research-area/field-services"
+        }
+      ]
+    },
+    "columns": {
+      "summary": "The four service scenarios come from Gartner's The Future of Field Service Management, which separates them on two factors: control and accountability over equipment outcomes, and service complexity and asset focus. Gartner's Critical Capabilities for Field Service Management then scored vendors against three of them as use cases (appointment-, equipment-, and outcome-centric); knowledge-centric appears in the scenarios only. Gartner retired the Magic Quadrant and Critical Capabilities for this market after 2022 and now publishes a Market Guide.",
+      "refs": [
+        {
+          "publisher": "Gartner",
+          "title": "The Future of Field Service Management",
+          "year": "2019",
+          "url": "https://www.gartner.com/en/documents/3975996",
+          "note": "The four operating scenarios. Subscription required."
+        },
+        {
+          "publisher": "Gartner",
+          "title": "Critical Capabilities for Field Service Management",
+          "year": "2021",
+          "url": "https://www.gartner.com/en/documents/4007807",
+          "note": "Use cases: appointment-centric, equipment-centric, outcome-centric. Subscription required."
+        },
+        {
+          "publisher": "Gartner",
+          "title": "Market Guide for Field Service Management",
+          "year": "2025",
+          "url": "https://www.gartner.com/en/documents/6311147",
+          "note": "Current coverage. Subscription required."
+        },
+        {
+          "publisher": "Resco",
+          "title": "4 field service operating scenarios of the future: Which road will you take?",
+          "url": "https://www.resco.net/learning/field-service-scenarios/",
+          "note": "Public summary of the Gartner scenarios."
+        }
+      ]
+    }
+  },
   "comingLabel": "Blueprint in development",
   "coherence": [
     {
@@ -32,17 +96,129 @@
     {
       "id": "servitization",
       "label": "Servitizing",
-      "description": "Service is sold as a promised outcome rather than as labor and parts."
+      "description": "Service is sold as a promised outcome rather than as labor and parts.",
+      "profile": {
+        "model": "Outcome-driven model",
+        "headline": "Servitizing customers care about driving long-term business outcomes.",
+        "audience": "Chief Operating Officer",
+        "says": {
+          "goals": "Our whole business has become a service business. We make products, but we sell them as services that drive customer outcomes.",
+          "success": "We're successful when our customers reach their goals, because our business model is built on outcomes.",
+          "pricing": "We sell our products and services on an outcome basis."
+        },
+        "caresAbout": [
+          {
+            "lead": "Long-term profitability by",
+            "items": [
+              "Differentiating from competitors",
+              "Growing top-line revenue",
+              "Opening new revenue streams",
+              "Driving business transformation"
+            ]
+          }
+        ],
+        "challenges": [
+          "Commoditization that squeezes profit and blurs differentiation",
+          "Competitors testing new business models that disrupt the market",
+          "Rising customer expectations for new services",
+          "Connected equipment (IoT) that demands new capabilities"
+        ],
+        "starters": [
+          "What is your strategy for differentiating as your products commoditize?",
+          "What role do services play in your long-term business strategy?",
+          "Do you have a plan to open new revenue streams through service?",
+          "Are you developing any product-as-a-service offers?",
+          "How are you responding to competitors who are?"
+        ]
+      }
     },
     {
       "id": "profit-center",
       "label": "Profit Center",
-      "description": "Service is its own margin line with revenue and margin targets."
+      "description": "Service is its own margin line with revenue and margin targets.",
+      "profile": {
+        "model": "Profit center model",
+        "headline": "Profit center customers care about increasing margins.",
+        "audience": "Vice President of Service",
+        "says": {
+          "goals": "Service keeps our products running, but more importantly it sets us apart from the competition.",
+          "success": "We're successful when outstanding service builds customer loyalty and delivers strong margins.",
+          "pricing": "We sell our services at a fixed price."
+        },
+        "caresAbout": [
+          {
+            "lead": "Differentiated service by",
+            "items": [
+              "Finding issues before the customer does",
+              "Limiting equipment downtime",
+              "Sending technicians who are prepared",
+              "Fixing it the first time"
+            ]
+          },
+          {
+            "lead": "Strong margins by",
+            "items": [
+              "Managing resources well",
+              "Capturing sales opportunities in the field",
+              "Eliminating unnecessary service calls"
+            ]
+          }
+        ],
+        "challenges": [
+          "Failures that cannot be anticipated, which raise downtime and frustrate customers",
+          "Unprepared technicians, which cut efficiency and satisfaction",
+          "No customer history in the field, so preferences are missed",
+          "No sales tools in the field, so upsell and cross-sell are lost",
+          "Unnecessary visits that erode productivity and margin"
+        ],
+        "starters": [
+          "What are you doing to stay competitive as products commoditize?",
+          "How are you making sure service helps you stand out from competitors?",
+          "How often do customers get frustrated because a technician could not fix it the first time?",
+          "How often do maintenance issues take more than one visit?",
+          "How do you make sure the right people, tools, and parts reach each visit?"
+        ]
+      }
     },
     {
       "id": "cost-center",
       "label": "Cost Center",
-      "description": "Service exists to protect the product sale and is managed to cost."
+      "description": "Service exists to protect the product sale and is managed to cost.",
+      "profile": {
+        "model": "Cost center model",
+        "headline": "Cost center customers care about minimizing expenses.",
+        "audience": "Director of Field Service",
+        "says": {
+          "goals": "Our service organization exists to support the products we make and repair them when they break.",
+          "success": "We're successful when we service our products effectively while keeping costs down.",
+          "pricing": "We price the service we provide on a cost-plus basis."
+        },
+        "caresAbout": [
+          {
+            "lead": "Reducing service cost by",
+            "items": [
+              "Minimizing equipment downtime",
+              "Raising first-time fix rates",
+              "Maximizing technician productivity",
+              "Optimizing service scheduling"
+            ]
+          }
+        ],
+        "challenges": [
+          "Little visibility into asset performance, so failures are hard to anticipate",
+          "Limited diagnostics, so technicians cannot spot the issue before they arrive",
+          "Low first-time fix rates, which raise the cost of every job",
+          "Technicians, tools, and parts that are not coordinated",
+          "Service calls that did not need to happen"
+        ],
+        "starters": [
+          "How often do technicians need more than one visit to close a request?",
+          "What does it cost every time you dispatch a technician to a customer site?",
+          "How do you usually learn that equipment is failing?",
+          "How often do you send a technician to check equipment that turns out to be working?",
+          "How often can a technician not fix the issue because they lack the right parts, tools, or expertise?"
+        ]
+      }
     }
   ],
   "columns": [

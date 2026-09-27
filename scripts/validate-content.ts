@@ -84,6 +84,13 @@ if (contrastFile && blueprintFiles.includes(contrastFile)) {
   if (cellId(bp.cell.row, bp.cell.column) !== cellId(contrastCell.row, contrastCell.column)) fail(`${contrastFile}: cell does not match file name`);
 }
 
+// ---- self-rating statements ----
+for (const r of grid.rows) {
+  for (const q of intake.claim.selfRating) if (!r.profile.says[q.id]) fail(`grid.json: row ${r.id} has no "${q.id}" self-rating statement`);
+  for (const k of Object.keys(r.profile.says))
+    if (!intake.claim.selfRating.some((q) => q.id === k)) fail(`grid.json: row ${r.id} has a statement for unknown self-rating question ${k}`);
+}
+
 // ---- intake ----
 const questionIds = intake.questions.map((q) => q.id);
 for (const q of intake.questions) {
