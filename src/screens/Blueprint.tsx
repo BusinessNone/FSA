@@ -17,9 +17,12 @@ const tabs: { id: BlueprintTab; label: string }[] = [
 interface Props {
   tab: BlueprintTab;
   onTab: (t: BlueprintTab) => void;
+  notes: Record<string, string>;
+  setNotes: (n: Record<string, string>) => void;
+  customerName: string;
 }
 
-export function Blueprint({ tab, onTab }: Props) {
+export function Blueprint({ tab, onTab, notes, setNotes, customerName }: Props) {
   return (
     <div className="space-y-5">
       <Card className="p-5">
@@ -53,7 +56,7 @@ export function Blueprint({ tab, onTab }: Props) {
       <div role="tabpanel" id={`panel-${tab}`} aria-labelledby={`tab-${tab}`} className="animate-rise" key={tab}>
         {tab === "jobs" && <Jobs />}
         {tab === "kpis" && <Kpis />}
-        {tab === "questions" && <Questions />}
+        {tab === "questions" && <Questions notes={notes} setNotes={setNotes} customerName={customerName} />}
         {tab === "process" && <Process />}
       </div>
     </div>
@@ -161,11 +164,12 @@ function Kpis() {
   );
 }
 
-function Questions() {
+function Questions({ notes, setNotes, customerName }: { notes: Record<string, string>; setNotes: (n: Record<string, string>) => void; customerName: string }) {
   const [area, setArea] = useState<string>(bp.processAreas[0].id);
   const [copied, setCopied] = useState<"idle" | "ok" | "fail">("idle");
   const { active, complete } = useCues();
-  const markdown = () => questionSetMarkdown(bp, client.name, client.fictionalBadge.toLowerCase());
+  const markdown = () =>
+    questionSetMarkdown(bp, customerName, customerName === client.name ? client.fictionalBadge.toLowerCase() : "customer record", notes);
   const numbered = bp.processAreas.flatMap((a) => bp.questionSet.filter((q) => q.area === a.id));
   const shown = area === "all" ? numbered : numbered.filter((q) => q.area === area);
 
@@ -249,6 +253,16 @@ function Questions() {
                       </ul>
                     </div>
                   </div>
+                  <label className="mt-4 block">
+                    <span className="sr-only">Notes from the call</span>
+                    <textarea
+                      value={notes[q.id] ?? ""}
+                      onChange={(e) => setNotes({ ...notes, [q.id]: e.target.value })}
+                      rows={notes[q.id] ? 3 : 1}
+                      placeholder="Notes from the call: what the customer actually said"
+                      className="w-full resize-y rounded border border-line bg-surface-2/50 px-2.5 py-1.5 text-sm text-ink placeholder:text-muted focus:border-accent focus:bg-surface"
+                    />
+                  </label>
                 </div>
               </div>
             </Card>

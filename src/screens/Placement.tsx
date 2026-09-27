@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { cellById, client, contrastBlueprint, grid, intake, meridianAnswers, type GridCell } from "../content";
+import { cellId } from "../../shared/api";
+import type { CellRef } from "../lib/record";
 import type { PlacementState } from "../lib/usePlacement";
 import { GridView } from "../components/GridView";
 import { Button, Card, cx, Icon, SectionLabel, Tag } from "../components/ui";
@@ -14,21 +16,30 @@ const presetCue: Record<string, ActiveCue> = {
 interface Props {
   answers: Record<string, string>;
   setAnswers: (a: Record<string, string>) => void;
+  claimed: CellRef;
+  setClaimed: (c: CellRef) => void;
+  customerName: string;
+  onRestore: () => void;
   placement: PlacementState;
   onOpenBlueprint: () => void;
+  onOpenRecord: () => void;
 }
 
-export function Placement({ answers, setAnswers, placement, onOpenBlueprint }: Props) {
+export function Placement({ answers, setAnswers, claimed, setClaimed, customerName, onRestore, placement, onOpenBlueprint, onOpenRecord }: Props) {
   const placed = placement.result ? cellById(placement.result.cell) : undefined;
+  const claimedCell = cellById(cellId(claimed.row, claimed.column));
   const { active: cue } = useCues();
   const [inspectId, setInspectId] = useState<string | undefined>();
-  const edited = intake.questions.some((q) => answers[q.id] !== meridianAnswers[q.id]);
+  const edited =
+    intake.questions.some((q) => answers[q.id] !== meridianAnswers[q.id]) ||
+    claimed.row !== intake.claim.meridian.row ||
+    claimed.column !== intake.claim.meridian.column;
 
   // A new placement clears any cell the user was inspecting.
   useEffect(() => setInspectId(undefined), [placed?.id]);
 
   const inspected = inspectId && inspectId !== placed?.id ? cellById(inspectId) : undefined;
-  const restore = () => setAnswers({ ...meridianAnswers });
+  const restore = onRestore;
 
   return (
     <div className="grid gap-6 xl:grid-cols-[minmax(0,4fr)_minmax(0,6fr)]">
@@ -46,12 +57,16 @@ export function Placement({ answers, setAnswers, placement, onOpenBlueprint }: P
         <p className="mb-4 text-sm text-muted">{intake.intro}</p>
         <div className="mb-4 flex flex-wrap gap-2" role="group" aria-label="Answer presets">
           {intake.presets.map((p) => {
-            const active = intake.questions.every((q) => answers[q.id] === p.answers[q.id]);
+            const active =
+              intake.questions.every((q) => answers[q.id] === p.answers[q.id]) && claimed.row === p.claimed.row && claimed.column === p.claimed.column;
             return (
               <button
                 key={p.id}
                 type="button"
-                onClick={() => setAnswers({ ...p.answers })}
+                onClick={() => {
+                  setAnswers({ ...p.answers });
+                  setClaimed({ ...p.claimed });
+                }}
                 aria-pressed={active}
                 className={cx(
                   "rounded-full border px-3 py-1 text-xs font-medium transition",
@@ -64,7 +79,7 @@ export function Placement({ answers, setAnswers, placement, onOpenBlueprint }: P
             );
           })}
         </div>
-        <IntakeStepper answers={answers} setAnswers={setAnswers} />
+        <IntakeStepper answers={answers} setAnswers={setAnswers} claimed={claimed} setClaimed={setClaimed} customerName={customerName} onOpenRecord={onOpenRecord} />
       </section>
 
       <section aria-labelledby="grid-title" className="min-w-0 space-y-4">
@@ -77,6 +92,7 @@ export function Placement({ answers, setAnswers, placement, onOpenBlueprint }: P
         <Card className="p-4">
           <GridView
             placedId={placed?.id}
+            claimedId={claimedCell?.id}
             selectedId={inspectId}
             pending={placement.status === "loading"}
             onSelect={(c) => (c.id === placed?.id && c.depth === "deep" ? onOpenBlueprint() : setInspectId(c.id))}
@@ -94,7 +110,14 @@ export function Placement({ answers, setAnswers, placement, onOpenBlueprint }: P
         )}
 
         {placed && placement.result && (
-          <PlacementResult cell={placed} rationale={placement.result.rationale} onOpenBlueprint={onOpenBlueprint} onRestore={restore} />
+          <PlacementResult
+            cell={placed}
+            claimedCell={claimedCell}
+            customerName={customerName}
+            rationale={placement.result.rationale}
+            onOpenBlueprint={onOpenBlueprint}
+            onRestore={restore}
+          />
         )}
 
         {inspected && <InspectCell cell={inspected} onClose={() => setInspectId(undefined)} />}
@@ -105,11 +128,15 @@ export function Placement({ answers, setAnswers, placement, onOpenBlueprint }: P
 
 function PlacementResult({
   cell,
+  claimedCell,
+  customerName,
   rationale,
   onOpenBlueprint,
   onRestore,
 }: {
   cell: GridCell;
+  claimedCell?: GridCell;
+  customerName: string;
   rationale: string;
   onOpenBlueprint: () => void;
   onRestore: () => void;
@@ -125,6 +152,7 @@ function PlacementResult({
       </div>
       <h3 className="mt-2 text-xl font-semibold">{cell.title}</h3>
       <CoherenceLine cell={cell} />
+      {claimedCell && <SaysDoes claimed={claimedCell} actual={cell} name={customerName} />}
       <p className="mt-3 max-w-prose leading-relaxed">{rationale}</p>
 
       {cell.depth === "deep" && (
@@ -224,106 +252,158 @@ function CoherenceLine({ cell }: { cell: GridCell }) {
   );
 }
 
-// One question at a time, in the style of a step-through form card.
-function IntakeStepper({ answers, setAnswers }: { answers: Record<string, string>; setAnswers: (a: Record<string, string>) => void }) {
+// One question at a time, laid out like a Microsoft Adaptive Card: an emphasis header,
+// a text block, an expanded choice set, a separator, an action set, and a fact set.
+// Step 0 captures where the client says they are; the rest capture how they behave.
+function IntakeStepper({
+  answers,
+  setAnswers,
+  claimed,
+  setClaimed,
+  customerName,
+  onOpenRecord,
+}: {
+  answers: Record<string, string>;
+  setAnswers: (a: Record<string, string>) => void;
+  claimed: CellRef;
+  setClaimed: (c: CellRef) => void;
+  customerName: string;
+  onOpenRecord: () => void;
+}) {
   const [index, setIndex] = useState(0);
-  const q = intake.questions[index];
-  const total = intake.questions.length;
+  const [showFacts, setShowFacts] = useState(false);
+  const total = intake.questions.length + 1;
   const last = index === total - 1;
+  const q = index > 0 ? intake.questions[index - 1] : undefined;
+  const claim = intake.claim;
+  const claimedTitle = cellById(cellId(claimed.row, claimed.column))?.title;
+  const acButton = "inline-flex items-center justify-center gap-1.5 rounded px-4 py-1.5 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-40";
+
+  const choice = (name: string, value: string, checked: boolean, label: string, onChange: () => void, hint?: string) => (
+    <label key={value} className="flex cursor-pointer items-start gap-2.5 rounded px-1.5 py-1.5 text-sm hover:bg-surface-2">
+      <input type="radio" name={name} value={value} checked={checked} onChange={onChange} className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--accent-text)]" />
+      <span className={cx("flex-1 leading-snug text-ink", checked && "font-semibold")}>{label}</span>
+      {hint && <span className="shrink-0 text-[0.7rem] text-muted">{hint}</span>}
+    </label>
+  );
 
   return (
-    <div className="space-y-4">
-      <div className="stepper-bg rounded-3xl p-4 sm:p-5">
-        <ol className="mb-4 flex gap-1.5" aria-label="Question progress">
-          {intake.questions.map((item, i) => (
-            <li key={item.id} className="flex-1">
-              <button
-                type="button"
-                onClick={() => setIndex(i)}
-                aria-label={`Question ${i + 1}`}
-                aria-current={i === index ? "step" : undefined}
-                className={cx("block h-1.5 w-full rounded-full transition", i === index ? "bg-[#009cde]" : i < index ? "bg-white" : "bg-white/25 hover:bg-white/50")}
-              />
-            </li>
-          ))}
-        </ol>
-
-        <fieldset key={q.id} className="card-shadow animate-rise rounded-2xl bg-surface p-5 sm:p-6">
-          <div className="text-3xl font-bold text-line" aria-hidden>
-            Q{index + 1}
+    <div className="overflow-hidden rounded-lg border border-line bg-surface shadow-sm">
+      <div className="flex items-center gap-3 bg-surface-2 px-4 py-3">
+        <img src="/favicon.svg" alt="" className="h-9 w-9 rounded" />
+        <div className="min-w-0 flex-1">
+          <div className="text-sm font-bold text-ink">Placement intake</div>
+          <div className="truncate text-xs text-muted">
+            {customerName} · {index === 0 ? "Claim" : `Question ${index} of ${total - 1}`}
           </div>
-          <legend className="sr-only">
-            Question {index + 1} of {total}
-          </legend>
-          <p className="mt-2 text-xl font-semibold leading-snug text-ink">{q.prompt}</p>
-          <div className="mt-4 space-y-2" role="radiogroup" aria-label={q.prompt}>
-            {q.options.map((o) => {
-              const checked = answers[q.id] === o.id;
-              const isMeridian = o.id === q.meridianAnswer;
-              return (
-                <label
-                  key={o.id}
-                  className={cx(
-                    "flex cursor-pointer items-center gap-3 rounded-xl border px-3.5 py-3 text-sm transition",
-                    checked ? "border-accent bg-accent-soft ring-1 ring-accent" : "border-line hover:border-muted",
-                  )}
-                >
-                  <input
-                    type="radio"
-                    name={`q-${q.id}`}
-                    value={o.id}
-                    checked={checked}
-                    onChange={() => setAnswers({ ...answers, [q.id]: o.id })}
-                    className="h-4 w-4 shrink-0 accent-[var(--accent)]"
-                  />
-                  <span className={cx("flex-1 leading-snug", checked ? "font-medium text-ink" : "text-ink/85")}>{o.label}</span>
-                  {isMeridian && !checked && <span className="shrink-0 rounded-full bg-surface-2 px-2 py-0.5 text-[0.65rem] font-semibold text-muted">{client.shortName}</span>}
-                </label>
-              );
-            })}
+        </div>
+        <button type="button" onClick={onOpenRecord} className="shrink-0 rounded px-2 py-1 text-xs font-semibold text-accent-text hover:bg-surface">
+          Reimport past answers
+        </button>
+      </div>
+      <div className="flex h-1 bg-line" aria-hidden>
+        <div className="bg-accent transition-all duration-300" style={{ width: `${((index + 1) / total) * 100}%` }} />
+      </div>
+
+      {!q ? (
+        <fieldset key="claim" className="animate-rise px-4 pb-4 pt-4">
+          <legend className="sr-only">{claim.prompt}</legend>
+          <div className="text-xs font-semibold uppercase tracking-wide text-accent-text">{claim.short}</div>
+          <p className="mt-1 text-lg font-bold leading-snug text-ink">{claim.prompt}</p>
+          <p className="mt-1 text-sm text-muted">{claim.help}</p>
+          <div className="mt-3 grid gap-4 sm:grid-cols-2">
+            <div role="radiogroup" aria-label={claim.rowPrompt}>
+              <div className="mb-1 px-1.5 text-xs font-semibold text-muted">{claim.rowPrompt}</div>
+              {grid.rows.map((r) =>
+                choice("claim-row", r.id, claimed.row === r.id, r.label, () => setClaimed({ ...claimed, row: r.id }), r.id === claim.meridian.row && claimed.row !== r.id ? `${client.shortName}` : undefined),
+              )}
+            </div>
+            <div role="radiogroup" aria-label={claim.columnPrompt}>
+              <div className="mb-1 px-1.5 text-xs font-semibold text-muted">{claim.columnPrompt}</div>
+              {grid.columns.map((c) =>
+                choice("claim-col", c.id, claimed.column === c.id, c.label, () => setClaimed({ ...claimed, column: c.id }), c.id === claim.meridian.column && claimed.column !== c.id ? `${client.shortName}` : undefined),
+              )}
+            </div>
           </div>
         </fieldset>
+      ) : (
+        <fieldset key={q.id} className="animate-rise px-4 pb-4 pt-4">
+          <legend className="sr-only">
+            Question {index} of {total - 1}
+          </legend>
+          <div className="text-xs font-semibold uppercase tracking-wide text-accent-text">{q.short}</div>
+          <p className="mt-1 text-lg font-bold leading-snug text-ink">{q.prompt}</p>
+          <div className="mt-3 space-y-1" role="radiogroup" aria-label={q.prompt}>
+            {q.options.map((o) =>
+              choice(
+                `q-${q.id}`,
+                o.id,
+                answers[q.id] === o.id,
+                o.label,
+                () => setAnswers({ ...answers, [q.id]: o.id }),
+                o.id === q.meridianAnswer && answers[q.id] !== o.id ? `${client.shortName}'s answer` : undefined,
+              ),
+            )}
+          </div>
+        </fieldset>
+      )}
 
-        <div className="mt-4 flex items-center justify-between gap-3">
-          <button
-            type="button"
-            onClick={() => setIndex(index - 1)}
-            disabled={index === 0}
-            className="rounded-full px-4 py-2 text-sm font-semibold text-white/80 transition hover:text-white disabled:opacity-0"
-          >
+      <div className="border-t border-line px-4 py-3">
+        <div className="flex flex-wrap items-center gap-2">
+          <button type="button" onClick={() => setIndex(index - 1)} disabled={index === 0} className={cx(acButton, "border border-line bg-surface text-ink hover:bg-surface-2")}>
             Back
           </button>
-          <span className="text-xs text-white/70 tabular-nums">
-            {index + 1} / {total}
-          </span>
-          <button
-            type="button"
-            onClick={() => setIndex(index + 1)}
-            disabled={last}
-            className="min-w-32 rounded-full bg-white px-6 py-2.5 text-sm font-semibold text-[#00153d] shadow-md transition hover:bg-white/90 disabled:bg-white/30 disabled:text-white/70 disabled:shadow-none"
-          >
-            {last ? "All answered" : "Next"}
+          <button type="button" onClick={() => setIndex(index + 1)} disabled={last} className={cx(acButton, "bg-accent-text text-white hover:opacity-90 dark:bg-accent dark:text-accent-ink")}>
+            Next
+          </button>
+          <button type="button" onClick={() => setShowFacts((v) => !v)} aria-expanded={showFacts} className={cx(acButton, "ml-auto px-2 text-accent-text hover:bg-surface-2")}>
+            {showFacts ? "Hide answers" : "All answers"}
           </button>
         </div>
       </div>
 
-      <details className="group rounded-2xl border border-line/70 bg-surface px-4 py-3 text-sm">
-        <summary className="cursor-pointer select-none font-semibold text-ink">All answers</summary>
-        <ol className="mt-2 space-y-1.5">
+      {showFacts && (
+        <dl className="animate-rise grid grid-cols-[minmax(8rem,auto)_1fr] gap-x-4 gap-y-1.5 border-t border-line bg-surface-2/60 px-4 py-3 text-sm">
+          <dt className="font-semibold text-ink">
+            <button type="button" onClick={() => setIndex(0)} className="text-left hover:underline">
+              {claim.short}
+            </button>
+          </dt>
+          <dd className="text-muted">{claimedTitle}</dd>
           {intake.questions.map((item, i) => {
             const answer = item.options.find((o) => o.id === answers[item.id]);
             const changed = answers[item.id] !== item.meridianAnswer;
             return (
-              <li key={item.id}>
-                <button type="button" onClick={() => setIndex(i)} className="w-full rounded-lg px-2 py-1 text-left hover:bg-surface-2">
-                  <span className="text-muted tabular-nums">Q{i + 1}. </span>
-                  <span className={cx(changed && "font-medium text-accent-text")}>{answer?.label}</span>
-                </button>
-              </li>
+              <div key={item.id} className="contents">
+                <dt className="font-semibold text-ink">
+                  <button type="button" onClick={() => setIndex(i + 1)} className="text-left hover:underline">
+                    {item.short}
+                  </button>
+                </dt>
+                <dd className={cx("text-muted", changed && "font-medium text-accent-text")}>{answer?.label}</dd>
+              </div>
             );
           })}
-        </ol>
-      </details>
+        </dl>
+      )}
+    </div>
+  );
+}
+
+function SaysDoes({ claimed, actual, name }: { claimed: GridCell; actual: GridCell; name: string }) {
+  const gap = claimed.id !== actual.id;
+  const fill = (t: string) => t.replace("{name}", name).replace("{claimed}", claimed.title).replace("{actual}", actual.title);
+  return (
+    <div className={cx("mt-3 rounded-lg border px-3 py-2.5 text-sm", gap ? "border-warn/50 bg-warn-soft" : "border-positive/40 bg-positive-soft")}>
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-semibold">
+        <span className="inline-flex items-center gap-1.5">
+          <span className="h-3 w-3 rounded-full border-2 border-ink border-dashed" aria-hidden /> Says: {claimed.title}
+        </span>
+        <span className="inline-flex items-center gap-1.5">
+          <span className="h-3 w-3 rounded-full bg-ink" aria-hidden /> Does: {actual.title}
+        </span>
+      </div>
+      <p className="mt-1.5 text-ink">{fill(gap ? intake.claim.gapText : intake.claim.matchText)}</p>
     </div>
   );
 }

@@ -46,6 +46,16 @@ export const configSchema = z.object({
 });
 
 // ---------- client.json ----------
+export const profileSchema = z.object({
+  name: text,
+  industry: z.string(),
+  revenue: z.string(),
+  technicians: z.string(),
+  branches: z.string(),
+  systems: z.string(),
+  contact: z.string(),
+});
+
 export const clientSchema = z.object({
   name: text,
   shortName: text,
@@ -56,6 +66,7 @@ export const clientSchema = z.object({
   today: text,
   ambition: text,
   painPoints: z.array(text).min(1),
+  record: z.object({ notice: text, profile: profileSchema }),
 });
 
 // ---------- grid.json ----------
@@ -89,12 +100,25 @@ export const gridSchema = z.object({
 });
 
 // ---------- intake.json ----------
+const cellRefSchema = z.object({ row: id, column: id });
+
 export const intakeSchema = z.object({
   intro: text,
+  claim: z.object({
+    short: text,
+    prompt: text,
+    help: text,
+    rowPrompt: text,
+    columnPrompt: text,
+    meridian: cellRefSchema,
+    gapText: text,
+    matchText: text,
+  }),
   questions: z
     .array(
       z.object({
         id,
+        short: text,
         prompt: text,
         options: z.array(z.object({ id, label: text })).min(2),
         meridianAnswer: id,
@@ -103,7 +127,7 @@ export const intakeSchema = z.object({
     .min(6)
     .max(8),
   presets: z
-    .array(z.object({ id, label: text, answers: z.record(z.string(), id) }))
+    .array(z.object({ id, label: text, answers: z.record(z.string(), id), claimed: cellRefSchema }))
     .min(1),
 });
 
@@ -244,6 +268,7 @@ export const payoffSchema = z.object({
 export type Config = z.infer<typeof configSchema>;
 export type CueId = z.infer<typeof cueIdSchema>;
 export type Client = z.infer<typeof clientSchema>;
+export type Profile = z.infer<typeof profileSchema>;
 export type Grid = z.infer<typeof gridSchema>;
 export type Depth = z.infer<typeof depthSchema>;
 export type Coherence = z.infer<typeof coherenceSchema>;

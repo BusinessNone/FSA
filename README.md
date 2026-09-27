@@ -56,6 +56,15 @@ The scoring weights and rationale sentences are in `worker/placement-rubric.json
 
 If you add an intake question or option, add its signals to the rubric too; `npm run validate` flags any gap and re-checks that Meridian's defaults still land the deep cell, and that the presets land the contrast cell and a coming cell.
 
+## Customer records
+
+Every session starts on the fictional client, Meridian. To capture a real customer, open **Customer record** in the sidebar and change the name; the header then shows it as a customer record.
+
+- **Captured:** facts and figures (name, industry, revenue, technicians, branches, systems, contact), where the client **says** it is (the first intake step), where its answers place it (**does**), all intake answers, the placement rationale, notes against each question-set question, and general notes.
+- **Export:** JSON (the full record) or CSV (one row per fact, with the customer name on every row, so exports from many customers stack in one spreadsheet). File them wherever the team keeps customer records.
+- **Reimport past answers:** open an exported JSON or CSV to pick a customer back up.
+- **Storage:** nothing is sent to the site. While a customer record is open, a working copy stays in this browser and is offered as **Resume** later; it never loads on its own. **Discard** removes it.
+
 ## Presenting
 
 - **Guided Tour** (default): Next and Back, or the arrow keys (PageUp and PageDown work for clickers). Each step shows a one-line talk track.

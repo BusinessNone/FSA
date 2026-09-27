@@ -95,6 +95,10 @@ for (const p of intake.presets) {
   }
 }
 
+const validClaim = (c: { row: string; column: string }) => rowIds.includes(c.row) && colIds.includes(c.column);
+if (!validClaim(intake.claim.meridian)) fail("intake.json: claim.meridian is not a grid cell");
+for (const p of intake.presets) if (!validClaim(p.claimed)) fail(`intake.json: preset ${p.id} claimed is not a grid cell`);
+
 // ---- deviations ----
 for (const r of deviations.requests) {
   if (!config.crim.types.includes(r.crimType)) fail(`deviations.json: ${r.id} crimType "${r.crimType}" is not in config.crim.types`);

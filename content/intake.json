@@ -1,8 +1,22 @@
 {
   "intro": "Plain-language questions a consultant can ask in the first conversation. Meridian's answers are pre-filled; change any of them to see the placement move.",
+  "claim": {
+    "short": "What the client says",
+    "prompt": "Where does the client say they are?",
+    "help": "Capture the client's own description first, before the behavior questions.",
+    "rowPrompt": "Business model they describe",
+    "columnPrompt": "Service scenario they describe",
+    "meridian": {
+      "row": "servitization",
+      "column": "equipment"
+    },
+    "gapText": "{name} says {claimed}. Its answers place it in {actual}. The gap between the two is the engagement.",
+    "matchText": "{name} says {claimed}, and its answers agree. Says and does line up."
+  },
   "questions": [
     {
       "id": "budget-language",
+      "short": "How service is described",
       "prompt": "How does service leadership describe service in budget meetings?",
       "options": [
         {
@@ -22,6 +36,7 @@
     },
     {
       "id": "priced-separately",
+      "short": "Service pricing",
       "prompt": "Is service priced separately from the equipment?",
       "options": [
         {
@@ -41,6 +56,7 @@
     },
     {
       "id": "installed-asset",
+      "short": "Dispatched against",
       "prompt": "Are technicians dispatched against a customer-owned installed asset?",
       "options": [
         {
@@ -64,6 +80,7 @@
     },
     {
       "id": "entitlements",
+      "short": "Contract entitlements",
       "prompt": "Do contracts carry entitlements such as response time or covered parts?",
       "options": [
         {
@@ -87,6 +104,7 @@
     },
     {
       "id": "job-mix",
+      "short": "Job mix",
       "prompt": "What share of jobs are scheduled appointments versus break-fix on equipment?",
       "options": [
         {
@@ -110,6 +128,7 @@
     },
     {
       "id": "repeat-visit-cause",
+      "short": "Repeat-visit cause",
       "prompt": "When a job does not close on the first visit, what is usually missing?",
       "options": [
         {
@@ -133,6 +152,7 @@
     },
     {
       "id": "customer-success",
+      "short": "What good looks like",
       "prompt": "How does the customer judge a good service visit?",
       "options": [
         {
@@ -156,6 +176,7 @@
     },
     {
       "id": "revenue-owner",
+      "short": "Revenue owner",
       "prompt": "Who owns service revenue targets?",
       "options": [
         {
@@ -187,6 +208,10 @@
         "repeat-visit-cause": "part-or-history",
         "customer-success": "fixed-first-time",
         "revenue-owner": "service-leader"
+      },
+      "claimed": {
+        "row": "servitization",
+        "column": "equipment"
       }
     },
     {
@@ -201,6 +226,10 @@
         "repeat-visit-cause": "slot-slipped",
         "customer-success": "on-time",
         "revenue-owner": "nobody"
+      },
+      "claimed": {
+        "row": "profit-center",
+        "column": "appointment"
       }
     },
     {
@@ -215,6 +244,10 @@
         "repeat-visit-cause": "performance-data",
         "customer-success": "output-met",
         "revenue-owner": "shared-recurring"
+      },
+      "claimed": {
+        "row": "servitization",
+        "column": "outcome"
       }
     }
   ]

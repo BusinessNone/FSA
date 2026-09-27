@@ -1,4 +1,4 @@
-import { cells, client, grid, type GridCell } from "../content";
+import { cells, grid, type GridCell } from "../content";
 import type { Coherence } from "../../shared/schema";
 import { cx, Icon } from "./ui";
 
@@ -21,13 +21,14 @@ const coherenceLabel = Object.fromEntries(grid.coherence.map((c) => [c.id, c.lab
 
 interface Props {
   placedId?: string;
+  claimedId?: string;
   selectedId?: string;
   onSelect?: (cell: GridCell) => void;
   pending?: boolean;
 }
 
 // The TOM grid: business model (rows, top to bottom) by service scenario (columns).
-export function GridView({ placedId, selectedId, onSelect, pending }: Props) {
+export function GridView({ placedId, claimedId, selectedId, onSelect, pending }: Props) {
   return (
     <div className="w-full">
       {/* On narrow screens the grid scrolls inside its card instead of widening the page. */}
@@ -40,7 +41,7 @@ export function GridView({ placedId, selectedId, onSelect, pending }: Props) {
           </div>
         ))}
         {grid.rows.map((r) => (
-          <Row key={r.id} rowId={r.id} label={r.label} description={r.description} placedId={placedId} selectedId={selectedId} onSelect={onSelect} pending={pending} />
+          <Row key={r.id} rowId={r.id} label={r.label} description={r.description} placedId={placedId} claimedId={claimedId} selectedId={selectedId} onSelect={onSelect} pending={pending} />
         ))}
         <div />
         <div className="col-span-4 pt-1 text-center text-[0.7rem] font-semibold uppercase tracking-wider text-muted">{grid.columnAxisLabel} →</div>
@@ -58,12 +59,20 @@ export function GridView({ placedId, selectedId, onSelect, pending }: Props) {
           <span className="h-3 w-3 rounded-sm border border-dashed border-muted" aria-hidden />
           {grid.comingLabel}
         </span>
+        <span className="inline-flex items-center gap-1.5">
+          <span className="rounded-full border-2 border-dashed border-ink px-1.5 text-[0.65rem] font-semibold text-ink">Says</span>
+          where the client claims to be
+        </span>
+        <span className="inline-flex items-center gap-1.5">
+          <span className="rounded-full bg-ink px-1.5 text-[0.65rem] font-semibold text-surface">Does</span>
+          where its answers place it
+        </span>
       </div>
     </div>
   );
 }
 
-function Row({ rowId, label, description, placedId, selectedId, onSelect, pending }: Props & { rowId: string; label: string; description: string }) {
+function Row({ rowId, label, description, placedId, claimedId, selectedId, onSelect, pending }: Props & { rowId: string; label: string; description: string }) {
   return (
     <>
       <div className="flex items-center rounded-lg bg-grid-head px-2 text-sm font-semibold leading-tight text-grid-head-ink" title={description}>
@@ -73,6 +82,7 @@ function Row({ rowId, label, description, placedId, selectedId, onSelect, pendin
         .filter((c) => c.row === rowId)
         .map((c) => {
           const placed = c.id === placedId;
+          const claimed = c.id === claimedId;
           const selected = c.id === selectedId;
           const coming = c.depth === "coming";
           return (
@@ -81,11 +91,11 @@ function Row({ rowId, label, description, placedId, selectedId, onSelect, pendin
               type="button"
               onClick={() => onSelect?.(c)}
               aria-pressed={selected}
-              aria-label={`${c.title}. ${coherenceLabel[c.coherence]}: ${c.signal}. ${depthLabel[c.depth]}.${placed ? ` ${client.shortName} is placed here.` : ""}`}
+              aria-label={`${c.title}. ${coherenceLabel[c.coherence]}: ${c.signal}. ${depthLabel[c.depth]}.${claimed ? " The client says it is here." : ""}${placed ? " Its answers place it here." : ""}`}
               className={cx(
                 "relative flex min-h-[6rem] min-w-0 flex-col justify-between rounded-lg border p-2.5 text-left transition",
                 coherenceStyle[c.coherence],
-                coming && !placed && "opacity-55 hover:opacity-90",
+                coming && !placed && !claimed && "opacity-55 hover:opacity-90",
                 placed && "z-10 opacity-100 ring-4 ring-ink ring-offset-2 ring-offset-surface",
                 selected && !placed && "ring-2 ring-muted ring-offset-1 ring-offset-surface",
                 placed && pending && "opacity-60",
@@ -93,11 +103,20 @@ function Row({ rowId, label, description, placedId, selectedId, onSelect, pendin
             >
               <span className="text-[0.7rem] font-bold uppercase tracking-wide opacity-80">{coherenceLabel[c.coherence]}</span>
               <span className="mt-1 text-xs font-medium leading-snug">{c.signal}</span>
-              <span className="mt-2 flex items-center justify-between gap-1">
-                {placed ? (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-ink px-2 py-0.5 text-[0.7rem] font-semibold text-surface animate-rise">
-                    <Icon name="pin" className="h-3 w-3" />
-                    {client.shortName}
+              <span className="mt-2 flex flex-wrap items-center justify-between gap-1">
+                {placed || claimed ? (
+                  <span className="flex flex-wrap gap-1">
+                    {claimed && (
+                      <span className="inline-flex items-center gap-1 rounded-full border-2 border-dashed border-current bg-surface/80 px-2 py-0.5 text-[0.7rem] font-semibold text-ink animate-rise">
+                        Says
+                      </span>
+                    )}
+                    {placed && (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-ink px-2 py-0.5 text-[0.7rem] font-semibold text-surface animate-rise">
+                        <Icon name="pin" className="h-3 w-3" />
+                        Does
+                      </span>
+                    )}
                   </span>
                 ) : (
                   <span className={cx("text-[0.65rem] font-semibold opacity-75", coming && "italic")}>{c.depth === "coming" ? "In development" : depthLabel[c.depth]}</span>
