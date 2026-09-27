@@ -69,3 +69,24 @@ describe("loading records to compare", () => {
     expect(() => parseRecordFile("a,b\n1,2\n", "x.csv")).toThrow();
   });
 });
+
+describe("sample customers", () => {
+  it("are full records that reimport with their answers and facts", async () => {
+    const { importRecord } = await import("../src/lib/record");
+    for (const e of sampleEntries()) {
+      const csv = combinedCsv([e]);
+      const back = importRecord(csv, { profile: { ...defaultProfile() }, claimed: { row: "cost-center", column: "appointment" }, answers: {}, questionNotes: {}, notes: "" });
+      const sample = compare.samples.find((s) => s.name === e.name)!;
+      expect(back.profile.name).toBe(sample.name);
+      expect(back.profile.sector).toBe(sample.sector);
+      expect(back.answers).toEqual(sample.answers);
+      expect(`${back.claimed.row}__${back.claimed.column}`).toBe(sample.claimed);
+      expect(e.actual?.id).toBe(sample.actual);
+    }
+  });
+
+  it("span every FY27 industry", () => {
+    const used = new Set(compare.samples.map((s) => s.industry));
+    for (const i of compare.industries) expect(used.has(i.name)).toBe(true);
+  });
+});

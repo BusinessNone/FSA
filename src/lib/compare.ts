@@ -100,31 +100,19 @@ export function entryFromOpenRecord(state: RecordState, placement?: PlacementRes
   return fromJsonRecord(exportRecord(state, placement), "Open record");
 }
 
+// Samples are full fictional records (answers included), so their combined export reads
+// exactly like real customers' and reimports cleanly.
 export function sampleEntries(): CompareEntry[] {
   return compare.samples.map((s) => {
-    const rows = [
-      ["profile", "name", s.name],
-      ["profile", "industry", s.industry],
-      ["profile", "sector", s.sector],
-      ["profile", "revenue", s.revenue],
-      ["profile", "technicians", s.technicians],
-      ["profile", "branches", s.branches],
-      ["placement", "claimed_cell", cellById(s.claimed)?.title ?? ""],
-      ["placement", "actual_cell", cellById(s.actual)?.title ?? ""],
-    ].map((r) => [s.name, ...r]);
-    return entry({
-      name: s.name,
-      industry: s.industry,
-      sector: s.sector,
-      revenue: s.revenue,
-      technicians: s.technicians,
-      branches: s.branches,
-      claimed: cellById(s.claimed),
-      actual: cellById(s.actual),
-      source: compare.sampleLabel,
-      sample: true,
-      csvRows: rows,
-    });
+    const [row, column] = s.claimed.split("__");
+    const state: RecordState = {
+      profile: { name: s.name, industry: s.industry, sector: s.sector, revenue: s.revenue, technicians: s.technicians, branches: s.branches, systems: s.systems, contact: "" },
+      claimed: { row, column },
+      answers: s.answers,
+      questionNotes: {},
+      notes: `${compare.sampleLabel}. ${s.notes}`,
+    };
+    return { ...fromJsonRecord(exportRecord(state, { cell: s.actual, rationale: "" }), compare.sampleLabel), sample: true };
   });
 }
 

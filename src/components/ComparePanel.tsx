@@ -119,13 +119,21 @@ export function ComparePanel({ entries, setEntries, openRecordEntry, onClose }: 
             Add the open record
           </button>
           <button type="button" className={toolButton} onClick={() => setEntries(mergeEntries(entries, sampleEntries()))}>
-            Load sample customers
+            {entries.some((e) => e.sample) ? "Reload sample customers" : "Load sample customers"}
           </button>
           <button type="button" className={toolButton} disabled={!entries.length} onClick={() => downloadText(`customer-records-${new Date().toISOString().slice(0, 10)}.csv`, combinedCsv(entries), "text/csv;charset=utf-8")}>
             <Icon name="download" /> Export combined CSV
           </button>
+          <button
+            type="button"
+            className="rounded px-3 py-1.5 text-sm font-semibold text-muted hover:text-ink disabled:opacity-40"
+            disabled={!entries.some((e) => e.sample)}
+            onClick={() => setEntries(entries.filter((e) => !e.sample))}
+          >
+            Remove samples
+          </button>
           <button type="button" className="rounded px-3 py-1.5 text-sm font-semibold text-muted hover:text-ink disabled:opacity-40" disabled={!entries.length} onClick={() => setEntries([])}>
-            Clear
+            Clear all
           </button>
           {message && (
             <span className="text-sm text-ink" role="status">
