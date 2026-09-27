@@ -1,0 +1,75 @@
+{
+  "appTitle": "Service Blueprint",
+  "appSubtitle": "From grid cell to delivery plan",
+  "practiceScope": "Field Service total operating model",
+  "nextGrid": "EAM grid: next",
+  "crim": {
+    "acronym": "CRIM",
+    "expansion": "Customization, Report, Integration, or Modification",
+    "types": ["Customization", "Report", "Integration", "Modification"]
+  },
+  "illustrativeLabel": "Illustrative",
+  "vocabulary": [
+    { "term": "Total Operating Model (TOM)", "meaning": "RSM's full map of the kinds of service operator a client could be. Rendered as the grid." },
+    { "term": "Grid", "meaning": "The TOM for field service: service motivation (rows) by service scenario (columns)." },
+    { "term": "Cell", "meaning": "One position on the grid." },
+    { "term": "Blueprint", "meaning": "Everything a cell pre-loads: jobs to be done, KPIs, question set, baseline process. The TOM is the map; the blueprint is the pin." },
+    { "term": "Off-blueprint", "meaning": "A client request that leaves the cell's baseline." },
+    { "term": "CRIM", "meaning": "Customization, Report, Integration, or Modification created by an off-blueprint request." }
+  ],
+  "tour": [
+    {
+      "id": "placement",
+      "beat": 1,
+      "beatLabel": "Placement",
+      "title": "Place the client on the grid",
+      "talkTrack": "A short set of plain-language questions puts Meridian in one cell. The scoring stays behind the curtain; the associate only sees the answers and the result."
+    },
+    {
+      "id": "jobs",
+      "beat": 2,
+      "beatLabel": "Blueprint",
+      "title": "Jobs to be done, tiered",
+      "talkTrack": "The cell hands delivery a tiered backlog on day one. Go-live scope is already argued for.",
+      "blueprintTab": "jobs"
+    },
+    {
+      "id": "kpis",
+      "beat": 2,
+      "beatLabel": "Blueprint",
+      "title": "KPIs for this cell",
+      "talkTrack": "The measures that matter for a profit-center equipment operator. A cost-center appointment operator gets a different list.",
+      "blueprintTab": "kpis"
+    },
+    {
+      "id": "questions",
+      "beat": 2,
+      "beatLabel": "Blueprint",
+      "title": "The question set",
+      "talkTrack": "This is what an associate takes onto the call: the question, why we ask it, what good sounds like, and what a red flag signals.",
+      "blueprintTab": "questions"
+    },
+    {
+      "id": "process",
+      "beat": 2,
+      "beatLabel": "Blueprint",
+      "title": "Baseline process",
+      "talkTrack": "The standard work-order lifecycle for this cell. Every later request is measured against this line.",
+      "blueprintTab": "process"
+    },
+    {
+      "id": "deviation",
+      "beat": 3,
+      "beatLabel": "Deviation",
+      "title": "Make the cost of deviation visible",
+      "talkTrack": "Each off-blueprint request shows what it creates and what it costs to carry. Accept them all and watch the risk climb."
+    },
+    {
+      "id": "payoff",
+      "beat": 4,
+      "beatLabel": "Payoff",
+      "title": "Why this is more efficient",
+      "talkTrack": "Discovery effort moves to the deltas, the pyramid widens at the base, and every engagement sharpens the cell for the next one."
+    }
+  ]
+}

@@ -1,0 +1,221 @@
+{
+  "intro": "Plain-language questions a consultant can ask in the first conversation. Meridian's answers are pre-filled; change any of them to see the placement move.",
+  "questions": [
+    {
+      "id": "budget-language",
+      "prompt": "How does service leadership describe service in budget meetings?",
+      "options": [
+        {
+          "id": "cost-to-contain",
+          "label": "A cost of keeping customers happy that we try to hold down"
+        },
+        {
+          "id": "margin-line",
+          "label": "A margin line with its own revenue and margin targets"
+        },
+        {
+          "id": "growth-subscription",
+          "label": "A growth engine sold as uptime or output subscriptions"
+        }
+      ],
+      "meridianAnswer": "margin-line"
+    },
+    {
+      "id": "priced-separately",
+      "prompt": "Is service priced separately from the equipment?",
+      "options": [
+        {
+          "id": "bundled",
+          "label": "No. It is bundled into the sale or covered by warranty"
+        },
+        {
+          "id": "tm-and-contracts",
+          "label": "Yes. Time and materials, plus service contracts"
+        },
+        {
+          "id": "priced-on-outcome",
+          "label": "We charge for uptime, usage, or output rather than labor"
+        }
+      ],
+      "meridianAnswer": "tm-and-contracts"
+    },
+    {
+      "id": "installed-asset",
+      "prompt": "Are technicians dispatched against a customer-owned installed asset?",
+      "options": [
+        {
+          "id": "location-visits",
+          "label": "Rarely. Most visits are to a location, not a specific machine"
+        },
+        {
+          "id": "depends",
+          "label": "Sometimes. It depends on the job type"
+        },
+        {
+          "id": "serialized-unit",
+          "label": "Almost always, to a specific serialized unit"
+        },
+        {
+          "id": "we-own-asset",
+          "label": "The asset is ours; the customer pays for what it does"
+        }
+      ],
+      "meridianAnswer": "serialized-unit"
+    },
+    {
+      "id": "entitlements",
+      "prompt": "Do contracts carry entitlements such as response time or covered parts?",
+      "options": [
+        {
+          "id": "no-contracts",
+          "label": "No. Most work is billed as it happens"
+        },
+        {
+          "id": "basic-coverage",
+          "label": "Some basic coverage, with few written terms"
+        },
+        {
+          "id": "sla-and-parts",
+          "label": "Yes. Response-time commitments, covered parts, and PM schedules"
+        },
+        {
+          "id": "uptime-guarantee",
+          "label": "Contracts guarantee uptime or output, with penalties"
+        }
+      ],
+      "meridianAnswer": "sla-and-parts"
+    },
+    {
+      "id": "job-mix",
+      "prompt": "What share of jobs are scheduled appointments versus break-fix on equipment?",
+      "options": [
+        {
+          "id": "mostly-appointments",
+          "label": "Mostly booked appointments such as installs, visits, and inspections"
+        },
+        {
+          "id": "even-mix",
+          "label": "Roughly even"
+        },
+        {
+          "id": "mostly-break-fix",
+          "label": "Mostly break-fix and planned maintenance on equipment"
+        },
+        {
+          "id": "mostly-remote",
+          "label": "Most issues get solved remotely before anyone travels"
+        }
+      ],
+      "meridianAnswer": "mostly-break-fix"
+    },
+    {
+      "id": "repeat-visit-cause",
+      "prompt": "When a job does not close on the first visit, what is usually missing?",
+      "options": [
+        {
+          "id": "slot-slipped",
+          "label": "The customer was not available or the time slot slipped"
+        },
+        {
+          "id": "part-or-history",
+          "label": "The right part, or the machine's service history"
+        },
+        {
+          "id": "expertise",
+          "label": "Specialist know-how; the technician needed an expert"
+        },
+        {
+          "id": "performance-data",
+          "label": "Telemetry or performance data to prove the outcome"
+        }
+      ],
+      "meridianAnswer": "part-or-history"
+    },
+    {
+      "id": "customer-success",
+      "prompt": "How does the customer judge a good service visit?",
+      "options": [
+        {
+          "id": "on-time",
+          "label": "Arrived in the window and was courteous"
+        },
+        {
+          "id": "fixed-first-time",
+          "label": "Machine back up, fixed the first time"
+        },
+        {
+          "id": "fast-answer",
+          "label": "Got the right answer fast, often without a visit"
+        },
+        {
+          "id": "output-met",
+          "label": "The contracted uptime or output was met this month"
+        }
+      ],
+      "meridianAnswer": "fixed-first-time"
+    },
+    {
+      "id": "revenue-owner",
+      "prompt": "Who owns service revenue targets?",
+      "options": [
+        {
+          "id": "nobody",
+          "label": "Nobody. Service is measured on cost and customer satisfaction"
+        },
+        {
+          "id": "service-leader",
+          "label": "A service leader with their own P&L"
+        },
+        {
+          "id": "shared-recurring",
+          "label": "Shared with sales, measured as recurring subscription revenue"
+        }
+      ],
+      "meridianAnswer": "service-leader"
+    }
+  ],
+  "presets": [
+    {
+      "id": "meridian",
+      "label": "Meridian's answers",
+      "answers": {
+        "budget-language": "margin-line",
+        "priced-separately": "tm-and-contracts",
+        "installed-asset": "serialized-unit",
+        "entitlements": "sla-and-parts",
+        "job-mix": "mostly-break-fix",
+        "repeat-visit-cause": "part-or-history",
+        "customer-success": "fixed-first-time",
+        "revenue-owner": "service-leader"
+      }
+    },
+    {
+      "id": "visit-operator",
+      "label": "A booked-visit operator run to cost",
+      "answers": {
+        "budget-language": "cost-to-contain",
+        "priced-separately": "bundled",
+        "installed-asset": "location-visits",
+        "entitlements": "no-contracts",
+        "job-mix": "mostly-appointments",
+        "repeat-visit-cause": "slot-slipped",
+        "customer-success": "on-time",
+        "revenue-owner": "nobody"
+      }
+    },
+    {
+      "id": "uptime-operator",
+      "label": "An operator selling uptime",
+      "answers": {
+        "budget-language": "growth-subscription",
+        "priced-separately": "priced-on-outcome",
+        "installed-asset": "we-own-asset",
+        "entitlements": "uptime-guarantee",
+        "job-mix": "mostly-break-fix",
+        "repeat-visit-cause": "performance-data",
+        "customer-success": "output-met",
+        "revenue-owner": "shared-recurring"
+      }
+    }
+  ]
+}

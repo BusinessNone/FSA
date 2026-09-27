@@ -1,0 +1,46 @@
+{
+  "cell": { "row": "cost-center", "column": "appointment" },
+  "title": "Cost Center × Appointment-Centric",
+  "summary": "Service protects the product sale and is managed to cost. Work is booked visits to a location, and the customer judges success by whether the technician arrived in the window.",
+  "contrastLine": "Same method, different cell: the blueprint shifts from margin and entitlement to schedule reliability and cost per visit.",
+  "focusJobs": [
+    "Offer and confirm appointment windows the customer can self-book",
+    "Optimize routes to minimize travel cost per visit",
+    "Send on-my-way and arrival notifications",
+    "Capture completion and customer sign-off on mobile"
+  ],
+  "kpis": [
+    {
+      "id": "on-time-arrival",
+      "name": "On-time arrival rate",
+      "definition": "Share of visits where the technician arrived inside the booked window.",
+      "whyItMatters": "In an appointment-centric cell the window is the promise. Missing it is the failure the customer remembers.",
+      "direction": "higher",
+      "whatGoodLooksLike": "Rising, with late arrivals traced to scheduling, travel, or overrunning prior jobs."
+    },
+    {
+      "id": "cost-per-visit",
+      "name": "Cost per visit",
+      "definition": "Total field labor, travel, and overhead divided by completed visits.",
+      "whyItMatters": "When service is a cost center, the operating goal is delivering the same promise for less.",
+      "direction": "lower",
+      "whatGoodLooksLike": "Falling without on-time arrival or satisfaction falling with it."
+    },
+    {
+      "id": "visits-per-tech-day",
+      "name": "Completed visits per technician day",
+      "definition": "Average number of visits a technician completes in a working day.",
+      "whyItMatters": "Route density and schedule quality show up here before they show up in cost.",
+      "direction": "higher",
+      "whatGoodLooksLike": "Rising through better routing, not through shorter, rushed visits."
+    },
+    {
+      "id": "csat",
+      "name": "Customer satisfaction after visit",
+      "definition": "Post-visit survey score on the appointment experience.",
+      "whyItMatters": "Service exists to protect the relationship and the next product sale.",
+      "direction": "higher",
+      "whatGoodLooksLike": "Stable or rising as cost per visit falls."
+    }
+  ]
+}

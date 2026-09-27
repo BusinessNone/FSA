@@ -1,0 +1,104 @@
+{
+  "intro": "Requests Meridian is likely to make. Each one leaves the blueprint. Decide each card and watch what the project carries.",
+  "punchline": "This is how a client ends up with a system designed for them instead of to best practice.",
+  "effortUnits": { "Low": 1, "Med": 3, "High": 5 },
+  "riskLevels": [
+    { "label": "On blueprint", "upTo": 0, "description": "Standard process. Upgrades and testing stay routine." },
+    { "label": "Contained", "upTo": 8, "description": "A few deliberate exceptions, each with an owner." },
+    { "label": "Elevated", "upTo": 20, "description": "Exceptions start to shape the design and the test plan." },
+    { "label": "High", "upTo": 34, "description": "Every release now needs regression work on custom code." },
+    { "label": "Severe", "upTo": 1000, "description": "The system is designed around legacy habit. Upgrades become projects." }
+  ],
+  "requests": [
+    {
+      "id": "legacy-board",
+      "request": "Rebuild our legacy dispatch board exactly as it looks today.",
+      "context": "Dispatchers have used the same screen for years and fear losing speed.",
+      "blueprintAlternative": "Use the standard schedule board with saved views per branch. Configure filters and columns; do not rebuild the screen.",
+      "crimType": "Customization",
+      "effort": "High",
+      "ongoingBurden": ["Upgrade", "Test", "Support"],
+      "ongoingDetail": "A custom board must be retested and often reworked with every platform release.",
+      "askWhy": [
+        "What can a dispatcher do on the old board in one click that worries them most?",
+        "Which information on the old board is used every hour, and which is habit?",
+        "If the standard board showed at-risk jobs first, would the layout still matter?"
+      ]
+    },
+    {
+      "id": "tech-pricing",
+      "request": "We need custom pricing rules per technician.",
+      "context": "Senior technicians have historically charged higher rates at some branches.",
+      "blueprintAlternative": "Price by contract, price list, and labor role. Technician rates belong in cost, not in the price the customer sees.",
+      "crimType": "Modification",
+      "effort": "Med",
+      "ongoingBurden": ["Test", "Support"],
+      "ongoingDetail": "Custom pricing logic has to be retested whenever price lists or contracts change.",
+      "askWhy": [
+        "Is the customer paying for the technician, or for the skill the job needs?",
+        "Would a labor role such as senior or specialist capture the same rule?",
+        "Who approves a rate today, and is that written down?"
+      ]
+    },
+    {
+      "id": "keep-warranty-tool",
+      "request": "Keep the separate warranty tool and integrate it.",
+      "context": "The warranty team is comfortable with its tool and worries about migration.",
+      "blueprintAlternative": "Model warranty as an entitlement on the asset and agreement in the platform, and retire the separate tool.",
+      "crimType": "Integration",
+      "effort": "High",
+      "ongoingBurden": ["Upgrade", "Test", "Support"],
+      "ongoingDetail": "Two systems of record for coverage, an interface to monitor, and a second vendor to upgrade against.",
+      "askWhy": [
+        "What does the warranty tool do that an entitlement on the asset would not?",
+        "When the two systems disagree about coverage, which one wins?",
+        "Is the concern the tool itself, or the history inside it?"
+      ]
+    },
+    {
+      "id": "branch-reports",
+      "request": "Build a bespoke report for every branch manager.",
+      "context": "Each branch manager keeps their own spreadsheet and trusts it.",
+      "blueprintAlternative": "One branch-performance dashboard built on the blueprint KPIs, filtered by branch.",
+      "crimType": "Report",
+      "effort": "Med",
+      "ongoingBurden": ["Test", "Support"],
+      "ongoingDetail": "Every bespoke report is a separate definition of margin to maintain and reconcile.",
+      "askWhy": [
+        "Which decisions does each manager make from their spreadsheet?",
+        "If every branch saw the same KPIs, what would be missing?",
+        "Should branches be compared with each other on the same definitions?"
+      ]
+    },
+    {
+      "id": "skip-entitlement",
+      "request": "Skip entitlement checks for our top accounts.",
+      "context": "Account managers do not want key customers questioned about coverage.",
+      "blueprintAlternative": "Give top accounts a premium entitlement tier. The check still runs, and goodwill is recorded rather than invisible.",
+      "crimType": "Modification",
+      "effort": "Low",
+      "ongoingBurden": ["Test", "Support"],
+      "ongoingDetail": "Cheap to build, expensive to carry: leakage on the largest contracts, and no record of what was given away.",
+      "askWhy": [
+        "Is the goal to avoid friction on the call, or to give free work?",
+        "Would an automatic premium tier remove the friction without losing the record?",
+        "Who decides the list of top accounts, and how often does it change?"
+      ]
+    },
+    {
+      "id": "close-without-parts",
+      "request": "Let technicians close jobs without logging parts. We will reconcile monthly.",
+      "context": "Technicians say recording parts on mobile slows them down.",
+      "blueprintAlternative": "Require parts on the work order before completion, with van stock suggested so recording takes seconds.",
+      "crimType": "Modification",
+      "effort": "Low",
+      "ongoingBurden": ["Test", "Support"],
+      "ongoingDetail": "Keeps Meridian's unbilled-parts problem alive and adds a monthly reconciliation to support.",
+      "askWhy": [
+        "How much of the delay is the app, and how much is finding the part number?",
+        "What happens to billing for parts that never get reconciled?",
+        "Would a scan or pick-from-van-stock option change the answer?"
+      ]
+    }
+  ]
+}

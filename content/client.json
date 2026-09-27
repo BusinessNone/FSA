@@ -1,0 +1,20 @@
+{
+  "name": "Meridian Industrial Equipment",
+  "shortName": "Meridian",
+  "fictionalBadge": "Fictional client",
+  "figuresNote": "Fictional company. Profile figures are illustrative.",
+  "descriptor": "Mid-market OEM that sells and services commercial industrial equipment, with a large installed base under service contracts.",
+  "profile": [
+    { "label": "Revenue", "value": "About $600M" },
+    { "label": "Field technicians", "value": "180" },
+    { "label": "Service branches", "value": "14, across the US" }
+  ],
+  "today": "Service runs on a 15-year-old legacy dispatch system, spreadsheets, and a separate warranty tool.",
+  "ambition": "Service leadership wants service treated as a margin line.",
+  "painPoints": [
+    "Contract entitlements are not enforced in the field.",
+    "Parts get pulled off the truck without being billed.",
+    "Invoicing is slow after the job is complete.",
+    "First-time fix is low because technicians lack asset history."
+  ]
+}

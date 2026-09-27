@@ -1,0 +1,128 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-ink: var(--accent-ink);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-side: var(--side);
+  --color-side-2: var(--side-2);
+  --color-side-line: var(--side-line);
+  --color-side-ink: var(--side-ink);
+  --color-side-muted: var(--side-muted);
+}
+
+:root {
+  --bg: #f4f5f7;
+  --surface: #ffffff;
+  --surface-2: #eef0f3;
+  --line: #dde1e7;
+  --ink: #131820;
+  --muted: #5a6371;
+  --accent: #1f6feb;
+  --accent-soft: #e7f0fe;
+  --accent-ink: #ffffff;
+  --warn: #a16207;
+  --warn-soft: #fdf3dc;
+  --danger: #c2322b;
+  --danger-soft: #fde8e7;
+  /* The sidebar stays dark in both themes. */
+  --side: #0c0f14;
+  --side-2: #161b23;
+  --side-line: #222936;
+  --side-ink: #e7eaf0;
+  --side-muted: #8a93a3;
+  color-scheme: light;
+}
+
+.dark {
+  --bg: #0f1217;
+  --surface: #171b22;
+  --surface-2: #1f242d;
+  --line: #2b313c;
+  --ink: #e7eaf0;
+  --muted: #9aa3b2;
+  --accent: #5b9dff;
+  --accent-soft: rgba(91, 157, 255, 0.14);
+  --accent-ink: #0a1322;
+  --warn: #f0b44c;
+  --warn-soft: rgba(240, 180, 76, 0.14);
+  --danger: #ff6b63;
+  --danger-soft: rgba(255, 107, 99, 0.14);
+  --side: #090b0f;
+  --side-2: #12161d;
+  --side-line: #1d232d;
+  color-scheme: dark;
+}
+
+html {
+  font-size: 16px;
+}
+/* Shared-screen presentation at 1920x1080 and above. */
+@media (min-width: 1800px) {
+  html {
+    font-size: 17px;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.animate-rise {
+  animation: rise 0.35s ease-out both;
+}
+
+@keyframes spike {
+  0% {
+    transform: scaleY(1);
+  }
+  40% {
+    transform: scaleY(1.9);
+  }
+  100% {
+    transform: scaleY(1);
+  }
+}
+.animate-spike {
+  animation: spike 0.6s ease-out;
+  transform-origin: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-rise,
+  .animate-spike {
+    animation: none;
+  }
+}
