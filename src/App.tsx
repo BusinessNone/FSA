@@ -12,7 +12,7 @@ import type { CueId, Profile } from "../shared/schema";
 import { defaultProfile, isDemoRecord, loadStoredRecord, storeRecord, type CellRef, type RecordState } from "./lib/record";
 import { RecordPanel } from "./components/RecordPanel";
 import { ComparePanel } from "./components/ComparePanel";
-import { entryFromOpenRecord, type CompareEntry } from "./lib/compare";
+import { entryFromOpenRecord, sampleEntries, type CompareEntry } from "./lib/compare";
 
 // A stored working copy is only trusted if every answer is still a valid option.
 function initialRecord(): RecordState | null {
@@ -51,7 +51,8 @@ export default function App() {
   const [notes, setNotes] = useState("");
   const [recordOpen, setRecordOpen] = useState(false);
   const [compareOpen, setCompareOpen] = useState(false);
-  const [compareEntries, setCompareEntries] = useState<CompareEntry[]>([]);
+  // Compare starts populated with the fictional sample set; Clear removes it.
+  const [compareEntries, setCompareEntries] = useState<CompareEntry[]>(sampleEntries);
   const [saved, setSaved] = useState(initialRecord);
   const [decisions, setDecisions] = useState<Decisions>({});
   const placement = usePlacement(answers);
@@ -406,7 +407,7 @@ function Sidebar({
           <span className="min-w-0">
             <span className="block">Compare customers</span>
             <span className="block truncate text-xs font-normal text-side-muted">
-              {compareCount ? `${compareCount} loaded` : "By industry and TOM maturity"}
+              {compareCount ? `${compareCount} customers loaded` : "By industry and TOM maturity"}
             </span>
           </span>
           <span aria-hidden>→</span>

@@ -100,31 +100,19 @@ export function entryFromOpenRecord(state: RecordState, placement?: PlacementRes
   return fromJsonRecord(exportRecord(state, placement), "Open record");
 }
 
+// Samples are full fictional records (answers included), so their combined export reads
+// exactly like real customers' and reimports cleanly.
 export function sampleEntries(): CompareEntry[] {
   return compare.samples.map((s) => {
-    const rows = [
-      ["profile", "name", s.name],
-      ["profile", "industry", s.industry],
-      ["profile", "sector", s.sector],
-      ["profile", "revenue", s.revenue],
-      ["profile", "technicians", s.technicians],
-      ["profile", "branches", s.branches],
-      ["placement", "claimed_cell", cellById(s.claimed)?.title ?? ""],
-      ["placement", "actual_cell", cellById(s.actual)?.title ?? ""],
-    ].map((r) => [s.name, ...r]);
-    return entry({
-      name: s.name,
-      industry: s.industry,
-      sector: s.sector,
-      revenue: s.revenue,
-      technicians: s.technicians,
-      branches: s.branches,
-      claimed: cellById(s.claimed),
-      actual: cellById(s.actual),
-      source: compare.sampleLabel,
-      sample: true,
-      csvRows: rows,
-    });
+    const [row, column] = s.claimed.split("__");
+    const state: RecordState = {
+      profile: { name: s.name, industry: s.industry, sector: s.sector, revenue: s.revenue, technicians: s.technicians, branches: s.branches, systems: s.systems, contact: "" },
+      claimed: { row, column },
+      answers: s.answers,
+      questionNotes: {},
+      notes: `${compare.sampleLabel}. ${s.notes}`,
+    };
+    return { ...fromJsonRecord(exportRecord(state, { cell: s.actual, rationale: "" }), compare.sampleLabel), sample: true };
   });
 }
 
@@ -142,3 +130,29 @@ export function combinedCsv(entries: CompareEntry[]): string {
 
 const listed = (name: string) => compare.industries.some((i) => i.name === name);
 export const industryOf = (e: CompareEntry) => (listed(e.industry) ? e.industry : e.industry.trim() ? `${e.industry} (unlisted)` : "Not set");
+
+export interface RollUpRow {
+  label: string;
+  all: boolean;
+  total: number;
+  counts: { maturity: Maturity; n: number; share: number }[];
+  alignedShare: number;
+}
+
+const pct = (n: number, d: number) => (d ? Math.round((n / d) * 100) : 0);
+
+// Share of placed customers at each maturity level: an "All customers" row, then one per industry.
+export function rollUp(entries: CompareEntry[], industries: string[]): RollUpRow[] {
+  const placed = entries.filter((e) => e.maturity);
+  const row = (label: string, items: CompareEntry[], all: boolean): RollUpRow => ({
+    label,
+    all,
+    total: items.length,
+    counts: compare.maturity
+      .map((m) => ({ maturity: m.id, n: items.filter((e) => e.maturity === m.id).length }))
+      .filter((c) => c.n)
+      .map((c) => ({ ...c, share: pct(c.n, items.length) })),
+    alignedShare: pct(items.filter((e) => e.maturity === "coherent" || e.maturity === "misread").length, items.length),
+  });
+  return [row("All customers", placed, true), ...industries.map((i) => row(i, placed.filter((e) => industryOf(e) === i), false))].filter((r) => r.total);
+}

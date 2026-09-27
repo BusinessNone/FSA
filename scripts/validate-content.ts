@@ -112,7 +112,11 @@ checkIndustry("client.json record.profile", clientContent.record.profile.industr
 for (const smp of compare.samples) {
   checkIndustry(`compare.json sample ${smp.name}`, smp.industry, smp.sector);
   for (const c of [smp.claimed, smp.actual]) if (!seen.has(c)) fail(`compare.json: sample ${smp.name} has unknown cell ${c}`);
+  for (const q of intake.questions) {
+    if (!q.options.some((o) => o.id === smp.answers[q.id])) fail(`compare.json: sample ${smp.name} has no valid answer for ${q.id}`);
+  }
 }
+if (new Set(compare.samples.map((x) => x.name.toLowerCase())).size !== compare.samples.length) fail("compare.json: sample names must be unique");
 
 // ---- deviations ----
 for (const r of deviations.requests) {
@@ -153,6 +157,10 @@ if (errors.length === 0 && deepCell && contrastCell) {
   const presetDepths = intake.presets.map((p) => depthOf(place(p.answers).cell));
   if (!presetDepths.includes("contrast")) fail("placement: no preset lands the contrast cell");
   if (!presetDepths.includes("coming")) fail("placement: no preset lands a coming cell");
+  for (const smp of compare.samples) {
+    const got = place(smp.answers).cell;
+    if (got !== smp.actual) fail(`compare.json: sample ${smp.name} answers place in ${got}, not ${smp.actual}. Run npm run samples.`);
+  }
 }
 
 if (errors.length) {

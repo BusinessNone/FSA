@@ -11,7 +11,8 @@
     "preview": "npm run build && vite preview",
     "deploy": "npm run build && wrangler deploy",
     "test": "vitest run",
-    "check": "npm run build && npm test"
+    "check": "npm run build && npm test",
+    "samples": "tsx scripts/generate-samples.ts && npm run validate"
   },
   "dependencies": {
     "react": "^19.3.0",

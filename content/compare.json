@@ -1,6 +1,6 @@
 {
   "title": "Compare customers",
-  "intro": "Load exported customer records to compare them by industry and by TOM maturity. Files are read in this browser only; nothing is uploaded.",
+  "intro": "Compare customers by industry and by TOM maturity. It opens with a fictional sample set so the view reads on day one; add exported customer records alongside it, or remove the samples. Files are read in this browser only; nothing is uploaded.",
   "industriesSource": "RSM Industry and Sectors FY27",
   "industries": [
     {
@@ -113,8 +113,20 @@
       "revenue": "About $600M",
       "technicians": "180",
       "branches": "14",
+      "systems": "Legacy dispatch system, spreadsheets, separate warranty tool",
+      "notes": "Leadership talks uptime-as-a-service; operation runs time and materials.",
       "claimed": "servitization__equipment",
-      "actual": "profit-center__equipment"
+      "actual": "profit-center__equipment",
+      "answers": {
+        "budget-language": "margin-line",
+        "priced-separately": "tm-and-contracts",
+        "installed-asset": "serialized-unit",
+        "entitlements": "basic-coverage",
+        "job-mix": "mostly-break-fix",
+        "repeat-visit-cause": "part-or-history",
+        "customer-success": "fixed-first-time",
+        "revenue-owner": "service-leader"
+      }
     },
     {
       "name": "Beacon Lift and Handling",
@@ -123,8 +135,64 @@
       "revenue": "About $350M",
       "technicians": "110",
       "branches": "8",
+      "systems": "ERP service module, paper tickets",
+      "notes": "Warranty work dominates; service margin is not reported.",
       "claimed": "profit-center__equipment",
-      "actual": "cost-center__equipment"
+      "actual": "cost-center__equipment",
+      "answers": {
+        "budget-language": "cost-to-contain",
+        "priced-separately": "bundled",
+        "installed-asset": "depends",
+        "entitlements": "no-contracts",
+        "job-mix": "mostly-break-fix",
+        "repeat-visit-cause": "part-or-history",
+        "customer-success": "fast-answer",
+        "revenue-owner": "nobody"
+      }
+    },
+    {
+      "name": "Forgeline Compressor Systems",
+      "industry": "Industrials",
+      "sector": "Manufacturing",
+      "revenue": "About $480M",
+      "technicians": "140",
+      "branches": "12",
+      "systems": "Field service platform, ERP",
+      "notes": "Contract attach tracked monthly; strong first-time fix culture.",
+      "claimed": "profit-center__equipment",
+      "actual": "profit-center__equipment",
+      "answers": {
+        "budget-language": "margin-line",
+        "priced-separately": "tm-and-contracts",
+        "installed-asset": "location-visits",
+        "entitlements": "basic-coverage",
+        "job-mix": "mostly-break-fix",
+        "repeat-visit-cause": "part-or-history",
+        "customer-success": "fixed-first-time",
+        "revenue-owner": "service-leader"
+      }
+    },
+    {
+      "name": "Stonegate Packaging Machinery",
+      "industry": "Industrials",
+      "sector": "Manufacturing",
+      "revenue": "About $520M",
+      "technicians": "95",
+      "branches": "6",
+      "systems": "Remote monitoring, CRM, ERP",
+      "notes": "Sells output guarantees backed by telemetry.",
+      "claimed": "servitization__outcome",
+      "actual": "servitization__outcome",
+      "answers": {
+        "budget-language": "growth-subscription",
+        "priced-separately": "priced-on-outcome",
+        "installed-asset": "depends",
+        "entitlements": "uptime-guarantee",
+        "job-mix": "even-mix",
+        "repeat-visit-cause": "performance-data",
+        "customer-success": "output-met",
+        "revenue-owner": "shared-recurring"
+      }
     },
     {
       "name": "Granite Ridge Power Systems",
@@ -133,8 +201,64 @@
       "revenue": "About $1.2B",
       "technicians": "150",
       "branches": "9",
+      "systems": "Asset management system, spreadsheets",
+      "notes": "Uptime contracts priced on labor; usage data not yet trusted.",
       "claimed": "servitization__outcome",
-      "actual": "servitization__equipment"
+      "actual": "servitization__equipment",
+      "answers": {
+        "budget-language": "growth-subscription",
+        "priced-separately": "priced-on-outcome",
+        "installed-asset": "serialized-unit",
+        "entitlements": "no-contracts",
+        "job-mix": "mostly-break-fix",
+        "repeat-visit-cause": "part-or-history",
+        "customer-success": "fixed-first-time",
+        "revenue-owner": "shared-recurring"
+      }
+    },
+    {
+      "name": "Windcrest Turbine Services",
+      "industry": "Industrials",
+      "sector": "Energy",
+      "revenue": "About $900M",
+      "technicians": "220",
+      "branches": "11",
+      "systems": "SCADA feeds, field service platform",
+      "notes": "Availability-based contracts with penalties and bonuses.",
+      "claimed": "servitization__outcome",
+      "actual": "servitization__outcome",
+      "answers": {
+        "budget-language": "growth-subscription",
+        "priced-separately": "priced-on-outcome",
+        "installed-asset": "depends",
+        "entitlements": "uptime-guarantee",
+        "job-mix": "mostly-remote",
+        "repeat-visit-cause": "performance-data",
+        "customer-success": "output-met",
+        "revenue-owner": "shared-recurring"
+      }
+    },
+    {
+      "name": "Solace Solar O&M",
+      "industry": "Industrials",
+      "sector": "Energy",
+      "revenue": "About $210M",
+      "technicians": "75",
+      "branches": "5",
+      "systems": "Monitoring portal, ticketing tool",
+      "notes": "Promises production guarantees without clean usage data.",
+      "claimed": "servitization__outcome",
+      "actual": "profit-center__outcome",
+      "answers": {
+        "budget-language": "margin-line",
+        "priced-separately": "tm-and-contracts",
+        "installed-asset": "location-visits",
+        "entitlements": "basic-coverage",
+        "job-mix": "even-mix",
+        "repeat-visit-cause": "performance-data",
+        "customer-success": "output-met",
+        "revenue-owner": "service-leader"
+      }
     },
     {
       "name": "Harborline Diagnostics",
@@ -143,28 +267,86 @@
       "revenue": "About $900M",
       "technicians": "240",
       "branches": "22",
+      "systems": "Field service platform, CRM, ERP",
+      "notes": "Service contracts priced per instrument; FTFR reviewed weekly.",
       "claimed": "profit-center__equipment",
-      "actual": "profit-center__equipment"
+      "actual": "profit-center__equipment",
+      "answers": {
+        "budget-language": "margin-line",
+        "priced-separately": "tm-and-contracts",
+        "installed-asset": "depends",
+        "entitlements": "sla-and-parts",
+        "job-mix": "mostly-break-fix",
+        "repeat-visit-cause": "part-or-history",
+        "customer-success": "fixed-first-time",
+        "revenue-owner": "service-leader"
+      }
     },
     {
-      "name": "Keystone Building Services",
-      "industry": "Business & Professional Services",
-      "sector": "Facility & Environmental",
-      "revenue": "About $400M",
-      "technicians": "95",
-      "branches": "11",
+      "name": "Pulsepoint Surgical Systems",
+      "industry": "Life Sciences",
+      "sector": "MedTech",
+      "revenue": "About $650M",
+      "technicians": "130",
+      "branches": "10",
+      "systems": "CRM case management, remote support tool",
+      "notes": "Most fixes happen remotely by specialists; sees itself as a field shop.",
       "claimed": "profit-center__equipment",
-      "actual": "profit-center__appointment"
+      "actual": "profit-center__knowledge",
+      "answers": {
+        "budget-language": "margin-line",
+        "priced-separately": "tm-and-contracts",
+        "installed-asset": "location-visits",
+        "entitlements": "basic-coverage",
+        "job-mix": "mostly-remote",
+        "repeat-visit-cause": "performance-data",
+        "customer-success": "fixed-first-time",
+        "revenue-owner": "service-leader"
+      }
     },
     {
-      "name": "Summitline Mechanical",
-      "industry": "Construction and Real Estate",
-      "sector": "Construction",
+      "name": "Cellgate Lab Equipment",
+      "industry": "Life Sciences",
+      "sector": "Bio/Pharma",
       "revenue": "About $300M",
-      "technicians": "310",
-      "branches": "18",
-      "claimed": "profit-center__appointment",
-      "actual": "cost-center__appointment"
+      "technicians": "60",
+      "branches": "4",
+      "systems": "ERP, spreadsheets",
+      "notes": "Service given away to protect instrument sales.",
+      "claimed": "profit-center__equipment",
+      "actual": "cost-center__equipment",
+      "answers": {
+        "budget-language": "cost-to-contain",
+        "priced-separately": "bundled",
+        "installed-asset": "serialized-unit",
+        "entitlements": "basic-coverage",
+        "job-mix": "mostly-break-fix",
+        "repeat-visit-cause": "part-or-history",
+        "customer-success": "fixed-first-time",
+        "revenue-owner": "nobody"
+      }
+    },
+    {
+      "name": "Assaywell Instrument Services",
+      "industry": "Life Sciences",
+      "sector": "Life Science Services",
+      "revenue": "About $180M",
+      "technicians": "70",
+      "branches": "7",
+      "systems": "Field service platform, LIMS integration",
+      "notes": "Application specialists billed by the hour.",
+      "claimed": "profit-center__knowledge",
+      "actual": "profit-center__knowledge",
+      "answers": {
+        "budget-language": "margin-line",
+        "priced-separately": "tm-and-contracts",
+        "installed-asset": "serialized-unit",
+        "entitlements": "basic-coverage",
+        "job-mix": "mostly-remote",
+        "repeat-visit-cause": "performance-data",
+        "customer-success": "fast-answer",
+        "revenue-owner": "service-leader"
+      }
     },
     {
       "name": "Arrowway Imaging Services",
@@ -173,8 +355,504 @@
       "revenue": "About $250M",
       "technicians": "120",
       "branches": "16",
+      "systems": "CMMS, email",
+      "notes": "Biomed expertise provided free to affiliated hospitals.",
       "claimed": "profit-center__knowledge",
-      "actual": "cost-center__knowledge"
+      "actual": "cost-center__knowledge",
+      "answers": {
+        "budget-language": "cost-to-contain",
+        "priced-separately": "bundled",
+        "installed-asset": "location-visits",
+        "entitlements": "no-contracts",
+        "job-mix": "mostly-remote",
+        "repeat-visit-cause": "performance-data",
+        "customer-success": "fast-answer",
+        "revenue-owner": "nobody"
+      }
+    },
+    {
+      "name": "Mercyline Clinical Engineering",
+      "industry": "Healthcare",
+      "sector": "Hospitals & Health Care Systems",
+      "revenue": "About $140M",
+      "technicians": "85",
+      "branches": "9",
+      "systems": "CMMS, spreadsheets",
+      "notes": "Uptime obligations on imaging equipment funded as overhead.",
+      "claimed": "cost-center__appointment",
+      "actual": "cost-center__equipment",
+      "answers": {
+        "budget-language": "cost-to-contain",
+        "priced-separately": "bundled",
+        "installed-asset": "serialized-unit",
+        "entitlements": "no-contracts",
+        "job-mix": "mostly-break-fix",
+        "repeat-visit-cause": "part-or-history",
+        "customer-success": "fast-answer",
+        "revenue-owner": "nobody"
+      }
+    },
+    {
+      "name": "Keystone Building Services",
+      "industry": "Business & Professional Services",
+      "sector": "Facility & Environmental",
+      "revenue": "About $400M",
+      "technicians": "95",
+      "branches": "11",
+      "systems": "Scheduling tool, accounting package",
+      "notes": "Claims profit focus but prices cost-plus and measures utilization.",
+      "claimed": "profit-center__equipment",
+      "actual": "profit-center__appointment",
+      "answers": {
+        "budget-language": "margin-line",
+        "priced-separately": "tm-and-contracts",
+        "installed-asset": "location-visits",
+        "entitlements": "sla-and-parts",
+        "job-mix": "mostly-appointments",
+        "repeat-visit-cause": "slot-slipped",
+        "customer-success": "fixed-first-time",
+        "revenue-owner": "service-leader"
+      }
+    },
+    {
+      "name": "Clearwater Environmental Services",
+      "industry": "Business & Professional Services",
+      "sector": "Facility & Environmental",
+      "revenue": "About $220M",
+      "technicians": "160",
+      "branches": "13",
+      "systems": "Route planning tool, CRM",
+      "notes": "Route density and cost per stop drive every decision.",
+      "claimed": "cost-center__appointment",
+      "actual": "cost-center__appointment",
+      "answers": {
+        "budget-language": "cost-to-contain",
+        "priced-separately": "bundled",
+        "installed-asset": "location-visits",
+        "entitlements": "no-contracts",
+        "job-mix": "mostly-appointments",
+        "repeat-visit-cause": "slot-slipped",
+        "customer-success": "fixed-first-time",
+        "revenue-owner": "nobody"
+      }
+    },
+    {
+      "name": "Brightpath Facility Partners",
+      "industry": "Business & Professional Services",
+      "sector": "Facility & Environmental",
+      "revenue": "About $310M",
+      "technicians": "210",
+      "branches": "15",
+      "systems": "Work order system, spreadsheets",
+      "notes": "Runs well on cost; leadership describes it as a margin business.",
+      "claimed": "profit-center__appointment",
+      "actual": "cost-center__appointment",
+      "answers": {
+        "budget-language": "cost-to-contain",
+        "priced-separately": "bundled",
+        "installed-asset": "location-visits",
+        "entitlements": "no-contracts",
+        "job-mix": "mostly-appointments",
+        "repeat-visit-cause": "slot-slipped",
+        "customer-success": "on-time",
+        "revenue-owner": "service-leader"
+      }
+    },
+    {
+      "name": "Crewline Technical Staffing",
+      "industry": "Business & Professional Services",
+      "sector": "Workforce Solutions",
+      "revenue": "About $160M",
+      "technicians": "300",
+      "branches": "20",
+      "systems": "Staffing platform, timesheets",
+      "notes": "Placed technicians billed by the visit.",
+      "claimed": "cost-center__appointment",
+      "actual": "cost-center__appointment",
+      "answers": {
+        "budget-language": "cost-to-contain",
+        "priced-separately": "bundled",
+        "installed-asset": "depends",
+        "entitlements": "basic-coverage",
+        "job-mix": "mostly-appointments",
+        "repeat-visit-cause": "slot-slipped",
+        "customer-success": "on-time",
+        "revenue-owner": "nobody"
+      }
+    },
+    {
+      "name": "Pinecrest Inspection Partners",
+      "industry": "Business & Professional Services",
+      "sector": "Professional Services",
+      "revenue": "About $120M",
+      "technicians": "55",
+      "branches": "6",
+      "systems": "Inspection app, CRM",
+      "notes": "Certified inspectors priced on expertise.",
+      "claimed": "profit-center__knowledge",
+      "actual": "profit-center__knowledge",
+      "answers": {
+        "budget-language": "margin-line",
+        "priced-separately": "tm-and-contracts",
+        "installed-asset": "serialized-unit",
+        "entitlements": "basic-coverage",
+        "job-mix": "mostly-remote",
+        "repeat-visit-cause": "expertise",
+        "customer-success": "fast-answer",
+        "revenue-owner": "service-leader"
+      }
+    },
+    {
+      "name": "Summitline Mechanical",
+      "industry": "Construction and Real Estate",
+      "sector": "Construction",
+      "revenue": "About $300M",
+      "technicians": "310",
+      "branches": "18",
+      "systems": "Dispatch board, accounting package",
+      "notes": "Service department exists to keep construction customers happy.",
+      "claimed": "profit-center__appointment",
+      "actual": "cost-center__appointment",
+      "answers": {
+        "budget-language": "cost-to-contain",
+        "priced-separately": "bundled",
+        "installed-asset": "location-visits",
+        "entitlements": "no-contracts",
+        "job-mix": "even-mix",
+        "repeat-visit-cause": "slot-slipped",
+        "customer-success": "on-time",
+        "revenue-owner": "nobody"
+      }
+    },
+    {
+      "name": "Ironbridge Elevator Co",
+      "industry": "Construction and Real Estate",
+      "sector": "Construction",
+      "revenue": "About $700M",
+      "technicians": "260",
+      "branches": "19",
+      "systems": "Field service platform, IoT gateways, ERP",
+      "notes": "Maintenance contracts on every installed unit.",
+      "claimed": "profit-center__equipment",
+      "actual": "profit-center__equipment",
+      "answers": {
+        "budget-language": "margin-line",
+        "priced-separately": "tm-and-contracts",
+        "installed-asset": "location-visits",
+        "entitlements": "sla-and-parts",
+        "job-mix": "mostly-break-fix",
+        "repeat-visit-cause": "expertise",
+        "customer-success": "fixed-first-time",
+        "revenue-owner": "service-leader"
+      }
+    },
+    {
+      "name": "Tallgrass Fire Protection",
+      "industry": "Construction and Real Estate",
+      "sector": "Construction",
+      "revenue": "About $190M",
+      "technicians": "140",
+      "branches": "10",
+      "systems": "Inspection scheduling tool, spreadsheets",
+      "notes": "Code inspections done at cost to win retrofit projects.",
+      "claimed": "profit-center__equipment",
+      "actual": "cost-center__equipment",
+      "answers": {
+        "budget-language": "cost-to-contain",
+        "priced-separately": "bundled",
+        "installed-asset": "serialized-unit",
+        "entitlements": "sla-and-parts",
+        "job-mix": "mostly-break-fix",
+        "repeat-visit-cause": "part-or-history",
+        "customer-success": "on-time",
+        "revenue-owner": "nobody"
+      }
+    },
+    {
+      "name": "Harborview Property Services",
+      "industry": "Construction and Real Estate",
+      "sector": "Real Estate",
+      "revenue": "About $260M",
+      "technicians": "180",
+      "branches": "12",
+      "systems": "Property management system, work orders",
+      "notes": "Tenant requests scheduled to a service window.",
+      "claimed": "cost-center__appointment",
+      "actual": "cost-center__appointment",
+      "answers": {
+        "budget-language": "cost-to-contain",
+        "priced-separately": "bundled",
+        "installed-asset": "location-visits",
+        "entitlements": "no-contracts",
+        "job-mix": "mostly-appointments",
+        "repeat-visit-cause": "slot-slipped",
+        "customer-success": "on-time",
+        "revenue-owner": "service-leader"
+      }
+    },
+    {
+      "name": "Oakmont Portfolio Maintenance",
+      "industry": "Construction and Real Estate",
+      "sector": "Real Estate",
+      "revenue": "About $150M",
+      "technicians": "90",
+      "branches": "8",
+      "systems": "Work order system, email",
+      "notes": "Pitches guaranteed building uptime; operates as a call-out crew.",
+      "claimed": "servitization__outcome",
+      "actual": "cost-center__appointment",
+      "answers": {
+        "budget-language": "cost-to-contain",
+        "priced-separately": "bundled",
+        "installed-asset": "location-visits",
+        "entitlements": "no-contracts",
+        "job-mix": "mostly-appointments",
+        "repeat-visit-cause": "slot-slipped",
+        "customer-success": "fixed-first-time",
+        "revenue-owner": "nobody"
+      }
+    },
+    {
+      "name": "Hearthline Appliance Service",
+      "industry": "Consumer Products",
+      "sector": "Consumer Goods",
+      "revenue": "About $230M",
+      "technicians": "350",
+      "branches": "25",
+      "systems": "Scheduling platform, parts portal",
+      "notes": "In-home warranty visits booked to two-hour windows.",
+      "claimed": "cost-center__appointment",
+      "actual": "cost-center__appointment",
+      "answers": {
+        "budget-language": "cost-to-contain",
+        "priced-separately": "bundled",
+        "installed-asset": "location-visits",
+        "entitlements": "basic-coverage",
+        "job-mix": "even-mix",
+        "repeat-visit-cause": "slot-slipped",
+        "customer-success": "on-time",
+        "revenue-owner": "nobody"
+      }
+    },
+    {
+      "name": "Cobaltwave Fitness Equipment",
+      "industry": "Consumer Products",
+      "sector": "Consumer Goods",
+      "revenue": "About $280M",
+      "technicians": "80",
+      "branches": "7",
+      "systems": "CRM, spreadsheets",
+      "notes": "Service sold as a profit line but priced to cover cost.",
+      "claimed": "profit-center__equipment",
+      "actual": "profit-center__appointment",
+      "answers": {
+        "budget-language": "margin-line",
+        "priced-separately": "tm-and-contracts",
+        "installed-asset": "location-visits",
+        "entitlements": "basic-coverage",
+        "job-mix": "mostly-appointments",
+        "repeat-visit-cause": "performance-data",
+        "customer-success": "on-time",
+        "revenue-owner": "service-leader"
+      }
+    },
+    {
+      "name": "Freshfield Beverage Systems",
+      "industry": "Consumer Products",
+      "sector": "Food & Beverage",
+      "revenue": "About $410M",
+      "technicians": "190",
+      "branches": "17",
+      "systems": "Field service platform, telemetry on dispensers",
+      "notes": "Dispenser uptime contracts with parts coverage.",
+      "claimed": "profit-center__equipment",
+      "actual": "profit-center__equipment",
+      "answers": {
+        "budget-language": "margin-line",
+        "priced-separately": "tm-and-contracts",
+        "installed-asset": "depends",
+        "entitlements": "sla-and-parts",
+        "job-mix": "mostly-break-fix",
+        "repeat-visit-cause": "part-or-history",
+        "customer-success": "fixed-first-time",
+        "revenue-owner": "service-leader"
+      }
+    },
+    {
+      "name": "Grainhouse Foodservice Equipment",
+      "industry": "Consumer Products",
+      "sector": "Food & Beverage",
+      "revenue": "About $170M",
+      "technicians": "65",
+      "branches": "6",
+      "systems": "ERP, paper tickets",
+      "notes": "Warranty repairs absorbed by the product business.",
+      "claimed": "profit-center__equipment",
+      "actual": "cost-center__equipment",
+      "answers": {
+        "budget-language": "cost-to-contain",
+        "priced-separately": "bundled",
+        "installed-asset": "serialized-unit",
+        "entitlements": "sla-and-parts",
+        "job-mix": "mostly-break-fix",
+        "repeat-visit-cause": "part-or-history",
+        "customer-success": "fixed-first-time",
+        "revenue-owner": "shared-recurring"
+      }
+    },
+    {
+      "name": "Copperpot Kitchen Services",
+      "industry": "Consumer Products",
+      "sector": "Retail & Restaurants",
+      "revenue": "About $130M",
+      "technicians": "120",
+      "branches": "14",
+      "systems": "Dispatch app, accounting package",
+      "notes": "Restaurant call-outs billed at cost-plus with a margin target.",
+      "claimed": "profit-center__equipment",
+      "actual": "profit-center__appointment",
+      "answers": {
+        "budget-language": "margin-line",
+        "priced-separately": "tm-and-contracts",
+        "installed-asset": "location-visits",
+        "entitlements": "sla-and-parts",
+        "job-mix": "mostly-appointments",
+        "repeat-visit-cause": "slot-slipped",
+        "customer-success": "fast-answer",
+        "revenue-owner": "service-leader"
+      }
+    },
+    {
+      "name": "Vaultline ATM Services",
+      "industry": "Financial Services",
+      "sector": "Banking & Capital Markets",
+      "revenue": "About $340M",
+      "technicians": "210",
+      "branches": "30",
+      "systems": "Monitoring platform, ticketing tool",
+      "notes": "Availability contracts priced per machine, not per outcome.",
+      "claimed": "servitization__outcome",
+      "actual": "servitization__equipment",
+      "answers": {
+        "budget-language": "growth-subscription",
+        "priced-separately": "priced-on-outcome",
+        "installed-asset": "depends",
+        "entitlements": "sla-and-parts",
+        "job-mix": "mostly-break-fix",
+        "repeat-visit-cause": "part-or-history",
+        "customer-success": "on-time",
+        "revenue-owner": "shared-recurring"
+      }
+    },
+    {
+      "name": "Claimwell Restoration Network",
+      "industry": "Financial Services",
+      "sector": "Insurance",
+      "revenue": "About $450M",
+      "technicians": "400",
+      "branches": "35",
+      "systems": "Claims platform, scheduling tool",
+      "notes": "Carrier-directed jobs run to cost and cycle time.",
+      "claimed": "profit-center__appointment",
+      "actual": "cost-center__appointment",
+      "answers": {
+        "budget-language": "cost-to-contain",
+        "priced-separately": "bundled",
+        "installed-asset": "location-visits",
+        "entitlements": "no-contracts",
+        "job-mix": "mostly-appointments",
+        "repeat-visit-cause": "slot-slipped",
+        "customer-success": "on-time",
+        "revenue-owner": "shared-recurring"
+      }
+    },
+    {
+      "name": "Riverbend County Fleet Services",
+      "industry": "Government Services",
+      "sector": "State, Local, Government",
+      "revenue": "About $60M",
+      "technicians": "45",
+      "branches": "3",
+      "systems": "Fleet management system, spreadsheets",
+      "notes": "Keeps the vehicle fleet running on a fixed budget.",
+      "claimed": "cost-center__appointment",
+      "actual": "cost-center__equipment",
+      "answers": {
+        "budget-language": "cost-to-contain",
+        "priced-separately": "bundled",
+        "installed-asset": "serialized-unit",
+        "entitlements": "sla-and-parts",
+        "job-mix": "mostly-break-fix",
+        "repeat-visit-cause": "part-or-history",
+        "customer-success": "on-time",
+        "revenue-owner": "nobody"
+      }
+    },
+    {
+      "name": "Metro Transit Signal Maintenance",
+      "industry": "Government Services",
+      "sector": "State, Local, Government",
+      "revenue": "About $90M",
+      "technicians": "70",
+      "branches": "4",
+      "systems": "CMMS, radio dispatch",
+      "notes": "Specialist signal expertise with no internal chargeback.",
+      "claimed": "cost-center__appointment",
+      "actual": "cost-center__knowledge",
+      "answers": {
+        "budget-language": "cost-to-contain",
+        "priced-separately": "bundled",
+        "installed-asset": "location-visits",
+        "entitlements": "no-contracts",
+        "job-mix": "mostly-remote",
+        "repeat-visit-cause": "performance-data",
+        "customer-success": "fast-answer",
+        "revenue-owner": "nobody"
+      }
+    },
+    {
+      "name": "Lakeshore University Facilities",
+      "industry": "Nonprofit & Education",
+      "sector": "Education",
+      "revenue": "About $110M",
+      "technicians": "150",
+      "branches": "2",
+      "systems": "CMMS, student portal requests",
+      "notes": "Campus work orders scheduled by building and trade.",
+      "claimed": "cost-center__appointment",
+      "actual": "cost-center__appointment",
+      "answers": {
+        "budget-language": "cost-to-contain",
+        "priced-separately": "bundled",
+        "installed-asset": "location-visits",
+        "entitlements": "no-contracts",
+        "job-mix": "mostly-appointments",
+        "repeat-visit-cause": "slot-slipped",
+        "customer-success": "on-time",
+        "revenue-owner": "nobody"
+      }
+    },
+    {
+      "name": "Commonroot Housing Repair",
+      "industry": "Nonprofit & Education",
+      "sector": "Nonprofit",
+      "revenue": "About $25M",
+      "technicians": "30",
+      "branches": "3",
+      "systems": "Spreadsheets, email",
+      "notes": "Skilled volunteers and staff give expertise away free.",
+      "claimed": "cost-center__appointment",
+      "actual": "cost-center__knowledge",
+      "answers": {
+        "budget-language": "cost-to-contain",
+        "priced-separately": "bundled",
+        "installed-asset": "serialized-unit",
+        "entitlements": "no-contracts",
+        "job-mix": "mostly-remote",
+        "repeat-visit-cause": "performance-data",
+        "customer-success": "fast-answer",
+        "revenue-owner": "nobody"
+      }
     },
     {
       "name": "Brightwire Networks",
@@ -183,8 +861,64 @@
       "revenue": "About $700M",
       "technicians": "85",
       "branches": "6",
+      "systems": "Remote monitoring, CRM",
+      "notes": "Managed-service subscriptions bundle expert support.",
       "claimed": "servitization__knowledge",
-      "actual": "servitization__knowledge"
+      "actual": "servitization__knowledge",
+      "answers": {
+        "budget-language": "growth-subscription",
+        "priced-separately": "priced-on-outcome",
+        "installed-asset": "serialized-unit",
+        "entitlements": "no-contracts",
+        "job-mix": "mostly-remote",
+        "repeat-visit-cause": "expertise",
+        "customer-success": "fast-answer",
+        "revenue-owner": "shared-recurring"
+      }
+    },
+    {
+      "name": "Datacrest Edge Services",
+      "industry": "Technology, Media & Telecom",
+      "sector": "Technology",
+      "revenue": "About $260M",
+      "technicians": "110",
+      "branches": "9",
+      "systems": "Field service platform, remote hands portal",
+      "notes": "Remote hands and expert resolution billed per incident.",
+      "claimed": "profit-center__knowledge",
+      "actual": "profit-center__knowledge",
+      "answers": {
+        "budget-language": "margin-line",
+        "priced-separately": "tm-and-contracts",
+        "installed-asset": "location-visits",
+        "entitlements": "basic-coverage",
+        "job-mix": "mostly-remote",
+        "repeat-visit-cause": "performance-data",
+        "customer-success": "fixed-first-time",
+        "revenue-owner": "service-leader"
+      }
+    },
+    {
+      "name": "Signalpeak Broadband Field Ops",
+      "industry": "Technology, Media & Telecom",
+      "sector": "Media, Entertainment & Telecom",
+      "revenue": "About $800M",
+      "technicians": "900",
+      "branches": "40",
+      "systems": "Workforce management system, OSS/BSS",
+      "notes": "Install and repair visits measured on cost per job despite a profit mandate.",
+      "claimed": "profit-center__appointment",
+      "actual": "profit-center__appointment",
+      "answers": {
+        "budget-language": "margin-line",
+        "priced-separately": "tm-and-contracts",
+        "installed-asset": "location-visits",
+        "entitlements": "basic-coverage",
+        "job-mix": "even-mix",
+        "repeat-visit-cause": "slot-slipped",
+        "customer-success": "on-time",
+        "revenue-owner": "service-leader"
+      }
     }
   ]
 }

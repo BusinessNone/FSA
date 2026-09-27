@@ -18,6 +18,7 @@ Other scripts:
 |---|---|
 | `npm run validate` | Validates every `/content` file against its zod schema, checks cross-references, and confirms the rubric still places Meridian in the deep cell. |
 | `npm run build` | Validate, typecheck, build, then fail if any scoring data appears in `dist/client`. |
+| `npm run samples` | Regenerate the fictional compare samples so their answers place them where stated. |
 | `npm test` | Unit tests for placement, the API response shape, and the Markdown export. |
 | `npm run deploy` | Build, then deploy with Wrangler. See below. |
 
@@ -67,9 +68,11 @@ Every session starts on the fictional client, Meridian. To capture a real custom
 
 ## Compare customers
 
-**Compare customers** in the sidebar loads several exported records (JSON or CSV, one or many customers per file) and shows them three ways: an industry-by-maturity table, the TOM grid with each customer placed (optionally with where they say they are), and a sortable customer table. Filter by industry or maturity, export everything as one combined CSV, or load the fictional sample set to demo it.
+**Compare customers** in the sidebar loads several exported records (JSON or CSV, one or many customers per file) and shows them four ways: a maturity-mix roll-up (share of customers at each level, per industry and overall, as 100% bars with an aligned share), an industry-by-maturity table, the TOM grid with each customer placed (optionally with where they say they are), and a sortable customer table. Filter by industry or maturity, export everything as one combined CSV, or load the fictional sample set to demo it.
 
 Maturity is read from the TOM, with no extra questions: **Coherent** (aligned cell, describes itself accurately), **Aligned, misread** (aligned cell, claims to be elsewhere), **Transitional**, **The trap**, and **Incoherent**, taken from the rating of the cell the answers land in. The industry list, maturity labels, and samples live in `content/compare.json`.
+
+The view opens with a fictional sample set across every industry and maturity level; **Remove samples** takes them out and **Reload sample customers** brings them back. Each sample is a full record (facts, systems, a note, and a complete answer set), so its export reimports like a real customer. To change the samples, edit the list in `scripts/generate-samples.ts` and run `npm run samples`: it searches every answer combination through the Worker's scoring and writes an answer set that genuinely places each customer in its stated cell. `npm run validate` fails if any sample's answers drift from its cell.
 
 ## Presenting
 

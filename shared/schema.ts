@@ -285,8 +285,11 @@ export const compareSchema = z.object({
         revenue: z.string(),
         technicians: z.string(),
         branches: z.string(),
+        systems: z.string(),
+        notes: z.string(),
         claimed: text,
         actual: text,
+        answers: z.record(z.string(), id),
       }),
     )
     .min(1),

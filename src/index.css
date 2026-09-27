@@ -27,6 +27,11 @@
   --color-side-line: var(--side-line);
   --color-side-ink: var(--side-ink);
   --color-side-muted: var(--side-muted);
+  --color-mat-1: var(--mat-1);
+  --color-mat-2: var(--mat-2);
+  --color-mat-3: var(--mat-3);
+  --color-mat-4: var(--mat-4);
+  --color-mat-5: var(--mat-5);
   --color-grid-head: var(--grid-head);
   --color-grid-head-ink: var(--grid-head-ink);
   --color-coh-aligned: var(--coh-aligned);
@@ -63,6 +68,17 @@
   --side-muted: #a3b3cc;
   --grid-head: #00153d;
   --grid-head-ink: #ffffff;
+  /* Maturity ramp: one RSM blue, Coherent darkest to Incoherent lightest (validated ordinal). */
+  --mat-1: #00153d;
+  --mat-2: #0b4f8a;
+  --mat-3: #0077b8;
+  --mat-4: #0095d6;
+  --mat-5: #4fb0de;
+  --mat-ink-1: #ffffff;
+  --mat-ink-2: #ffffff;
+  --mat-ink-3: #ffffff;
+  --mat-ink-4: #00153d;
+  --mat-ink-5: #00153d;
   --coh-aligned: #009cde;
   --coh-transitional: #cccfcf;
   --coh-incoherent: #63666a;
@@ -97,6 +113,17 @@
   --side-line: #17305c;
   --grid-head: #0b2a5c;
   --grid-head-ink: #ffffff;
+  /* Dark mode takes its own validated steps: Coherent brightest on the dark surface. */
+  --mat-1: #d6effa;
+  --mat-2: #99d6f2;
+  --mat-3: #4fb8e8;
+  --mat-4: #1a8fcc;
+  --mat-5: #136a9c;
+  --mat-ink-1: #00153d;
+  --mat-ink-2: #00153d;
+  --mat-ink-3: #00153d;
+  --mat-ink-4: #00153d;
+  --mat-ink-5: #ffffff;
   --coh-aligned: #1b8fc6;
   --coh-transitional: #3a4556;
   --coh-incoherent: #262d38;
