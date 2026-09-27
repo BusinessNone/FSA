@@ -2,14 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import type { Profile } from "../../shared/schema";
 import type { PlacementResponse } from "../../shared/api";
 import { cellId } from "../../shared/api";
-import { cellById, client, intake, meridianAnswers } from "../content";
+import { cellById, client, compare, intake, meridianAnswers } from "../content";
 import { defaultProfile, exportRecord, importRecord, recordFileName, recordToCsv, type RecordState } from "../lib/record";
 import { downloadText } from "../lib/markdown";
 import { Button, cx, Icon, SectionLabel } from "./ui";
 
 const fields: { key: keyof Profile; label: string; placeholder?: string; wide?: boolean }[] = [
   { key: "name", label: "Customer name", wide: true },
-  { key: "industry", label: "Industry" },
   { key: "revenue", label: "Revenue", placeholder: "e.g. About $600M" },
   { key: "technicians", label: "Field technicians" },
   { key: "branches", label: "Service branches or locations" },
@@ -60,7 +59,7 @@ export function RecordPanel({ record, placement, setProfile, setNotes, onLoad, s
   };
   const newCustomer = () =>
     onLoad({
-      profile: { name: "New customer", industry: "", revenue: "", technicians: "", branches: "", systems: "", contact: "" },
+      profile: { name: "New customer", industry: "", sector: "", revenue: "", technicians: "", branches: "", systems: "", contact: "" },
       claimed: { ...intake.claim.meridian },
       answers: { ...meridianAnswers },
       questionNotes: {},
@@ -104,6 +103,7 @@ export function RecordPanel({ record, placement, setProfile, setNotes, onLoad, s
           <section>
             <SectionLabel>Facts and figures</SectionLabel>
             <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              <IndustryPicker profile={record.profile} setProfile={setProfile} />
               {fields.map((f, i) => (
                 <label key={f.key} className={cx("block text-sm", f.wide && "sm:col-span-2")}>
                   <span className="mb-1 block text-xs font-semibold text-muted">{f.label}</span>
@@ -186,5 +186,48 @@ export function RecordPanel({ record, placement, setProfile, setNotes, onLoad, s
         </footer>
       </aside>
     </div>
+  );
+}
+
+const selectClass = "w-full rounded border border-line bg-surface px-2 py-1.5 text-ink focus:border-accent";
+
+function IndustryPicker({ profile, setProfile }: { profile: Profile; setProfile: (p: Profile) => void }) {
+  const known = compare.industries.find((i) => i.name === profile.industry);
+  const sectors = known?.sectors ?? [];
+  return (
+    <>
+      <label className="block text-sm">
+        <span className="mb-1 block text-xs font-semibold text-muted">Industry</span>
+        <select
+          value={profile.industry}
+          onChange={(e) => {
+            const next = compare.industries.find((i) => i.name === e.target.value);
+            setProfile({ ...profile, industry: e.target.value, sector: next?.sectors.length === 1 ? next.sectors[0] : "" });
+          }}
+          className={selectClass}
+        >
+          <option value="">Choose an industry</option>
+          {compare.industries.map((i) => (
+            <option key={i.name} value={i.name}>
+              {i.name}
+            </option>
+          ))}
+          {profile.industry && !known && <option value={profile.industry}>{profile.industry} (unlisted)</option>}
+        </select>
+      </label>
+      <label className="block text-sm">
+        <span className="mb-1 block text-xs font-semibold text-muted">Sector</span>
+        <select value={profile.sector} onChange={(e) => setProfile({ ...profile, sector: e.target.value })} disabled={!known} className={cx(selectClass, "disabled:opacity-50")}>
+          <option value="">{known ? "Choose a sector" : "Choose an industry first"}</option>
+          {sectors.map((sct) => (
+            <option key={sct} value={sct}>
+              {sct}
+            </option>
+          ))}
+          {profile.sector && known && !sectors.includes(profile.sector) && <option value={profile.sector}>{profile.sector} (unlisted)</option>}
+        </select>
+      </label>
+      <p className="-mt-1 text-[0.7rem] text-muted sm:col-span-2">Industries and sectors follow {compare.industriesSource}.</p>
+    </>
   );
 }

@@ -57,7 +57,7 @@ export function exportRecord(state: RecordState, placement?: PlacementResponse) 
   };
 }
 
-const csvCell = (v: unknown) => {
+export const csvCell = (v: unknown) => {
   const s = v === null || v === undefined ? "" : String(v);
   return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 };
@@ -91,7 +91,7 @@ const validCell = (c: unknown): c is CellRef =>
   grid.rows.some((r) => r.id === (c as CellRef).row) &&
   grid.columns.some((k) => k.id === (c as CellRef).column);
 
-function parseCsv(text: string): string[][] {
+export function parseCsv(text: string): string[][] {
   const rows: string[][] = [];
   let row: string[] = [];
   let cell = "";
@@ -160,8 +160,10 @@ export function importRecord(text: string, fallback: RecordState): RecordState {
   const [row, column] = String(data.claimed?.cell ?? "").split("__");
   const questionNotes: Record<string, string> = {};
   for (const n of data.questionNotes ?? []) if (typeof n?.id === "string" && typeof n?.note === "string") questionNotes[n.id] = n.note;
-  const profile = { ...defaultProfile() };
+  // Start blank so an older record never inherits the demo client's facts.
+  const profile = Object.fromEntries(Object.keys(defaultProfile()).map((k) => [k, ""])) as Profile;
   for (const k of Object.keys(profile) as (keyof Profile)[]) if (typeof data.profile?.[k] === "string") profile[k] = data.profile[k];
+  if (!profile.name.trim()) profile.name = "Unnamed customer";
   return {
     profile,
     claimed: validCell({ row, column }) ? { row, column } : fallback.claimed,

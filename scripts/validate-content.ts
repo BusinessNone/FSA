@@ -6,6 +6,7 @@ import { join } from "node:path";
 import type { ZodType } from "zod";
 import {
   clientSchema,
+  compareSchema,
   configSchema,
   contrastBlueprintSchema,
   deepBlueprintSchema,
@@ -33,7 +34,8 @@ function load<T>(file: string, schema: ZodType<T>): T {
 }
 
 const config = load("config.json", configSchema);
-load("client.json", clientSchema);
+const clientContent = load("client.json", clientSchema);
+const compare = load("compare.json", compareSchema);
 const grid = load("grid.json", gridSchema);
 const intake = load("intake.json", intakeSchema);
 const deviations = load("deviations.json", deviationsSchema);
@@ -98,6 +100,19 @@ for (const p of intake.presets) {
 const validClaim = (c: { row: string; column: string }) => rowIds.includes(c.row) && colIds.includes(c.column);
 if (!validClaim(intake.claim.meridian)) fail("intake.json: claim.meridian is not a grid cell");
 for (const p of intake.presets) if (!validClaim(p.claimed)) fail(`intake.json: preset ${p.id} claimed is not a grid cell`);
+
+// ---- compare ----
+const sectorsOf = (industry: string) => compare.industries.find((i) => i.name === industry)?.sectors;
+const checkIndustry = (where: string, industry: string, sector: string) => {
+  const sectors = sectorsOf(industry);
+  if (!sectors) fail(`${where}: industry "${industry}" is not in compare.industries`);
+  else if (!sectors.includes(sector)) fail(`${where}: sector "${sector}" is not listed under ${industry}`);
+};
+checkIndustry("client.json record.profile", clientContent.record.profile.industry, clientContent.record.profile.sector);
+for (const smp of compare.samples) {
+  checkIndustry(`compare.json sample ${smp.name}`, smp.industry, smp.sector);
+  for (const c of [smp.claimed, smp.actual]) if (!seen.has(c)) fail(`compare.json: sample ${smp.name} has unknown cell ${c}`);
+}
 
 // ---- deviations ----
 for (const r of deviations.requests) {

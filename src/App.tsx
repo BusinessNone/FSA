@@ -11,6 +11,8 @@ import { CueContext, cueRing, type ActiveCue } from "./lib/cues";
 import type { CueId, Profile } from "../shared/schema";
 import { defaultProfile, isDemoRecord, loadStoredRecord, storeRecord, type CellRef, type RecordState } from "./lib/record";
 import { RecordPanel } from "./components/RecordPanel";
+import { ComparePanel } from "./components/ComparePanel";
+import { entryFromOpenRecord, type CompareEntry } from "./lib/compare";
 
 // A stored working copy is only trusted if every answer is still a valid option.
 function initialRecord(): RecordState | null {
@@ -48,6 +50,8 @@ export default function App() {
   const [questionNotes, setQuestionNotes] = useState<Record<string, string>>({});
   const [notes, setNotes] = useState("");
   const [recordOpen, setRecordOpen] = useState(false);
+  const [compareOpen, setCompareOpen] = useState(false);
+  const [compareEntries, setCompareEntries] = useState<CompareEntry[]>([]);
   const [saved, setSaved] = useState(initialRecord);
   const [decisions, setDecisions] = useState<Decisions>({});
   const placement = usePlacement(answers);
@@ -164,7 +168,7 @@ export default function App() {
   return (
     <CueContext.Provider value={cues}>
     <div className="flex h-dvh flex-col bg-bg text-ink lg:flex-row">
-      <Sidebar mode={mode} setMode={setMode} step={step} setStep={setStep} theme={theme} toggleTheme={toggle} hints={hints} setHints={setHints} onOpenRecord={() => setRecordOpen(true)} recordProfile={demo ? undefined : profile} resumeName={demo ? saved?.profile.name : undefined} />
+      <Sidebar mode={mode} setMode={setMode} step={step} setStep={setStep} theme={theme} toggleTheme={toggle} hints={hints} setHints={setHints} onOpenRecord={() => setRecordOpen(true)} onOpenCompare={() => setCompareOpen(true)} compareCount={compareEntries.length} recordProfile={demo ? undefined : profile} resumeName={demo ? saved?.profile.name : undefined} />
 
       <div className="flex min-h-0 min-w-0 flex-1 flex-col">
         <main id="main" className="min-h-0 flex-1 overflow-y-auto">
@@ -231,6 +235,14 @@ export default function App() {
 
         {mode === "guided" && <TourBar step={step} setStep={setStep} onRestart={restart} active={active} />}
       </div>
+      {compareOpen && (
+        <ComparePanel
+          entries={compareEntries}
+          setEntries={setCompareEntries}
+          openRecordEntry={() => (demo ? null : entryFromOpenRecord(record, placement.result))}
+          onClose={() => setCompareOpen(false)}
+        />
+      )}
       {recordOpen && (
         <RecordPanel
           record={record}
@@ -258,6 +270,8 @@ function Sidebar({
   hints,
   setHints,
   onOpenRecord,
+  onOpenCompare,
+  compareCount,
   recordProfile,
   resumeName,
 }: {
@@ -270,6 +284,8 @@ function Sidebar({
   hints: boolean;
   setHints: (h: boolean) => void;
   onOpenRecord: () => void;
+  onOpenCompare: () => void;
+  compareCount: number;
   recordProfile?: Profile;
   resumeName?: string;
 }) {
@@ -381,6 +397,19 @@ function Sidebar({
             <span className="block truncate text-xs font-normal text-side-muted">{recordName ?? (resumeName ? `Resume ${resumeName}` : "Capture, export, or reimport")}</span>
           </span>
           <Icon name="download" />
+        </button>
+        <button
+          type="button"
+          onClick={onOpenCompare}
+          className="flex w-full items-center justify-between gap-2 rounded-lg border border-side-line px-3 py-2 text-left text-sm font-semibold text-side-ink transition hover:border-side-muted"
+        >
+          <span className="min-w-0">
+            <span className="block">Compare customers</span>
+            <span className="block truncate text-xs font-normal text-side-muted">
+              {compareCount ? `${compareCount} loaded` : "By industry and TOM maturity"}
+            </span>
+          </span>
+          <span aria-hidden>→</span>
         </button>
         {recordProfile ? (
           <div className="hidden rounded-lg bg-side-2 p-3 lg:block">

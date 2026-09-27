@@ -49,6 +49,7 @@ export const configSchema = z.object({
 export const profileSchema = z.object({
   name: text,
   industry: z.string(),
+  sector: z.string(),
   revenue: z.string(),
   technicians: z.string(),
   branches: z.string(),
@@ -265,7 +266,35 @@ export const payoffSchema = z.object({
   close: text,
 });
 
+// ---------- compare.json ----------
+export const maturitySchema = z.enum(["coherent", "misread", "transitional", "trap", "incoherent"]);
+
+export const compareSchema = z.object({
+  title: text,
+  intro: text,
+  industriesSource: text,
+  industries: z.array(z.object({ name: text, sectors: z.array(text).min(1) })).min(2),
+  maturity: z.array(z.object({ id: maturitySchema, label: text, description: text })).length(5),
+  sampleLabel: text,
+  samples: z
+    .array(
+      z.object({
+        name: text,
+        industry: text,
+        sector: text,
+        revenue: z.string(),
+        technicians: z.string(),
+        branches: z.string(),
+        claimed: text,
+        actual: text,
+      }),
+    )
+    .min(1),
+});
+
 export type Config = z.infer<typeof configSchema>;
+export type Compare = z.infer<typeof compareSchema>;
+export type Maturity = z.infer<typeof maturitySchema>;
 export type CueId = z.infer<typeof cueIdSchema>;
 export type Client = z.infer<typeof clientSchema>;
 export type Profile = z.infer<typeof profileSchema>;

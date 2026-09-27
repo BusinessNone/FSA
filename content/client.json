@@ -30,7 +30,8 @@
     "notice": "Every session starts with the fictional client. Customer records stay in this browser until you export them; nothing is sent to the site.",
     "profile": {
       "name": "Meridian Industrial Equipment",
-      "industry": "Commercial industrial equipment (OEM)",
+      "industry": "Industrials",
+      "sector": "Manufacturing",
       "revenue": "About $600M",
       "technicians": "180",
       "branches": "14, across the US",
