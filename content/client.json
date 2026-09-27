@@ -5,16 +5,25 @@
   "figuresNote": "Fictional company. Profile figures are illustrative.",
   "descriptor": "Mid-market OEM that sells and services commercial industrial equipment, with a large installed base under service contracts.",
   "profile": [
-    { "label": "Revenue", "value": "About $600M" },
-    { "label": "Field technicians", "value": "180" },
-    { "label": "Service branches", "value": "14, across the US" }
+    {
+      "label": "Revenue",
+      "value": "About $600M"
+    },
+    {
+      "label": "Field technicians",
+      "value": "180"
+    },
+    {
+      "label": "Service branches",
+      "value": "14, across the US"
+    }
   ],
-  "today": "Service runs on a 15-year-old legacy dispatch system, spreadsheets, and a separate warranty tool.",
-  "ambition": "Service leadership wants service treated as a margin line.",
+  "today": "Requests arrive by phone, email, and an external portal and are re-keyed. Dispatch runs on spreadsheets and trust, and technicians record work in a separate shop system.",
+  "ambition": "Service leadership wants one intake, scheduling, and dispatch backbone first, then to run service as a margin line.",
   "painPoints": [
-    "Contract entitlements are not enforced in the field.",
-    "Parts get pulled off the truck without being billed.",
-    "Invoicing is slow after the job is complete.",
-    "First-time fix is low because technicians lack asset history."
+    "Requests arrive through several channels and are re-keyed before anyone can schedule them.",
+    "Dispatch cannot see who owns a job or whether it is waiting, stalled, or done.",
+    "Technicians arrive without the machine's history or warranty status.",
+    "Parts, pricing, and completion details are captured inconsistently, so billing lags."
   ]
 }
