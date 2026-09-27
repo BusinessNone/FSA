@@ -1,0 +1,48 @@
+{
+  "intro": "Same client, two ways to deliver. The difference is where the effort goes and who can carry it.",
+  "sides": { "blankPage": "Blank-page build", "blueprint": "Blueprint-led build" },
+  "comparison": [
+    {
+      "id": "discovery",
+      "dimension": "Where discovery effort goes",
+      "blankPage": "Rediscovering the standard process with the client. Workshops rebuild dispatch, entitlement, and billing from a blank whiteboard.",
+      "blueprint": "Only the deltas: confirming placement, running the question set, and deciding each off-blueprint request."
+    },
+    {
+      "id": "who-delivers",
+      "dimension": "Who can deliver it",
+      "blankPage": "Directors and senior managers carry the design because nothing is written down.",
+      "blueprint": "Associates run the scripted question set. Directors step in on placement calls and deviation decisions."
+    },
+    {
+      "id": "reuse",
+      "dimension": "What gets reused next time",
+      "blankPage": "Little. The design lives in people's heads and in one client's configuration.",
+      "blueprint": "The cell gets sharper: new red-flag answers, better defaults, and deviation decisions that become precedent."
+    }
+  ],
+  "staffing": {
+    "label": "Staffing pyramid",
+    "note": "Illustrative shape, not a staffing plan.",
+    "levels": [
+      { "role": "Director", "blankPage": 0.55, "blueprint": 0.2 },
+      { "role": "Senior Manager", "blankPage": 0.75, "blueprint": 0.35 },
+      { "role": "Manager", "blankPage": 0.7, "blueprint": 0.55 },
+      { "role": "Senior Associate", "blankPage": 0.5, "blueprint": 0.8 },
+      { "role": "Associate", "blankPage": 0.3, "blueprint": 1 }
+    ]
+  },
+  "reference": {
+    "label": "Reference point",
+    "text": "One RSM engagement: advisory up front was about 30% of a $50K project."
+  },
+  "ladder": {
+    "title": "The Productization Ladder",
+    "tiers": [
+      { "id": "prebuilt", "rung": 3, "title": "High-frequency cells get pre-built", "description": "Jobs, KPIs, question set, process, and deviation precedents ready before kickoff.", "depth": "deep" },
+      { "id": "scripted", "rung": 2, "title": "The grid scripts the questions", "description": "Placement and a cell-specific question set focus discovery on the deltas.", "depth": "contrast" },
+      { "id": "advisory", "rung": 1, "title": "Advisory frames the deal", "description": "Every engagement starts by placing the client on the total operating model.", "depth": "coming" }
+    ]
+  },
+  "close": "The grid cell is the SKU."
+}

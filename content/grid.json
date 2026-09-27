@@ -1,0 +1,32 @@
+{
+  "title": "Field Service total operating model",
+  "rowAxisLabel": "Service motivation",
+  "columnAxisLabel": "Service scenario",
+  "columnSource": "Columns follow Gartner's four field service scenarios.",
+  "comingLabel": "Blueprint in development",
+  "rows": [
+    { "id": "cost-center", "label": "Cost Center", "description": "Service exists to protect the product sale and is managed to cost." },
+    { "id": "profit-center", "label": "Profit Center", "description": "Service is its own margin line with revenue and margin targets." },
+    { "id": "servitization", "label": "Servitization (Outcome-based)", "description": "Service is sold as a promised outcome rather than as labor and parts." }
+  ],
+  "columns": [
+    { "id": "appointment", "label": "Appointment-Centric", "description": "Booked visits to a location, judged on hitting the window." },
+    { "id": "equipment", "label": "Equipment-Centric", "description": "Work against a serialized installed asset, judged on fixing it." },
+    { "id": "knowledge", "label": "Knowledge-Centric", "description": "Resolution depends on expertise, often delivered remotely." },
+    { "id": "outcome", "label": "Outcome-Centric", "description": "The customer buys uptime, output, or usage, not the visit." }
+  ],
+  "cells": [
+    { "row": "cost-center", "column": "appointment", "depth": "contrast", "oneLiner": "Scheduled visits run as a cost of serving the customer." },
+    { "row": "cost-center", "column": "equipment", "depth": "coming", "oneLiner": "Keeping installed equipment running as a warranty or goodwill obligation, managed to cost." },
+    { "row": "cost-center", "column": "knowledge", "depth": "coming", "oneLiner": "Help desk and remote support run to contain cost per resolution." },
+    { "row": "cost-center", "column": "outcome", "depth": "coming", "oneLiner": "Uptime commitments carried as a cost of selling the product, not priced on their own." },
+    { "row": "profit-center", "column": "appointment", "depth": "coming", "oneLiner": "Paid, booked visits such as installs and inspections, run for margin." },
+    { "row": "profit-center", "column": "equipment", "depth": "deep", "oneLiner": "Service run as a margin line on a contracted installed base." },
+    { "row": "profit-center", "column": "knowledge", "depth": "coming", "oneLiner": "Expert and remote diagnostic services sold as a margin line." },
+    { "row": "profit-center", "column": "outcome", "depth": "coming", "oneLiner": "Priced performance guarantees layered onto a margin-run service business." },
+    { "row": "servitization", "column": "appointment", "depth": "coming", "oneLiner": "Recurring subscription visits where the customer buys the schedule, not the job." },
+    { "row": "servitization", "column": "equipment", "depth": "coming", "oneLiner": "Equipment as a service: the customer pays for the asset's availability." },
+    { "row": "servitization", "column": "knowledge", "depth": "coming", "oneLiner": "Subscription access to expertise, monitoring, and remote resolution." },
+    { "row": "servitization", "column": "outcome", "depth": "coming", "oneLiner": "Pay-per-outcome contracts for uptime, output, or usage." }
+  ]
+}
