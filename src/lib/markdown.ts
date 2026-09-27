@@ -1,7 +1,7 @@
 import type { DeepBlueprint } from "../../shared/schema";
 
 // Exports the question set as clean Markdown an associate can paste into call notes.
-export function questionSetMarkdown(bp: DeepBlueprint, clientName: string, fictionalNote: string): string {
+export function questionSetMarkdown(bp: DeepBlueprint, clientName: string, fictionalNote: string, notes: Record<string, string> = {}): string {
   const out: string[] = [];
   out.push(`# Question Set: ${bp.title}`, "");
   out.push(`Client: ${clientName} (${fictionalNote})`, "");
@@ -18,6 +18,8 @@ export function questionSetMarkdown(bp: DeepBlueprint, clientName: string, ficti
       out.push(`**Red-flag answers:**`, "");
       for (const rf of q.redFlags) out.push(`- ${rf.answer} Signals: ${rf.signals}`);
       out.push("");
+      const note = notes[q.id]?.trim();
+      if (note) out.push(`**Notes from the call:** ${note.replace(/\s*\n\s*/g, " ")}`, "");
     }
   }
   return out.join("\n").trimEnd() + "\n";
@@ -40,8 +42,8 @@ export async function copyText(text: string): Promise<boolean> {
   }
 }
 
-export function downloadText(filename: string, text: string) {
-  const url = URL.createObjectURL(new Blob([text], { type: "text/markdown;charset=utf-8" }));
+export function downloadText(filename: string, text: string, type = "text/markdown;charset=utf-8") {
+  const url = URL.createObjectURL(new Blob([text], { type }));
   const a = document.createElement("a");
   a.href = url;
   a.download = filename;

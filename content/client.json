@@ -25,5 +25,18 @@
     "Dispatch cannot see who owns a job or whether it is waiting, stalled, or done.",
     "Technicians arrive without the machine's history or warranty status.",
     "Parts, pricing, and completion details are captured inconsistently, so billing lags."
-  ]
+  ],
+  "record": {
+    "notice": "Every session starts with the fictional client. Customer records stay in this browser until you export them; nothing is sent to the site.",
+    "profile": {
+      "name": "Meridian Industrial Equipment",
+      "industry": "Industrials",
+      "sector": "Manufacturing",
+      "revenue": "About $600M",
+      "technicians": "180",
+      "branches": "14, across the US",
+      "systems": "Legacy dispatch system, spreadsheets, separate warranty tool",
+      "contact": ""
+    }
+  }
 }

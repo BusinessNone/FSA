@@ -1,8 +1,22 @@
 {
   "intro": "Plain-language questions a consultant can ask in the first conversation. Meridian's answers are pre-filled; change any of them to see the placement move.",
+  "claim": {
+    "short": "What the client says",
+    "prompt": "Where does the client say they are?",
+    "help": "Capture the client's own description first, before the behavior questions.",
+    "rowPrompt": "Business model they describe",
+    "columnPrompt": "Service scenario they describe",
+    "meridian": {
+      "row": "servitization",
+      "column": "equipment"
+    },
+    "gapText": "{name} says {claimed}. Its answers place it in {actual}. The gap between the two is the engagement.",
+    "matchText": "{name} says {claimed}, and its answers agree. Says and does line up."
+  },
   "questions": [
     {
       "id": "budget-language",
+      "short": "How service is described",
       "prompt": "How does service leadership describe service in budget meetings?",
       "options": [
         {
@@ -22,6 +36,7 @@
     },
     {
       "id": "priced-separately",
+      "short": "Service pricing",
       "prompt": "Is service priced separately from the equipment?",
       "options": [
         {
@@ -30,7 +45,7 @@
         },
         {
           "id": "tm-and-contracts",
-          "label": "Yes. Time and materials, plus service contracts"
+          "label": "Yes. Time and materials, with customer-specific price lists"
         },
         {
           "id": "priced-on-outcome",
@@ -41,6 +56,7 @@
     },
     {
       "id": "installed-asset",
+      "short": "Dispatched against",
       "prompt": "Are technicians dispatched against a customer-owned installed asset?",
       "options": [
         {
@@ -64,6 +80,7 @@
     },
     {
       "id": "entitlements",
+      "short": "Contract entitlements",
       "prompt": "Do contracts carry entitlements such as response time or covered parts?",
       "options": [
         {
@@ -72,7 +89,7 @@
         },
         {
           "id": "basic-coverage",
-          "label": "Some basic coverage, with few written terms"
+          "label": "Some. Key accounts get response commitments, but coverage per machine is not tracked"
         },
         {
           "id": "sla-and-parts",
@@ -83,10 +100,11 @@
           "label": "Contracts guarantee uptime or output, with penalties"
         }
       ],
-      "meridianAnswer": "sla-and-parts"
+      "meridianAnswer": "basic-coverage"
     },
     {
       "id": "job-mix",
+      "short": "Job mix",
       "prompt": "What share of jobs are scheduled appointments versus break-fix on equipment?",
       "options": [
         {
@@ -99,7 +117,7 @@
         },
         {
           "id": "mostly-break-fix",
-          "label": "Mostly break-fix and planned maintenance on equipment"
+          "label": "Mostly repairs, installations, and planned maintenance on equipment"
         },
         {
           "id": "mostly-remote",
@@ -110,6 +128,7 @@
     },
     {
       "id": "repeat-visit-cause",
+      "short": "Repeat-visit cause",
       "prompt": "When a job does not close on the first visit, what is usually missing?",
       "options": [
         {
@@ -118,7 +137,7 @@
         },
         {
           "id": "part-or-history",
-          "label": "The right part, or the machine's service history"
+          "label": "The right part or the machine's history, because the job was booked without them"
         },
         {
           "id": "expertise",
@@ -133,6 +152,7 @@
     },
     {
       "id": "customer-success",
+      "short": "What good looks like",
       "prompt": "How does the customer judge a good service visit?",
       "options": [
         {
@@ -156,6 +176,7 @@
     },
     {
       "id": "revenue-owner",
+      "short": "Revenue owner",
       "prompt": "Who owns service revenue targets?",
       "options": [
         {
@@ -182,11 +203,15 @@
         "budget-language": "margin-line",
         "priced-separately": "tm-and-contracts",
         "installed-asset": "serialized-unit",
-        "entitlements": "sla-and-parts",
+        "entitlements": "basic-coverage",
         "job-mix": "mostly-break-fix",
         "repeat-visit-cause": "part-or-history",
         "customer-success": "fixed-first-time",
         "revenue-owner": "service-leader"
+      },
+      "claimed": {
+        "row": "servitization",
+        "column": "equipment"
       }
     },
     {
@@ -201,6 +226,10 @@
         "repeat-visit-cause": "slot-slipped",
         "customer-success": "on-time",
         "revenue-owner": "nobody"
+      },
+      "claimed": {
+        "row": "profit-center",
+        "column": "appointment"
       }
     },
     {
@@ -215,6 +244,10 @@
         "repeat-visit-cause": "performance-data",
         "customer-success": "output-met",
         "revenue-owner": "shared-recurring"
+      },
+      "claimed": {
+        "row": "servitization",
+        "column": "outcome"
       }
     }
   ]

@@ -4,13 +4,13 @@ import { client, config } from "../content";
 export const cx = (...c: (string | false | null | undefined)[]) => c.filter(Boolean).join(" ");
 
 export function Card({ children, className }: { children: ReactNode; className?: string }) {
-  return <div className={cx("rounded-xl border border-line bg-surface", className)}>{children}</div>;
+  return <div className={cx("card-shadow rounded-2xl border border-line/70 bg-surface", className)}>{children}</div>;
 }
 
 export function Tag({ children, tone = "neutral", className }: { children: ReactNode; tone?: "neutral" | "accent" | "warn" | "danger"; className?: string }) {
   const tones = {
     neutral: "bg-surface-2 text-muted",
-    accent: "bg-accent-soft text-accent",
+    accent: "bg-accent-soft text-accent-text",
     warn: "bg-warn-soft text-warn",
     danger: "bg-danger-soft text-danger",
   };
@@ -25,7 +25,7 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & { variant?: "primar
 
 export function Button({ variant = "secondary", className, ...props }: ButtonProps) {
   const variants = {
-    primary: "bg-accent text-accent-ink hover:opacity-90",
+    primary: "bg-primary text-primary-ink hover:opacity-90",
     secondary: "border border-line bg-surface text-ink hover:bg-surface-2",
     ghost: "text-muted hover:text-ink hover:bg-surface-2",
   };
@@ -33,7 +33,7 @@ export function Button({ variant = "secondary", className, ...props }: ButtonPro
     <button
       type="button"
       className={cx(
-        "inline-flex items-center justify-center gap-2 rounded-lg px-3.5 py-2 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-40",
+        "inline-flex items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-40",
         variants[variant],
         className,
       )}

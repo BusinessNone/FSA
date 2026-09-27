@@ -125,7 +125,7 @@
       "id": "connected-equipment",
       "tier": 3,
       "title": "Create jobs from connected-equipment alerts",
-      "detail": "Machine telemetry opens a case before the customer notices a fault. A step toward the Servitization row.",
+      "detail": "Machine telemetry opens a case before the customer notices a fault. A step toward the Servitizing row.",
       "area": "asset-history"
     }
   ],

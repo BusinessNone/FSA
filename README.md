@@ -56,6 +56,21 @@ The scoring weights and rationale sentences are in `worker/placement-rubric.json
 
 If you add an intake question or option, add its signals to the rubric too; `npm run validate` flags any gap and re-checks that Meridian's defaults still land the deep cell, and that the presets land the contrast cell and a coming cell.
 
+## Customer records
+
+Every session starts on the fictional client, Meridian. To capture a real customer, open **Customer record** in the sidebar and change the name; the header then shows it as a customer record.
+
+- **Captured:** facts and figures (name, industry and sector from RSM Industry and Sectors FY27, revenue, technicians, branches, systems, contact), where the client **says** it is (the first intake step), where its answers place it (**does**), all intake answers, the placement rationale, notes against each question-set question, and general notes.
+- **Export:** JSON (the full record) or CSV (one row per fact, with the customer name on every row, so exports from many customers stack in one spreadsheet). File them wherever the team keeps customer records.
+- **Reimport past answers:** open an exported JSON or CSV to pick a customer back up.
+- **Storage:** nothing is sent to the site. While a customer record is open, a working copy stays in this browser and is offered as **Resume** later; it never loads on its own. **Discard** removes it.
+
+## Compare customers
+
+**Compare customers** in the sidebar loads several exported records (JSON or CSV, one or many customers per file) and shows them three ways: an industry-by-maturity table, the TOM grid with each customer placed (optionally with where they say they are), and a sortable customer table. Filter by industry or maturity, export everything as one combined CSV, or load the fictional sample set to demo it.
+
+Maturity is read from the TOM, with no extra questions: **Coherent** (aligned cell, describes itself accurately), **Aligned, misread** (aligned cell, claims to be elsewhere), **Transitional**, **The trap**, and **Incoherent**, taken from the rating of the cell the answers land in. The industry list, maturity labels, and samples live in `content/compare.json`.
+
 ## Presenting
 
 - **Guided Tour** (default): Next and Back, or the arrow keys (PageUp and PageDown work for clickers). Each step shows a one-line talk track.

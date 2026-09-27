@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { client, config, deepCell, meridianAnswers, cellById, contrastCell } from "./content";
+import { client, config, deepCell, meridianAnswers, cellById, contrastCell, intake } from "./content";
 import { usePlacement } from "./lib/usePlacement";
 import { useTheme } from "./lib/theme";
 import { Placement } from "./screens/Placement";
@@ -8,7 +8,19 @@ import { Deviation, type Decisions } from "./screens/Deviation";
 import { Payoff } from "./screens/Payoff";
 import { Button, cx, FictionalBadge, Icon } from "./components/ui";
 import { CueContext, cueRing, type ActiveCue } from "./lib/cues";
-import type { CueId } from "../shared/schema";
+import type { CueId, Profile } from "../shared/schema";
+import { defaultProfile, isDemoRecord, loadStoredRecord, storeRecord, type CellRef, type RecordState } from "./lib/record";
+import { RecordPanel } from "./components/RecordPanel";
+import { ComparePanel } from "./components/ComparePanel";
+import { entryFromOpenRecord, type CompareEntry } from "./lib/compare";
+
+// A stored working copy is only trusted if every answer is still a valid option.
+function initialRecord(): RecordState | null {
+  const r = loadStoredRecord();
+  if (!r?.profile || !r.answers || !r.claimed) return null;
+  const ok = intake.questions.every((q) => q.options.some((o) => o.id === r.answers[q.id]));
+  return ok ? { ...r, profile: { ...defaultProfile(), ...r.profile }, questionNotes: r.questionNotes ?? {}, notes: r.notes ?? "" } : null;
+}
 
 type Mode = "guided" | "explore";
 const tour = config.tour;
@@ -31,7 +43,16 @@ function stepFromHash(): number {
 export default function App() {
   const [mode, setMode] = useState<Mode>("guided");
   const [step, setStepRaw] = useState(stepFromHash);
+  // Every session starts on the fictional client. A saved customer record is offered to resume, never auto-loaded.
   const [answers, setAnswers] = useState<Record<string, string>>({ ...meridianAnswers });
+  const [claimed, setClaimed] = useState<CellRef>({ ...intake.claim.meridian });
+  const [profile, setProfile] = useState<Profile>(defaultProfile);
+  const [questionNotes, setQuestionNotes] = useState<Record<string, string>>({});
+  const [notes, setNotes] = useState("");
+  const [recordOpen, setRecordOpen] = useState(false);
+  const [compareOpen, setCompareOpen] = useState(false);
+  const [compareEntries, setCompareEntries] = useState<CompareEntry[]>([]);
+  const [saved, setSaved] = useState(initialRecord);
   const [decisions, setDecisions] = useState<Decisions>({});
   const placement = usePlacement(answers);
   const { theme, toggle } = useTheme();
@@ -51,6 +72,7 @@ export default function App() {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+      if (document.querySelector('[role="dialog"]')) return;
       const el = e.target as HTMLElement;
       if (el.closest("input, select, textarea, [contenteditable=true]")) return;
       if (e.key === "ArrowRight" || e.key === "PageDown") {
@@ -105,7 +127,34 @@ export default function App() {
   const cueText = !active ? undefined : nextCue ? nextCue.text : config.continueCue.replace("{title}", tour[step + 1].title);
   const cues = useMemo(() => ({ active, complete }), [active, complete]);
 
+  const record: RecordState = { profile, claimed, answers, questionNotes, notes };
+  const demo = isDemoRecord(profile);
+  // A real customer's record keeps a browser copy so it can be resumed; the fictional demo is never saved.
+  useEffect(() => {
+    if (demo) return;
+    const r = { profile, claimed, answers, questionNotes, notes };
+    storeRecord(r);
+    setSaved(r);
+  }, [demo, profile, claimed, answers, questionNotes, notes]);
+  const discardSaved = () => {
+    storeRecord(null);
+    setSaved(null);
+  };
+
+  const loadRecord = (r: RecordState) => {
+    setProfile(r.profile);
+    setClaimed(r.claimed);
+    setAnswers(r.answers);
+    setQuestionNotes(r.questionNotes);
+    setNotes(r.notes);
+  };
+  const restoreMeridian = () => {
+    setAnswers({ ...meridianAnswers });
+    setClaimed({ ...intake.claim.meridian });
+  };
+
   const restart = () => {
+    setClaimed({ ...intake.claim.meridian });
     setAnswers({ ...meridianAnswers });
     setDecisions({});
     setCuesDone(new Set());
@@ -119,26 +168,34 @@ export default function App() {
   return (
     <CueContext.Provider value={cues}>
     <div className="flex h-dvh flex-col bg-bg text-ink lg:flex-row">
-      <Sidebar mode={mode} setMode={setMode} step={step} setStep={setStep} theme={theme} toggleTheme={toggle} hints={hints} setHints={setHints} />
+      <Sidebar mode={mode} setMode={setMode} step={step} setStep={setStep} theme={theme} toggleTheme={toggle} hints={hints} setHints={setHints} onOpenRecord={() => setRecordOpen(true)} onOpenCompare={() => setCompareOpen(true)} compareCount={compareEntries.length} recordProfile={demo ? undefined : profile} resumeName={demo ? saved?.profile.name : undefined} />
 
       <div className="flex min-h-0 min-w-0 flex-1 flex-col">
         <main id="main" className="min-h-0 flex-1 overflow-y-auto">
           <div className="mx-auto max-w-[110rem] px-4 py-6 sm:px-8 lg:px-10">
             <header className="mb-6 flex flex-wrap items-start justify-between gap-4">
               <div>
-                <div className="text-sm font-semibold text-accent">
+                <div className="text-sm font-semibold text-accent-text">
                   Beat {current.beat} · {current.beatLabel}
                 </div>
                 <h1 className="mt-1 text-3xl font-semibold tracking-tight">{current.title}</h1>
                 {mode === "guided" && <p className="mt-2 max-w-3xl text-muted">{current.talkTrack}</p>}
                 {cueText && (
-                  <p key={cueText} className="mt-3 flex max-w-3xl items-center gap-2 text-sm font-medium text-accent animate-rise" role="status">
+                  <p key={cueText} className="mt-3 flex max-w-3xl items-center gap-2 text-sm font-medium text-accent-text animate-rise" role="status">
                     <span className="cue-dot" aria-hidden />
                     {cueText}
                   </p>
                 )}
               </div>
-              <FictionalBadge />
+              {demo ? (
+                <FictionalBadge />
+              ) : (
+                <button type="button" onClick={() => setRecordOpen(true)} className="inline-flex items-center gap-2 rounded-full border border-accent/50 bg-accent-soft px-3 py-1 text-xs text-accent-text">
+                  <span className="font-semibold">{profile.name}</span>
+                  <span aria-hidden>·</span>
+                  <span className="font-medium uppercase tracking-wide">Customer record</span>
+                </button>
+              )}
             </header>
 
             {offDeep && (
@@ -147,16 +204,28 @@ export default function App() {
                   Edited answers place {client.shortName} in {placedCell!.title}
                   {placedCell!.id === contrastCell.id ? " (contrast cell)" : " (blueprint in development)"}. This walkthrough continues with {client.shortName}'s cell, {deepCell.title}.
                 </span>
-                <Button onClick={() => setAnswers({ ...meridianAnswers })}>
+                <Button onClick={restoreMeridian}>
                   <Icon name="reset" /> Restore {client.shortName}'s answers
                 </Button>
               </div>
             )}
 
             {current.id === "placement" && (
-              <Placement answers={answers} setAnswers={setAnswers} placement={placement} onOpenBlueprint={() => setStep(step + 1)} />
+              <Placement
+                answers={answers}
+                setAnswers={setAnswers}
+                claimed={claimed}
+                setClaimed={setClaimed}
+                customerName={demo ? client.shortName : profile.name}
+                onRestore={restoreMeridian}
+                placement={placement}
+                onOpenBlueprint={() => setStep(step + 1)}
+                onOpenRecord={() => setRecordOpen(true)}
+              />
             )}
-            {current.blueprintTab && <Blueprint tab={current.blueprintTab} onTab={goTab} />}
+            {current.blueprintTab && (
+              <Blueprint tab={current.blueprintTab} onTab={goTab} notes={questionNotes} setNotes={setQuestionNotes} customerName={profile.name} />
+            )}
             {current.id === "deviation" && <Deviation decisions={decisions} setDecisions={setDecisions} guided={mode === "guided"} />}
             {current.id === "payoff" && <Payoff guided={mode === "guided"} />}
 
@@ -166,6 +235,26 @@ export default function App() {
 
         {mode === "guided" && <TourBar step={step} setStep={setStep} onRestart={restart} active={active} />}
       </div>
+      {compareOpen && (
+        <ComparePanel
+          entries={compareEntries}
+          setEntries={setCompareEntries}
+          openRecordEntry={() => (demo ? null : entryFromOpenRecord(record, placement.result))}
+          onClose={() => setCompareOpen(false)}
+        />
+      )}
+      {recordOpen && (
+        <RecordPanel
+          record={record}
+          placement={placement.result}
+          setProfile={setProfile}
+          setNotes={setNotes}
+          onLoad={loadRecord}
+          saved={demo ? saved : null}
+          onDiscardSaved={discardSaved}
+          onClose={() => setRecordOpen(false)}
+        />
+      )}
     </div>
     </CueContext.Provider>
   );
@@ -180,6 +269,11 @@ function Sidebar({
   toggleTheme,
   hints,
   setHints,
+  onOpenRecord,
+  onOpenCompare,
+  compareCount,
+  recordProfile,
+  resumeName,
 }: {
   mode: Mode;
   setMode: (m: Mode) => void;
@@ -189,7 +283,13 @@ function Sidebar({
   toggleTheme: () => void;
   hints: boolean;
   setHints: (h: boolean) => void;
+  onOpenRecord: () => void;
+  onOpenCompare: () => void;
+  compareCount: number;
+  recordProfile?: Profile;
+  resumeName?: string;
 }) {
+  const recordName = recordProfile?.name;
   const beats = [1, 2, 3, 4].map((b) => ({ beat: b, steps: tour.map((t, i) => ({ ...t, index: i })).filter((t) => t.beat === b) }));
   const current = tour[step];
   const explore = mode === "explore";
@@ -287,6 +387,54 @@ function Sidebar({
       </nav>
 
       <div className="space-y-3 px-5 py-3 lg:border-t lg:border-side-line lg:py-4">
+        <button
+          type="button"
+          onClick={onOpenRecord}
+          className="flex w-full items-center justify-between gap-2 rounded-lg border border-side-line bg-side-2 px-3 py-2 text-left text-sm font-semibold text-side-ink transition hover:border-side-muted"
+        >
+          <span className="min-w-0">
+            <span className="block">Customer record</span>
+            <span className="block truncate text-xs font-normal text-side-muted">{recordName ?? (resumeName ? `Resume ${resumeName}` : "Capture, export, or reimport")}</span>
+          </span>
+          <Icon name="download" />
+        </button>
+        <button
+          type="button"
+          onClick={onOpenCompare}
+          className="flex w-full items-center justify-between gap-2 rounded-lg border border-side-line px-3 py-2 text-left text-sm font-semibold text-side-ink transition hover:border-side-muted"
+        >
+          <span className="min-w-0">
+            <span className="block">Compare customers</span>
+            <span className="block truncate text-xs font-normal text-side-muted">
+              {compareCount ? `${compareCount} loaded` : "By industry and TOM maturity"}
+            </span>
+          </span>
+          <span aria-hidden>→</span>
+        </button>
+        {recordProfile ? (
+          <div className="hidden rounded-lg bg-side-2 p-3 lg:block">
+            <div className="text-sm font-semibold">{recordProfile.name}</div>
+            <div className="mt-0.5 text-[0.7rem] font-semibold uppercase tracking-wide text-side-muted">Customer record</div>
+            <dl className="mt-2 space-y-0.5 text-xs">
+              {(
+                [
+                  ["Industry", recordProfile.industry],
+                  ["Revenue", recordProfile.revenue],
+                  ["Field technicians", recordProfile.technicians],
+                  ["Branches", recordProfile.branches],
+                ] as const
+              )
+                .filter(([, v]) => v.trim())
+                .map(([k, v]) => (
+                  <div key={k} className="flex justify-between gap-2">
+                    <dt className="text-side-muted">{k}</dt>
+                    <dd className="text-right">{v}</dd>
+                  </div>
+                ))}
+            </dl>
+            <p className="mt-2 text-[0.7rem] text-side-muted">{client.record.notice}</p>
+          </div>
+        ) : (
         <div className="hidden rounded-lg bg-side-2 p-3 lg:block">
           <div className="text-sm font-semibold">{client.name}</div>
           <div className="mt-0.5 text-[0.7rem] font-semibold uppercase tracking-wide text-side-muted">{client.fictionalBadge}</div>
@@ -301,6 +449,7 @@ function Sidebar({
           </dl>
           <p className="mt-2 text-[0.7rem] text-side-muted">{client.figuresNote}</p>
         </div>
+        )}
         <div className="flex items-center justify-between text-xs text-side-muted">
           <span>
             {config.practiceScope}

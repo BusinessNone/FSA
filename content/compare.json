@@ -1,0 +1,190 @@
+{
+  "title": "Compare customers",
+  "intro": "Load exported customer records to compare them by industry and by TOM maturity. Files are read in this browser only; nothing is uploaded.",
+  "industriesSource": "RSM Industry and Sectors FY27",
+  "industries": [
+    {
+      "name": "Business & Professional Services",
+      "sectors": [
+        "Professional Services",
+        "Facility & Environmental",
+        "Workforce Solutions"
+      ]
+    },
+    {
+      "name": "Construction and Real Estate",
+      "sectors": [
+        "Construction",
+        "Real Estate"
+      ]
+    },
+    {
+      "name": "Consumer Products",
+      "sectors": [
+        "Consumer Goods",
+        "Food & Beverage",
+        "Retail & Restaurants"
+      ]
+    },
+    {
+      "name": "Financial Services",
+      "sectors": [
+        "Asset Management",
+        "Banking & Capital Markets",
+        "Insurance",
+        "Specialty Finance"
+      ]
+    },
+    {
+      "name": "Government Services",
+      "sectors": [
+        "State, Local, Government"
+      ]
+    },
+    {
+      "name": "Healthcare",
+      "sectors": [
+        "Hospitals & Health Care Systems"
+      ]
+    },
+    {
+      "name": "Industrials",
+      "sectors": [
+        "Energy",
+        "Manufacturing"
+      ]
+    },
+    {
+      "name": "Life Sciences",
+      "sectors": [
+        "Bio/Pharma",
+        "Life Science Services",
+        "MedTech"
+      ]
+    },
+    {
+      "name": "Nonprofit & Education",
+      "sectors": [
+        "Nonprofit",
+        "Education"
+      ]
+    },
+    {
+      "name": "Technology, Media & Telecom",
+      "sectors": [
+        "Media, Entertainment & Telecom",
+        "Technology"
+      ]
+    }
+  ],
+  "maturity": [
+    {
+      "id": "coherent",
+      "label": "Coherent",
+      "description": "Operates in an aligned cell and describes itself accurately."
+    },
+    {
+      "id": "misread",
+      "label": "Aligned, misread",
+      "description": "Operates in an aligned cell but describes itself as somewhere else."
+    },
+    {
+      "id": "transitional",
+      "label": "Transitional",
+      "description": "Moving between models; model, operation, or KPIs lag one another."
+    },
+    {
+      "id": "trap",
+      "label": "The trap",
+      "description": "Looks aligned on paper; behaves like a cost center."
+    },
+    {
+      "id": "incoherent",
+      "label": "Incoherent",
+      "description": "The business model and the operation contradict each other."
+    }
+  ],
+  "sampleLabel": "Sample (fictional)",
+  "samples": [
+    {
+      "name": "Meridian Industrial Equipment",
+      "industry": "Industrials",
+      "sector": "Manufacturing",
+      "revenue": "About $600M",
+      "technicians": "180",
+      "branches": "14",
+      "claimed": "servitization__equipment",
+      "actual": "profit-center__equipment"
+    },
+    {
+      "name": "Beacon Lift and Handling",
+      "industry": "Industrials",
+      "sector": "Manufacturing",
+      "revenue": "About $350M",
+      "technicians": "110",
+      "branches": "8",
+      "claimed": "profit-center__equipment",
+      "actual": "cost-center__equipment"
+    },
+    {
+      "name": "Granite Ridge Power Systems",
+      "industry": "Industrials",
+      "sector": "Energy",
+      "revenue": "About $1.2B",
+      "technicians": "150",
+      "branches": "9",
+      "claimed": "servitization__outcome",
+      "actual": "servitization__equipment"
+    },
+    {
+      "name": "Harborline Diagnostics",
+      "industry": "Life Sciences",
+      "sector": "MedTech",
+      "revenue": "About $900M",
+      "technicians": "240",
+      "branches": "22",
+      "claimed": "profit-center__equipment",
+      "actual": "profit-center__equipment"
+    },
+    {
+      "name": "Keystone Building Services",
+      "industry": "Business & Professional Services",
+      "sector": "Facility & Environmental",
+      "revenue": "About $400M",
+      "technicians": "95",
+      "branches": "11",
+      "claimed": "profit-center__equipment",
+      "actual": "profit-center__appointment"
+    },
+    {
+      "name": "Summitline Mechanical",
+      "industry": "Construction and Real Estate",
+      "sector": "Construction",
+      "revenue": "About $300M",
+      "technicians": "310",
+      "branches": "18",
+      "claimed": "profit-center__appointment",
+      "actual": "cost-center__appointment"
+    },
+    {
+      "name": "Arrowway Imaging Services",
+      "industry": "Healthcare",
+      "sector": "Hospitals & Health Care Systems",
+      "revenue": "About $250M",
+      "technicians": "120",
+      "branches": "16",
+      "claimed": "profit-center__knowledge",
+      "actual": "cost-center__knowledge"
+    },
+    {
+      "name": "Brightwire Networks",
+      "industry": "Technology, Media & Telecom",
+      "sector": "Technology",
+      "revenue": "About $700M",
+      "technicians": "85",
+      "branches": "6",
+      "claimed": "servitization__knowledge",
+      "actual": "servitization__knowledge"
+    }
+  ]
+}

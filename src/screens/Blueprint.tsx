@@ -17,9 +17,12 @@ const tabs: { id: BlueprintTab; label: string }[] = [
 interface Props {
   tab: BlueprintTab;
   onTab: (t: BlueprintTab) => void;
+  notes: Record<string, string>;
+  setNotes: (n: Record<string, string>) => void;
+  customerName: string;
 }
 
-export function Blueprint({ tab, onTab }: Props) {
+export function Blueprint({ tab, onTab, notes, setNotes, customerName }: Props) {
   return (
     <div className="space-y-5">
       <Card className="p-5">
@@ -53,7 +56,7 @@ export function Blueprint({ tab, onTab }: Props) {
       <div role="tabpanel" id={`panel-${tab}`} aria-labelledby={`tab-${tab}`} className="animate-rise" key={tab}>
         {tab === "jobs" && <Jobs />}
         {tab === "kpis" && <Kpis />}
-        {tab === "questions" && <Questions />}
+        {tab === "questions" && <Questions notes={notes} setNotes={setNotes} customerName={customerName} />}
         {tab === "process" && <Process />}
       </div>
     </div>
@@ -161,11 +164,12 @@ function Kpis() {
   );
 }
 
-function Questions() {
+function Questions({ notes, setNotes, customerName }: { notes: Record<string, string>; setNotes: (n: Record<string, string>) => void; customerName: string }) {
   const [area, setArea] = useState<string>(bp.processAreas[0].id);
   const [copied, setCopied] = useState<"idle" | "ok" | "fail">("idle");
   const { active, complete } = useCues();
-  const markdown = () => questionSetMarkdown(bp, client.name, client.fictionalBadge.toLowerCase());
+  const markdown = () =>
+    questionSetMarkdown(bp, customerName, customerName === client.name ? client.fictionalBadge.toLowerCase() : "customer record", notes);
   const numbered = bp.processAreas.flatMap((a) => bp.questionSet.filter((q) => q.area === a.id));
   const shown = area === "all" ? numbered : numbered.filter((q) => q.area === area);
 
@@ -188,7 +192,7 @@ function Questions() {
               aria-current={area === a.id}
               className={cx(
                 "flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-sm font-medium transition",
-                area === a.id ? "bg-accent-soft text-accent" : "text-muted hover:bg-surface-2 hover:text-ink",
+                area === a.id ? "bg-accent-soft text-accent-text" : "text-muted hover:bg-surface-2 hover:text-ink",
               )}
             >
               {a.label}
@@ -230,7 +234,7 @@ function Questions() {
                       <p className="mt-1 text-sm">{q.whyWeAsk}</p>
                     </div>
                     <div>
-                      <div className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-accent">
+                      <div className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-accent-text">
                         <Icon name="check" className="h-3.5 w-3.5" /> What a good answer sounds like
                       </div>
                       <p className="mt-1 text-sm">{q.goodAnswer}</p>
@@ -249,6 +253,16 @@ function Questions() {
                       </ul>
                     </div>
                   </div>
+                  <label className="mt-4 block">
+                    <span className="sr-only">Notes from the call</span>
+                    <textarea
+                      value={notes[q.id] ?? ""}
+                      onChange={(e) => setNotes({ ...notes, [q.id]: e.target.value })}
+                      rows={notes[q.id] ? 3 : 1}
+                      placeholder="Notes from the call: what the customer actually said"
+                      className="w-full resize-y rounded border border-line bg-surface-2/50 px-2.5 py-1.5 text-sm text-ink placeholder:text-muted focus:border-accent focus:bg-surface"
+                    />
+                  </label>
                 </div>
               </div>
             </Card>
@@ -280,7 +294,7 @@ function Process() {
               </div>
               <p className="mt-2 flex-1 text-sm text-muted">{s.description}</p>
               <div className="mt-3 flex gap-1.5 border-t border-line pt-2.5 text-xs">
-                <Icon name="shield" className="mt-px h-3.5 w-3.5 shrink-0 text-accent" />
+                <Icon name="shield" className="mt-px h-3.5 w-3.5 shrink-0 text-accent-text" />
                 <span>{s.guardrail}</span>
               </div>
             </Card>

@@ -148,7 +148,7 @@ function RequestCard({
       <p className="mt-1 text-sm text-muted">{r.context}</p>
 
       <div className="mt-4 rounded-lg bg-surface-2 p-3 text-sm">
-        <div className="mb-0.5 text-xs font-semibold uppercase tracking-wide text-accent">Blueprint alternative</div>
+        <div className="mb-0.5 text-xs font-semibold uppercase tracking-wide text-accent-text">Blueprint alternative</div>
         {r.blueprintAlternative}
       </div>
 
@@ -182,7 +182,7 @@ function RequestCard({
             complete("ask-why");
           }}
           aria-expanded={askWhy}
-          className={cx("inline-flex items-center gap-1.5 rounded-md px-1 -mx-1 text-sm font-medium text-accent hover:underline", cueTarget && cueRing(active, "ask-why"))}
+          className={cx("inline-flex items-center gap-1.5 rounded-md px-1 -mx-1 text-sm font-medium text-accent-text hover:underline", cueTarget && cueRing(active, "ask-why"))}
         >
           <Icon name="question" /> Ask why
         </button>
