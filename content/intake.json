@@ -30,7 +30,7 @@
         },
         {
           "id": "tm-and-contracts",
-          "label": "Yes. Time and materials, plus service contracts"
+          "label": "Yes. Time and materials, with customer-specific price lists"
         },
         {
           "id": "priced-on-outcome",
@@ -72,7 +72,7 @@
         },
         {
           "id": "basic-coverage",
-          "label": "Some basic coverage, with few written terms"
+          "label": "Some. Key accounts get response commitments, but coverage per machine is not tracked"
         },
         {
           "id": "sla-and-parts",
@@ -83,7 +83,7 @@
           "label": "Contracts guarantee uptime or output, with penalties"
         }
       ],
-      "meridianAnswer": "sla-and-parts"
+      "meridianAnswer": "basic-coverage"
     },
     {
       "id": "job-mix",
@@ -99,7 +99,7 @@
         },
         {
           "id": "mostly-break-fix",
-          "label": "Mostly break-fix and planned maintenance on equipment"
+          "label": "Mostly repairs, installations, and planned maintenance on equipment"
         },
         {
           "id": "mostly-remote",
@@ -118,7 +118,7 @@
         },
         {
           "id": "part-or-history",
-          "label": "The right part, or the machine's service history"
+          "label": "The right part or the machine's history, because the job was booked without them"
         },
         {
           "id": "expertise",
@@ -182,7 +182,7 @@
         "budget-language": "margin-line",
         "priced-separately": "tm-and-contracts",
         "installed-asset": "serialized-unit",
-        "entitlements": "sla-and-parts",
+        "entitlements": "basic-coverage",
         "job-mix": "mostly-break-fix",
         "repeat-visit-cause": "part-or-history",
         "customer-success": "fixed-first-time",

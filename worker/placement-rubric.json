@@ -1,64 +1,218 @@
 {
   "_note": "WORKER ONLY. Never import this file from /src. The build fails if any of it reaches the client bundle.",
-  "rows": ["profit-center", "cost-center", "servitization"],
-  "columns": ["equipment", "appointment", "knowledge", "outcome"],
+  "rows": [
+    "profit-center",
+    "cost-center",
+    "servitization"
+  ],
+  "columns": [
+    "equipment",
+    "appointment",
+    "knowledge",
+    "outcome"
+  ],
   "signals": {
     "budget-language": {
-      "cost-to-contain": { "row": { "cost-center": 3 } },
-      "margin-line": { "row": { "profit-center": 3 } },
-      "growth-subscription": { "row": { "servitization": 3 }, "column": { "outcome": 1 } }
+      "cost-to-contain": {
+        "row": {
+          "cost-center": 3
+        }
+      },
+      "margin-line": {
+        "row": {
+          "profit-center": 3
+        }
+      },
+      "growth-subscription": {
+        "row": {
+          "servitization": 3
+        },
+        "column": {
+          "outcome": 1
+        }
+      }
     },
     "priced-separately": {
-      "bundled": { "row": { "cost-center": 2 } },
-      "tm-and-contracts": { "row": { "profit-center": 2 } },
-      "priced-on-outcome": { "row": { "servitization": 2 }, "column": { "outcome": 2 } }
+      "bundled": {
+        "row": {
+          "cost-center": 2
+        }
+      },
+      "tm-and-contracts": {
+        "row": {
+          "profit-center": 2
+        }
+      },
+      "priced-on-outcome": {
+        "row": {
+          "servitization": 2
+        },
+        "column": {
+          "outcome": 2
+        }
+      }
     },
     "installed-asset": {
-      "location-visits": { "column": { "appointment": 2 } },
-      "depends": { "column": { "appointment": 1, "equipment": 1 } },
-      "serialized-unit": { "column": { "equipment": 2 } },
-      "we-own-asset": { "row": { "servitization": 1 }, "column": { "outcome": 2 } }
+      "location-visits": {
+        "column": {
+          "appointment": 2
+        }
+      },
+      "depends": {
+        "column": {
+          "appointment": 1,
+          "equipment": 1
+        }
+      },
+      "serialized-unit": {
+        "column": {
+          "equipment": 2
+        }
+      },
+      "we-own-asset": {
+        "row": {
+          "servitization": 1
+        },
+        "column": {
+          "outcome": 2
+        }
+      }
     },
     "entitlements": {
-      "no-contracts": { "row": { "cost-center": 1 }, "column": { "appointment": 1 } },
-      "basic-coverage": { "row": { "profit-center": 1 } },
-      "sla-and-parts": { "row": { "profit-center": 1 }, "column": { "equipment": 2 } },
-      "uptime-guarantee": { "row": { "servitization": 2 }, "column": { "outcome": 2 } }
+      "no-contracts": {
+        "row": {
+          "cost-center": 1
+        },
+        "column": {
+          "appointment": 1
+        }
+      },
+      "basic-coverage": {
+        "row": {
+          "profit-center": 1
+        }
+      },
+      "sla-and-parts": {
+        "row": {
+          "profit-center": 1
+        },
+        "column": {
+          "equipment": 2
+        }
+      },
+      "uptime-guarantee": {
+        "row": {
+          "servitization": 2
+        },
+        "column": {
+          "outcome": 2
+        }
+      }
     },
     "job-mix": {
-      "mostly-appointments": { "column": { "appointment": 3 } },
-      "even-mix": { "column": { "appointment": 1, "equipment": 1 } },
-      "mostly-break-fix": { "column": { "equipment": 3 } },
-      "mostly-remote": { "column": { "knowledge": 3 } }
+      "mostly-appointments": {
+        "column": {
+          "appointment": 3
+        }
+      },
+      "even-mix": {
+        "column": {
+          "appointment": 1,
+          "equipment": 1
+        }
+      },
+      "mostly-break-fix": {
+        "column": {
+          "equipment": 3
+        }
+      },
+      "mostly-remote": {
+        "column": {
+          "knowledge": 3
+        }
+      }
     },
     "repeat-visit-cause": {
-      "slot-slipped": { "column": { "appointment": 2 } },
-      "part-or-history": { "column": { "equipment": 2 } },
-      "expertise": { "column": { "knowledge": 2 } },
-      "performance-data": { "column": { "outcome": 2 } }
+      "slot-slipped": {
+        "column": {
+          "appointment": 2
+        }
+      },
+      "part-or-history": {
+        "column": {
+          "equipment": 2
+        }
+      },
+      "expertise": {
+        "column": {
+          "knowledge": 2
+        }
+      },
+      "performance-data": {
+        "column": {
+          "outcome": 2
+        }
+      }
     },
     "customer-success": {
-      "on-time": { "row": { "cost-center": 1 }, "column": { "appointment": 2 } },
-      "fixed-first-time": { "row": { "profit-center": 1 }, "column": { "equipment": 2 } },
-      "fast-answer": { "column": { "knowledge": 2 } },
-      "output-met": { "row": { "servitization": 1 }, "column": { "outcome": 2 } }
+      "on-time": {
+        "row": {
+          "cost-center": 1
+        },
+        "column": {
+          "appointment": 2
+        }
+      },
+      "fixed-first-time": {
+        "row": {
+          "profit-center": 1
+        },
+        "column": {
+          "equipment": 2
+        }
+      },
+      "fast-answer": {
+        "column": {
+          "knowledge": 2
+        }
+      },
+      "output-met": {
+        "row": {
+          "servitization": 1
+        },
+        "column": {
+          "outcome": 2
+        }
+      }
     },
     "revenue-owner": {
-      "nobody": { "row": { "cost-center": 3 } },
-      "service-leader": { "row": { "profit-center": 3 } },
-      "shared-recurring": { "row": { "servitization": 3 } }
+      "nobody": {
+        "row": {
+          "cost-center": 3
+        }
+      },
+      "service-leader": {
+        "row": {
+          "profit-center": 3
+        }
+      },
+      "shared-recurring": {
+        "row": {
+          "servitization": 3
+        }
+      }
     }
   },
   "closeCallRatio": 0.7,
   "rationale": {
     "row": {
       "cost-center": "Service is run to protect the product sale and is measured on cost and satisfaction rather than margin, which places Meridian in the Cost Center row.",
-      "profit-center": "Service leadership runs service as its own margin line, priced separately from the equipment and owned by a leader with a P&L, which places Meridian in the Profit Center row.",
+      "profit-center": "Service leadership runs service as its own margin line, priced separately from the equipment on customer-specific price lists and owned by a leader with a P&L, which places Meridian in the Profit Center row.",
       "servitization": "Service is sold as a promised result such as uptime or output rather than as labor and parts, which places Meridian in the Servitization row."
     },
     "column": {
       "appointment": "Most work is booked visits to a location, and a good visit means arriving in the window, which is the Appointment-Centric scenario.",
-      "equipment": "Technicians are dispatched against serialized installed assets under contract, and first-time fix depends on parts and asset history, which is the Equipment-Centric scenario.",
+      "equipment": "Technicians are dispatched against serialized customer machines, and first-time fix depends on having the parts and the machine's history before the visit, which is the Equipment-Centric scenario.",
       "knowledge": "Resolution depends on specialist know-how, often delivered before anyone travels, which is the Knowledge-Centric scenario.",
       "outcome": "The customer is buying uptime or output rather than the visit itself, which is the Outcome-Centric scenario."
     },
