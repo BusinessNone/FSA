@@ -6,7 +6,7 @@
   "columnAxisLabel": "Service scenario (Gartner)",
   "sources": {
     "rows": {
-      "summary": "The business-model spectrum follows TSIA's research on field services moving from cost center to profit engine to outcome-based offers, and the four supplier levels in B4B. The self-rating statements and conversation guides are adapted from Microsoft Dynamics 365 Field Service sales guidance. The coherence band is RSM analysis.",
+      "summary": "The business-model spectrum follows TSIA's research on field services moving from cost center to profit engine to outcome-based offers, and the four supplier levels in B4B. The self-rating statements, conversation guides, and coherence band are RSM analysis.",
       "refs": [
         {
           "publisher": "TSIA",
@@ -33,18 +33,6 @@
           "title": "Field Services research area",
           "year": "2026",
           "url": "https://www.tsia.com/research-area/field-services"
-        },
-        {
-          "publisher": "Microsoft",
-          "title": "Defining 'profit center' and 'cost center' for field service management",
-          "year": "2016",
-          "url": "https://www.microsoft.com/en-us/dynamics-365/blog/business-leader/2016/04/13/defining-39-profit-center-39-and-39-cost-center-39-for-field-service-management/"
-        },
-        {
-          "publisher": "Microsoft",
-          "title": "Building a servitization mindset to transform your field service organization",
-          "year": "2018",
-          "url": "https://www.microsoft.com/en-us/dynamics-365/blog/business-leader/2018/04/26/building-a-servitization-mindset-to-transform-your-field-service-organization/"
         }
       ]
     },
