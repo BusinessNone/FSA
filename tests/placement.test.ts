@@ -36,7 +36,7 @@ describe("placement", () => {
 describe("POST /api/place", () => {
   const env = { ASSETS: { fetch: async () => new Response("asset") } } as never;
   const call = (body: unknown) =>
-    worker.fetch!(new Request("http://localhost/api/place", { method: "POST", body: JSON.stringify(body) }) as never, env, {} as never);
+    worker.fetch!(new Request("https://fsa.benvollmer.net/api/place", { method: "POST", body: JSON.stringify(body) }) as never, env, {} as never);
 
   it("responds with only { cell, rationale }", async () => {
     const res = await call({ answers: meridian });
@@ -50,15 +50,9 @@ describe("POST /api/place", () => {
     expect(await res.json()).toEqual({ error: "Incomplete or unknown answers" });
   });
 
-  it("refuses non-local requests when Access is not configured", async () => {
+  it("serves the app on the public hostname", async () => {
     const res = await worker.fetch!(new Request("https://fsa.benvollmer.net/") as never, env, {} as never);
-    expect(res.status).toBe(403);
-  });
-
-  it("refuses requests without an Access token when Access is configured", async () => {
-    const guarded = { ...(env as object), ACCESS_TEAM_DOMAIN: "team.cloudflareaccess.com", ACCESS_AUD: "aud" } as never;
-    const res = await worker.fetch!(new Request("https://x/") as never, guarded, {} as never);
-    expect(res.status).toBe(403);
+    expect(await res.text()).toBe("asset");
   });
 });
 

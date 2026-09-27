@@ -14,12 +14,6 @@ routes = [
 workers_dev = false
 preview_urls = false
 
-# ACCESS_TEAM_DOMAIN and ACCESS_AUD are deliberately not declared here. `npm run deploy`
-# sets them from the Access application it provisions; keep_vars preserves them (and any set
-# in the dashboard) across later deploys, including Workers Builds. Without them the Worker
-# refuses every non-local request, so the demo is never served unprotected.
-keep_vars = true
-
 # Lets a bare `wrangler deploy` (e.g. Workers Builds with no build command) build first.
 [build]
 command = "npm run build"
@@ -28,6 +22,5 @@ command = "npm run build"
 directory = "./dist/client"
 binding = "ASSETS"
 not_found_handling = "single-page-application"
-# The Worker runs first so it can verify the Cloudflare Access token on every request,
-# including static assets, before anything is served.
-run_worker_first = true
+# Only the placement API reaches the Worker; everything else is served straight from assets.
+run_worker_first = ["/api/*"]
