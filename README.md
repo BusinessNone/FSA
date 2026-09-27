@@ -60,5 +60,6 @@ If you add an intake question or option, add its signals to the rubric too; `npm
 
 - **Guided Tour** (default): Next and Back, or the arrow keys (PageUp and PageDown work for clickers). Each step shows a one-line talk track.
 - **Explore**: jump anywhere from the sidebar; click grid cells to inspect them.
+- **Hints** (Guided Tour only): one suggested next move at a time, shown under the step title with a soft pulse on the control. Cue text lives in `content/config.json` (`tour[].cues`, `continueCue`). Turn them off with **Hints for the next move** in the sidebar; the setting is remembered per browser. **Restart tour** resets answers, decisions, and hints.
 - The theme toggle is at the bottom of the sidebar. Tuned for 1920×1080 on a shared screen and readable on a laptop.
 - Deep links: `/#/placement`, `/#/jobs`, `/#/kpis`, `/#/questions`, `/#/process`, `/#/deviation`, `/#/payoff`.

@@ -6,6 +6,17 @@ const id = z.string().regex(/^[a-z0-9-]+$/, "ids are lowercase kebab-case");
 const text = z.string().min(1);
 
 // ---------- config.json ----------
+// Guided Tour cues are tied to specific controls in the app, so their ids are fixed.
+export const cueIdSchema = z.enum([
+  "try-contrast",
+  "try-coming",
+  "return-meridian",
+  "compare-kpis",
+  "copy-questions",
+  "ask-why",
+  "accept-all",
+]);
+
 export const configSchema = z.object({
   appTitle: text,
   appSubtitle: text,
@@ -17,6 +28,7 @@ export const configSchema = z.object({
     types: z.array(text).min(1),
   }),
   illustrativeLabel: text,
+  continueCue: text,
   vocabulary: z.array(z.object({ term: text, meaning: text })).min(1),
   tour: z
     .array(
@@ -27,6 +39,7 @@ export const configSchema = z.object({
         title: text,
         talkTrack: text,
         blueprintTab: z.enum(["jobs", "kpis", "questions", "process"]).optional(),
+        cues: z.array(z.object({ id: cueIdSchema, text: text })).optional(),
       }),
     )
     .min(4),
@@ -222,6 +235,7 @@ export const payoffSchema = z.object({
 });
 
 export type Config = z.infer<typeof configSchema>;
+export type CueId = z.infer<typeof cueIdSchema>;
 export type Client = z.infer<typeof clientSchema>;
 export type Grid = z.infer<typeof gridSchema>;
 export type Depth = z.infer<typeof depthSchema>;

@@ -109,6 +109,9 @@ if (new Set(payoff.ladder.tiers.map((t) => t.rung)).size !== 3) fail("payoff.jso
 
 // ---- tour ----
 for (const beat of [1, 2, 3, 4]) if (!config.tour.some((t) => t.beat === beat)) fail(`config.json: tour has no step for beat ${beat}`);
+const cueIds = config.tour.flatMap((t) => t.cues?.map((c) => c.id) ?? []);
+if (new Set(cueIds).size !== cueIds.length) fail("config.json: each cue id may appear on only one tour step");
+if (!config.continueCue.includes("{title}")) fail("config.json: continueCue must contain {title}");
 
 // ---- placement rubric (Worker only) ----
 if (JSON.stringify([...rubric.rows].sort()) !== JSON.stringify([...rowIds].sort())) fail("placement-rubric.json: rows do not match grid rows");
