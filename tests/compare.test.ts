@@ -90,3 +90,22 @@ describe("sample customers", () => {
     for (const i of compare.industries) expect(used.has(i.name)).toBe(true);
   });
 });
+
+describe("industry roll-up", async () => {
+  const { rollUp } = await import("../src/lib/compare");
+  it("shares sum to the whole and aligned share counts coherent plus misread", () => {
+    const rows = rollUp(sampleEntries(), compare.industries.map((i) => i.name));
+    const all = rows[0];
+    expect(all.label).toBe("All customers");
+    expect(all.total).toBe(compare.samples.length);
+    expect(all.counts.reduce((s, c) => s + c.n, 0)).toBe(all.total);
+    for (const r of rows) {
+      const sum = r.counts.reduce((s, c) => s + c.share, 0);
+      expect(sum).toBeGreaterThanOrEqual(98);
+      expect(sum).toBeLessThanOrEqual(102);
+    }
+    const ind = rows.find((r) => r.label === "Industrials")!;
+    const aligned = ind.counts.filter((c) => c.maturity === "coherent" || c.maturity === "misread").reduce((s, c) => s + c.n, 0);
+    expect(ind.alignedShare).toBe(Math.round((aligned / ind.total) * 100));
+  });
+});

@@ -1,23 +1,23 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Maturity } from "../../shared/schema";
 import { cells, compare, grid } from "../content";
-import { combinedCsv, industryOf, maturityRank, mergeEntries, parseRecordFile, sampleEntries, type CompareEntry } from "../lib/compare";
+import { combinedCsv, industryOf, maturityRank, mergeEntries, parseRecordFile, rollUp, sampleEntries, type CompareEntry } from "../lib/compare";
 import { downloadText } from "../lib/markdown";
 import { cx, Icon, SectionLabel } from "./ui";
 
-const maturityStyle: Record<Maturity, string> = {
-  coherent: "bg-coh-aligned text-coh-ink",
-  misread: "bg-accent-soft text-accent-text ring-1 ring-accent",
-  transitional: "bg-coh-transitional text-coh-ink dark:text-ink",
-  trap: "bg-surface text-ink ring-2 ring-positive",
-  incoherent: "bg-coh-incoherent text-coh-ink-inverse",
-};
+// One ordinal ramp for maturity (validated for light and dark): the order reads in the color.
+const matStep: Record<Maturity, number> = { coherent: 1, misread: 2, transitional: 3, trap: 4, incoherent: 5 };
+const matFill = (m: Maturity) => ({ background: `var(--mat-${matStep[m]})`, color: `var(--mat-ink-${matStep[m]})` });
 
 const maturityLabel = Object.fromEntries(compare.maturity.map((m) => [m.id, m.label])) as Record<Maturity, string>;
 
 function MaturityBadge({ m }: { m?: Maturity }) {
   if (!m) return <span className="text-xs text-muted">No placement</span>;
-  return <span className={cx("inline-flex rounded px-2 py-0.5 text-xs font-semibold whitespace-nowrap", maturityStyle[m])}>{maturityLabel[m]}</span>;
+  return (
+    <span className="inline-flex rounded px-2 py-0.5 text-xs font-semibold whitespace-nowrap" style={matFill(m)}>
+      {maturityLabel[m]}
+    </span>
+  );
 }
 
 interface Props {
@@ -175,6 +175,8 @@ export function ComparePanel({ entries, setEntries, openRecordEntry, onClose }: 
                 </div>
               </div>
 
+              <RollUp entries={entries.filter((e) => !industry || industryOf(e) === industry)} industries={industries.filter((i) => !industry || i === industry)} />
+
               <section className="rounded-xl border border-line bg-surface p-4">
                 <SectionLabel>Industry by TOM maturity</SectionLabel>
                 <div className="mt-3 overflow-x-auto">
@@ -307,5 +309,66 @@ export function ComparePanel({ entries, setEntries, openRecordEntry, onClose }: 
         </div>
       </div>
     </div>
+  );
+}
+
+// Share of customers at each maturity level, per industry, as 100% stacked bars.
+// Ignores the maturity filter on purpose: a share needs the whole distribution.
+function RollUp({ entries, industries }: { entries: CompareEntry[]; industries: string[] }) {
+  const rows = rollUp(entries, industries);
+  return (
+    <section className="rounded-xl border border-line bg-surface p-4" aria-labelledby="rollup-title">
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
+        <h3 id="rollup-title" className="text-xs font-semibold uppercase tracking-wider text-muted">
+          Maturity mix by industry
+        </h3>
+        <ul className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-ink" aria-label="Legend">
+          {compare.maturity.map((m) => (
+            <li key={m.id} className="inline-flex items-center gap-1.5" title={m.description}>
+              <span className="h-3 w-3 rounded-sm" style={{ background: `var(--mat-${matStep[m.id]})` }} aria-hidden />
+              {m.label}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="mt-4 space-y-2.5">
+        {rows.map((r) => {
+          const { total, counts } = r;
+          return (
+            <div key={r.label} className={cx("grid items-center gap-3 sm:grid-cols-[15rem_minmax(0,1fr)_7rem]", r.all && "border-b border-line pb-3")}>
+              <div className="min-w-0 text-sm">
+                <span className={cx("text-ink", r.all ? "font-bold" : "font-semibold")}>{r.label}</span>
+                <span className="text-muted"> · {total} {total === 1 ? "customer" : "customers"}</span>
+              </div>
+              <div className="flex h-7 gap-[2px]" role="img" aria-label={`${r.label}: ${counts.map((c) => `${maturityLabel[c.maturity]} ${c.n} of ${total} (${c.share}%)`).join(", ")}`}>
+                {counts.map((c, i) => {
+                  const share = c.share;
+                  return (
+                    <div
+                      key={c.maturity}
+                      tabIndex={0}
+                      className={cx("group relative flex min-w-[6px] items-center justify-center text-[0.7rem] font-semibold outline-offset-2", i === 0 && "rounded-l", i === counts.length - 1 && "rounded-r")}
+                      style={{ ...matFill(c.maturity), flexGrow: c.n, flexBasis: 0 }}
+                    >
+                      {share >= 12 && <span aria-hidden>{share}%</span>}
+                      <span className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-1.5 hidden -translate-x-1/2 whitespace-nowrap rounded bg-ink px-2 py-1 text-xs font-medium text-surface shadow-lg group-hover:block group-focus:block">
+                        {maturityLabel[c.maturity]}: {c.n} of {total} ({share}%)
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="text-right text-xs text-muted" title="Share in an aligned cell (Coherent or Aligned, misread)">
+                <span className="text-sm font-semibold text-ink">{r.alignedShare}%</span> aligned
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <p className="mt-3 text-xs text-muted">
+        Share of customers at each maturity level. Hover a segment for counts. The industry filter applies; the maturity filter does not, so each bar shows the full mix.
+      </p>
+    </section>
   );
 }

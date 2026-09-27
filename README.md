@@ -68,7 +68,7 @@ Every session starts on the fictional client, Meridian. To capture a real custom
 
 ## Compare customers
 
-**Compare customers** in the sidebar loads several exported records (JSON or CSV, one or many customers per file) and shows them three ways: an industry-by-maturity table, the TOM grid with each customer placed (optionally with where they say they are), and a sortable customer table. Filter by industry or maturity, export everything as one combined CSV, or load the fictional sample set to demo it.
+**Compare customers** in the sidebar loads several exported records (JSON or CSV, one or many customers per file) and shows them four ways: a maturity-mix roll-up (share of customers at each level, per industry and overall, as 100% bars with an aligned share), an industry-by-maturity table, the TOM grid with each customer placed (optionally with where they say they are), and a sortable customer table. Filter by industry or maturity, export everything as one combined CSV, or load the fictional sample set to demo it.
 
 Maturity is read from the TOM, with no extra questions: **Coherent** (aligned cell, describes itself accurately), **Aligned, misread** (aligned cell, claims to be elsewhere), **Transitional**, **The trap**, and **Incoherent**, taken from the rating of the cell the answers land in. The industry list, maturity labels, and samples live in `content/compare.json`.
 

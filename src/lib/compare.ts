@@ -130,3 +130,29 @@ export function combinedCsv(entries: CompareEntry[]): string {
 
 const listed = (name: string) => compare.industries.some((i) => i.name === name);
 export const industryOf = (e: CompareEntry) => (listed(e.industry) ? e.industry : e.industry.trim() ? `${e.industry} (unlisted)` : "Not set");
+
+export interface RollUpRow {
+  label: string;
+  all: boolean;
+  total: number;
+  counts: { maturity: Maturity; n: number; share: number }[];
+  alignedShare: number;
+}
+
+const pct = (n: number, d: number) => (d ? Math.round((n / d) * 100) : 0);
+
+// Share of placed customers at each maturity level: an "All customers" row, then one per industry.
+export function rollUp(entries: CompareEntry[], industries: string[]): RollUpRow[] {
+  const placed = entries.filter((e) => e.maturity);
+  const row = (label: string, items: CompareEntry[], all: boolean): RollUpRow => ({
+    label,
+    all,
+    total: items.length,
+    counts: compare.maturity
+      .map((m) => ({ maturity: m.id, n: items.filter((e) => e.maturity === m.id).length }))
+      .filter((c) => c.n)
+      .map((c) => ({ ...c, share: pct(c.n, items.length) })),
+    alignedShare: pct(items.filter((e) => e.maturity === "coherent" || e.maturity === "misread").length, items.length),
+  });
+  return [row("All customers", placed, true), ...industries.map((i) => row(i, placed.filter((e) => industryOf(e) === i), false))].filter((r) => r.total);
+}
