@@ -1,371 +1,503 @@
 {
-  "cell": { "row": "profit-center", "column": "equipment" },
+  "cell": {
+    "row": "profit-center",
+    "column": "equipment"
+  },
   "title": "Profit Center × Equipment-Centric",
-  "summary": "Service is a margin line earned on a contracted installed base. Margin is won or lost on three things: enforcing what the contract covers, billing everything else, and fixing the machine on the first visit.",
+  "summary": "Service is a margin line earned on an installed base, and margin starts with control of the work. Every request lands in one queue, every job has an owner and a visible status, and every technician arrives with the machine's history. Pricing, parts, warranty, and agreements build on that backbone in phase two.",
   "tiers": [
-    { "tier": 1, "label": "Tier 1: Go-live", "description": "Without these, service cannot be run as a margin line." },
-    { "tier": 2, "label": "Tier 2: Phase two", "description": "Builds margin and capacity once the core loop is stable." },
-    { "tier": 3, "label": "Tier 3: Later or optional", "description": "Worth doing when the data from Tiers 1 and 2 is trustworthy." }
+    {
+      "tier": 1,
+      "label": "Tier 1: Go-live",
+      "description": "The intake, scheduling, and dispatch backbone. Nothing downstream is reliable without it."
+    },
+    {
+      "tier": 2,
+      "label": "Tier 2: Phase two",
+      "description": "Parts, pricing, warranty, and agreements, once the job data coming out of Tier 1 can be trusted."
+    },
+    {
+      "tier": 3,
+      "label": "Tier 3: Later or optional",
+      "description": "Optimization and connected equipment, once there is enough real history to tune them."
+    }
   ],
   "jobs": [
     {
-      "id": "enforce-entitlements",
+      "id": "one-front-door",
       "tier": 1,
-      "title": "Enforce contract entitlements at dispatch",
-      "detail": "Check coverage, response commitment, and covered parts when the request is logged, so billable and covered work are split before anyone rolls a truck.",
+      "title": "Turn every qualified request into one work order",
+      "detail": "Requests from phone, email, and portal become a work order with the minimum data a dispatcher needs: service address, contact, work type, and the machine.",
       "area": "intake-entitlement"
+    },
+    {
+      "id": "one-queue",
+      "tier": 1,
+      "title": "Put all unscheduled work in one queue",
+      "detail": "One queue across every intake channel, with aging and urgent work surfaced first, prioritized by the customer commitment behind each job.",
+      "area": "scheduling-dispatch"
+    },
+    {
+      "id": "visible-ownership",
+      "tier": 1,
+      "title": "Make every assignment visible and owned",
+      "detail": "A shared board replaces trust-based assignment: everyone can see who owns a job, when it is booked, and where it stands.",
+      "area": "scheduling-dispatch"
+    },
+    {
+      "id": "schedule-by-territory",
+      "tier": 1,
+      "title": "Schedule by territory, hours, and travel",
+      "detail": "Technicians route from their home base within working hours. Territory guides the choice without blocking dispatch from covering a staffing gap.",
+      "area": "scheduling-dispatch"
     },
     {
       "id": "asset-on-every-job",
       "tier": 1,
-      "title": "Tie every work order to a serialized asset",
-      "detail": "No asset, no work order. This is what makes entitlement, warranty, and history possible later.",
+      "title": "Tie every job to the customer's machine",
+      "detail": "Each work order points to a customer asset, and a new installation cannot close until the machine is identified.",
       "area": "asset-history"
     },
     {
-      "id": "dispatch-by-skill-sla",
+      "id": "mobile-day",
       "tier": 1,
-      "title": "Schedule and dispatch by skill, territory, and response commitment",
-      "detail": "The board shows which jobs are at risk of breaching the contract, not just who is free.",
-      "area": "scheduling-dispatch"
-    },
-    {
-      "id": "history-before-arrival",
-      "tier": 1,
-      "title": "Put asset history in the technician's hands before arrival",
-      "detail": "Prior faults, parts replaced, open cases, and the covering contract on the mobile work order.",
+      "title": "Give technicians a simple mobile day",
+      "detail": "Route, job details, customer and branch context, and the machine's prior service history on one screen, before the truck leaves.",
       "area": "work-execution"
     },
     {
-      "id": "capture-parts",
+      "id": "status-and-holds",
       "tier": 1,
-      "title": "Capture parts consumption on the work order",
-      "detail": "Every part used is recorded against the job and decremented from van stock, so it is either covered or billed.",
+      "title": "Track status through the job, including holds",
+      "detail": "Technicians update status as they travel, work, and finish. Work waiting on parts, approval, or the customer shows a reason instead of disappearing.",
+      "area": "work-execution"
+    },
+    {
+      "id": "structured-close",
+      "tier": 1,
+      "title": "Capture structured findings and keep follow-up work open",
+      "detail": "Complaint, cause, and correction are recorded in fields, not one free-text note. A diagnostic visit closes its booking while the work order stays open for the return trip.",
+      "area": "work-execution"
+    },
+    {
+      "id": "review-before-post",
+      "tier": 1,
+      "title": "Review completed work before it posts",
+      "detail": "A manager checks every completed job before it moves to billing, so errors are fixed once instead of chased later.",
+      "area": "billing-close"
+    },
+    {
+      "id": "parts-and-truck-stock",
+      "tier": 2,
+      "title": "Record parts and labor, then manage truck stock",
+      "detail": "Parts used are captured on the job and drawn down from the truck, so they are either covered or billed.",
       "area": "parts-inventory"
     },
     {
-      "id": "price-from-contract",
-      "tier": 1,
-      "title": "Price billable work from the contract and price list",
-      "detail": "Labor and parts pricing come from the agreement and the price list, not from technician judgment.",
+      "id": "price-from-agreements",
+      "tier": 2,
+      "title": "Price from price lists and customer agreements",
+      "detail": "Labor, parts, and travel charges come from the agreed price list for that customer and region, not from technician judgment.",
       "area": "billing-close"
     },
     {
-      "id": "invoice-fast",
-      "tier": 1,
-      "title": "Invoice within an agreed number of days of job completion",
-      "detail": "Completion triggers billing review automatically. The number of days is a target the client sets in discovery.",
-      "area": "billing-close"
+      "id": "warranty-on-asset",
+      "tier": 2,
+      "title": "Show warranty and coverage on the machine",
+      "detail": "Dispatch and technicians see whether the machine is under warranty or contract before the visit, drawn from the system of record.",
+      "area": "intake-entitlement"
     },
     {
       "id": "pm-from-agreements",
       "tier": 2,
-      "title": "Generate planned maintenance from agreement schedules",
-      "detail": "PM visits are created from the contract, not remembered by the branch.",
+      "title": "Generate planned maintenance from service agreements",
+      "detail": "Recurring inspections and maintenance come from the agreement, not from each branch remembering.",
       "area": "scheduling-dispatch"
     },
     {
-      "id": "van-stock-replenishment",
-      "tier": 2,
-      "title": "Replenish and transfer van stock",
-      "detail": "Truck stock levels drive replenishment, and transfers between technicians are tracked.",
-      "area": "parts-inventory"
-    },
-    {
-      "id": "supplier-warranty-recovery",
-      "tier": 2,
-      "title": "Recover supplier warranty on failed components",
-      "detail": "Claims against suppliers are raised from the work order instead of a separate tool.",
-      "area": "billing-close"
-    },
-    {
-      "id": "branch-margin-view",
-      "tier": 2,
-      "title": "Report service margin by branch and service line",
-      "detail": "One view, filtered per branch, built on the blueprint KPIs.",
-      "area": "billing-close"
-    },
-    {
-      "id": "sell-from-field",
-      "tier": 2,
-      "title": "Quote repairs and contract renewals from the field",
-      "detail": "Technicians flag and quote out-of-contract work and lapsed coverage while on site.",
-      "area": "work-execution"
-    },
-    {
-      "id": "customer-portal",
+      "id": "optimized-scheduling",
       "tier": 3,
-      "title": "Offer customer self-service for requests and asset status",
-      "detail": "Customers log requests against their own assets and see job status without calling the branch.",
-      "area": "intake-entitlement"
+      "title": "Optimize schedules automatically",
+      "detail": "Automated scheduling and long-distance routing, once job durations, territories, and skills reflect real history.",
+      "area": "scheduling-dispatch"
     },
     {
       "id": "connected-equipment",
       "tier": 3,
-      "title": "Create cases from connected-equipment alerts",
+      "title": "Create jobs from connected-equipment alerts",
       "detail": "Machine telemetry opens a case before the customer notices a fault. A step toward the Servitization row.",
       "area": "asset-history"
     }
   ],
   "kpis": [
     {
+      "id": "request-to-booking",
+      "name": "Time from request to booking",
+      "definition": "Elapsed time from a qualified request to a confirmed booking with a technician.",
+      "whyItMatters": "It is the first thing the customer feels, and the first place a decentralized intake process shows up.",
+      "direction": "lower",
+      "whatGoodLooksLike": "Falling and consistent across channels, with urgent work booked first."
+    },
+    {
+      "id": "promise-adherence",
+      "name": "Promise-window adherence",
+      "definition": "Share of visits where the technician arrived inside the window promised to the customer.",
+      "whyItMatters": "Customer commitments only mean something if they drive scheduling. This tests whether they do.",
+      "direction": "higher",
+      "whatGoodLooksLike": "Rising, with every miss traced to scheduling, travel, or an overrun earlier in the day."
+    },
+    {
       "id": "first-time-fix",
       "name": "First-time fix rate",
       "definition": "Share of jobs resolved on the first visit with no return trip for the same fault.",
-      "whyItMatters": "Every return trip is unbilled labor on a contract job and a hit to the customer's uptime. It is the clearest test of whether parts and history reach the technician.",
+      "whyItMatters": "Every return trip is labor the customer rarely pays for twice. It is the clearest test of whether history and parts reach the technician.",
       "direction": "higher",
-      "whatGoodLooksLike": "Rising quarter over quarter, with repeat visits traced to a named cause (part, history, or skill)."
+      "whatGoodLooksLike": "Rising quarter over quarter, with return visits traced to a named cause."
     },
     {
-      "id": "contract-attach",
-      "name": "Contract attach rate",
-      "definition": "Share of installed units sold or in service that are covered by an active service agreement.",
-      "whyItMatters": "The installed base only earns recurring margin if it is under contract. This is the growth lever for a profit-center service line.",
-      "direction": "higher",
-      "whatGoodLooksLike": "Rising, with renewals tracked and lapsed units visible to sales and to technicians on site."
-    },
-    {
-      "id": "service-gross-margin",
-      "name": "Service gross margin",
-      "definition": "Service revenue less the direct cost of labor, parts, and travel, as a share of service revenue.",
-      "whyItMatters": "This is the number service leadership is asking to be judged on. The other KPIs explain why it moves.",
-      "direction": "higher",
-      "whatGoodLooksLike": "Reported by branch and service line from the system, not assembled in a spreadsheet."
-    },
-    {
-      "id": "entitlement-leakage",
-      "name": "Entitlement leakage",
-      "definition": "Work performed free that the contract did not cover, plus covered work that was billed in error.",
-      "whyItMatters": "Leakage in either direction costs margin or customer trust. It is the direct measure of whether entitlement checks work.",
+      "id": "daily-carryover",
+      "name": "Daily carryover rate",
+      "definition": "Share of booked work that ends the day unfinished and has to be rebooked.",
+      "whyItMatters": "Carryover exposes weak duration estimates and hidden holds before they turn into missed commitments.",
       "direction": "lower",
-      "whatGoodLooksLike": "Trending toward zero, with every override logged and attributable."
+      "whatGoodLooksLike": "Falling, with each carried-over job showing a hold reason."
     },
     {
-      "id": "unbilled-completed-work",
-      "name": "Unbilled completed work",
-      "definition": "Value of completed jobs that have not yet been invoiced, including parts consumed but not billed.",
-      "whyItMatters": "Meridian's parts and invoicing pain shows up here first. It is cash the business has earned and not collected.",
-      "direction": "lower",
-      "whatGoodLooksLike": "Small and aging quickly, with no job completed without its parts recorded."
+      "id": "tech-utilization",
+      "name": "Technician utilization",
+      "definition": "Share of paid technician hours spent on productive work rather than travel, waiting, or admin.",
+      "whyItMatters": "Labor is the largest cost in the service margin. Better routing and less re-keying show up here first.",
+      "direction": "higher",
+      "whatGoodLooksLike": "Rising without first-time fix falling, which would signal rushed work."
+    },
+    {
+      "id": "completion-quality",
+      "name": "Complete-at-close rate",
+      "definition": "Share of completed jobs that close with every required field: asset, findings, parts, labor, and sign-off.",
+      "whyItMatters": "Billing, warranty, and asset history all depend on what the technician records at close.",
+      "direction": "higher",
+      "whatGoodLooksLike": "Near complete, so review is a check rather than a rebuild."
     },
     {
       "id": "completion-to-invoice",
       "name": "Days from completion to invoice",
-      "definition": "Elapsed time between a job being marked complete and the invoice being issued.",
+      "definition": "Elapsed time between a job being completed and the invoice being issued.",
       "whyItMatters": "Slow invoicing delays cash and invites disputes because the visit is no longer fresh for the customer.",
       "direction": "lower",
       "whatGoodLooksLike": "Falling toward the target the client sets in discovery, and consistent across branches."
     },
     {
-      "id": "mttr",
-      "name": "Mean time to repair",
-      "definition": "Average elapsed time from a fault being reported to the asset being back in service.",
-      "whyItMatters": "It is what the customer experiences and what response commitments in the contract are written against.",
-      "direction": "lower",
-      "whatGoodLooksLike": "Falling, and reported against each contract's response commitment rather than as one average."
-    },
-    {
-      "id": "tech-utilization",
-      "name": "Technician utilization",
-      "definition": "Share of paid technician hours spent on productive work orders rather than travel, waiting, or admin.",
-      "whyItMatters": "Labor is the largest cost in the service margin. Better routing and less paperwork show up here.",
+      "id": "service-gross-margin",
+      "name": "Service gross margin",
+      "definition": "Service revenue less the direct cost of labor, parts, and travel, as a share of service revenue.",
+      "whyItMatters": "This is the number service leadership wants to be judged on. The other KPIs explain why it moves.",
       "direction": "higher",
-      "whatGoodLooksLike": "Rising without first-time fix falling, which would signal rushed work."
+      "whatGoodLooksLike": "Reported by branch and service line from the system, not assembled in a spreadsheet."
     }
   ],
   "processAreas": [
-    { "id": "intake-entitlement", "label": "Intake & Entitlement" },
-    { "id": "scheduling-dispatch", "label": "Scheduling & Dispatch" },
-    { "id": "parts-inventory", "label": "Parts & Inventory" },
-    { "id": "work-execution", "label": "Work Execution" },
-    { "id": "billing-close", "label": "Billing & Close" },
-    { "id": "asset-history", "label": "Asset History" }
+    {
+      "id": "intake-entitlement",
+      "label": "Intake & Entitlement"
+    },
+    {
+      "id": "scheduling-dispatch",
+      "label": "Scheduling & Dispatch"
+    },
+    {
+      "id": "parts-inventory",
+      "label": "Parts & Inventory"
+    },
+    {
+      "id": "work-execution",
+      "label": "Work Execution"
+    },
+    {
+      "id": "billing-close",
+      "label": "Billing & Close"
+    },
+    {
+      "id": "asset-history",
+      "label": "Asset History"
+    }
   ],
   "questionSet": [
     {
       "id": "ie-1",
       "area": "intake-entitlement",
-      "question": "Walk me through what happens from the moment a customer calls with a down machine to the moment a job exists.",
-      "whyWeAsk": "It shows who touches the request, what gets captured, and whether the asset and contract are identified up front.",
-      "goodAnswer": "The agent identifies the customer and the serial number, sees the contract, and creates the job with coverage already known.",
+      "question": "How many different ways does a service request reach you today, and which one should be the front door?",
+      "whyWeAsk": "Decentralized intake is the most common blocker to a single scheduling queue. We need to know every channel before we design one.",
+      "goodAnswer": "A short list of channels, a named owner for each, and agreement that every request ends up as a work order in one place.",
       "redFlags": [
-        { "answer": "\"The branch takes it from there.\"", "signals": "Intake varies by branch. Expect a different version of the process in every branch." },
-        { "answer": "\"We usually figure out the machine when the tech gets there.\"", "signals": "No asset on the job, so entitlement and history cannot work at dispatch." }
+        {
+          "answer": "\"It depends on the branch, and some of it comes in by text to the technician.\"",
+          "signals": "Work is invisible until someone re-keys it. Expect a Phase 1 intake decision before scheduling design can finish."
+        },
+        {
+          "answer": "\"We'd like every channel integrated on day one.\"",
+          "signals": "Likely off-blueprint request. Start with manual intake into one queue and integrate once the intake fields are stable."
+        }
       ]
     },
     {
       "id": "ie-2",
       "area": "intake-entitlement",
-      "question": "How does the person taking the call know what this customer's contract covers?",
-      "whyWeAsk": "Entitlement enforcement is a Tier 1 job. We need to know where the contract terms live today.",
-      "goodAnswer": "Contract terms such as covered parts, labor, and response time are on the customer record and visible at intake.",
+      "question": "What is the minimum a request needs before someone can schedule it?",
+      "whyWeAsk": "It sets the required fields on the work order and the mapping from every intake channel.",
+      "goodAnswer": "Address, contact phone, work type, customer, and the machine, agreed once and enforced at creation.",
       "redFlags": [
-        { "answer": "\"They look it up in the warranty tool, or ask the branch manager.\"", "signals": "Terms live outside the service system. Watch for an integration request later." },
-        { "answer": "\"The good ones just know.\"", "signals": "Entitlement lives in people's heads, which means leakage is almost certain." }
+        {
+          "answer": "\"Whatever the caller gives us; the tech sorts it out.\"",
+          "signals": "Jobs will be scheduled without the data to finish them. Expect return trips and calls from the field."
+        },
+        {
+          "answer": "\"Every customer needs something different.\"",
+          "signals": "Customer-specific fields multiply fast. Separate the true minimum from account instructions."
+        }
       ]
     },
     {
       "id": "ie-3",
       "area": "intake-entitlement",
-      "question": "When work is done that the contract does not cover, what happens?",
-      "whyWeAsk": "It tests whether billable work is caught or given away, and who has authority to decide.",
-      "goodAnswer": "The job is flagged billable at intake or on site, the customer approves, and it is priced from the price list.",
+      "question": "When a request comes in, how do you know whether the machine is under warranty or a service contract?",
+      "whyWeAsk": "Coverage decides who pays. If it is invisible at intake, it is decided on site, inconsistently.",
+      "goodAnswer": "Warranty and contract status are visible on the machine record before the visit, from one system of record.",
       "redFlags": [
-        { "answer": "\"We usually eat it for good customers.\"", "signals": "Unmanaged goodwill. Expect a request to skip entitlement checks for key accounts." },
-        { "answer": "\"The tech decides on site.\"", "signals": "Pricing authority sits with technicians. Margin varies by who shows up." }
+        {
+          "answer": "\"The tech checks the other system when they get there.\"",
+          "signals": "Coverage lives outside the service record. Plan a warranty-visibility decision and a later integration."
+        },
+        {
+          "answer": "\"We don't track which individual machines are covered.\"",
+          "signals": "Asset-level entitlement needs its own discovery. Keep it out of go-live scope."
+        }
       ]
     },
     {
       "id": "sd-1",
       "area": "scheduling-dispatch",
-      "question": "How does a dispatcher decide which technician gets which job?",
-      "whyWeAsk": "It reveals whether skills, territory, and contract response commitments drive dispatch or habit does.",
-      "goodAnswer": "Skills, location, and the contract's response commitment drive the choice, and the dispatcher can see who is at risk of breaching.",
+      "question": "Once a job is assigned, how does everyone know who owns it and where it stands?",
+      "whyWeAsk": "Trust-based assignment works until volume grows. Visible ownership is a Tier 1 job.",
+      "goodAnswer": "Every booking has one owner and a current status that dispatch and the branch can both see.",
       "redFlags": [
-        { "answer": "\"Our dispatchers know the techs.\"", "signals": "Dispatch knowledge is tribal. Expect resistance to a standard board." },
-        { "answer": "\"Whoever is closest.\"", "signals": "Contract response commitments are not part of dispatch. Breaches are likely invisible." }
+        {
+          "answer": "\"We call the tech and ask.\"",
+          "signals": "No shared status. Booking status and hold reasons need to be defined early."
+        },
+        {
+          "answer": "\"The technician knows, and they're good about it.\"",
+          "signals": "Ownership lives with people. Expect resistance to status updates until the benefit is shown."
+        }
       ]
     },
     {
       "id": "sd-2",
       "area": "scheduling-dispatch",
-      "question": "How are planned maintenance visits created today?",
-      "whyWeAsk": "PM on contract is recurring margin. We need to know whether it is generated or remembered.",
-      "goodAnswer": "PM visits are created from the agreement schedule, and missed PMs are reported.",
+      "question": "Should a technician's territory limit which jobs they can take, or only guide the choice?",
+      "whyWeAsk": "Territories that act as hard walls break staffing-gap coverage. This decides how scheduling rules are built.",
+      "goodAnswer": "Territory is a preference. Dispatch can send someone across a boundary when that is the better answer.",
       "redFlags": [
-        { "answer": "\"Each branch keeps a spreadsheet.\"", "signals": "PM delivery depends on the branch. Contract value is at risk of not being delivered." }
+        {
+          "answer": "\"Techs should only ever see their own area.\"",
+          "signals": "Likely off-blueprint request for a hard territory rule. Ask how often jobs already cross boundaries."
+        },
+        {
+          "answer": "\"We haven't agreed where the boundaries are.\"",
+          "signals": "Territory design is a go-live blocker. Get the geographic structure decided first."
+        }
       ]
     },
     {
       "id": "sd-3",
       "area": "scheduling-dispatch",
-      "question": "What does the dispatch board need to show that it does not show today?",
-      "whyWeAsk": "It separates real information needs from a request to rebuild the current screen.",
-      "goodAnswer": "The answer is framed as information, such as jobs at risk, parts status, and skills, rather than as a screen layout.",
+      "question": "What should happen when a booking would push a technician into overtime?",
+      "whyWeAsk": "Overtime policy drives the scheduling guardrail: a warning, an approval, or a hard stop.",
+      "goodAnswer": "A warning first, with a named approver for exceptions, and the rule written down.",
       "redFlags": [
-        { "answer": "\"Just make it look like the old one.\"", "signals": "Likely off-blueprint request. Ask why before it becomes a Customization." }
+        {
+          "answer": "\"It should never be allowed.\"",
+          "signals": "A hard stop blocks emergency work. Test it against real emergency scenarios before building it."
+        },
+        {
+          "answer": "\"The branch manager decides case by case.\"",
+          "signals": "No policy yet. The guardrail cannot be configured until there is one."
+        }
       ]
     },
     {
       "id": "pi-1",
       "area": "parts-inventory",
-      "question": "When a technician uses a part from the truck, how does anyone know?",
-      "whyWeAsk": "Parts pulled off-truck without billing is a named Meridian pain point. This finds where the record breaks.",
-      "goodAnswer": "The part is recorded on the work order at the time of use and van stock is decremented.",
+      "question": "What does a technician record today about the parts and labor on a job, and who uses it?",
+      "whyWeAsk": "It sets the minimum work detail for go-live and shows whether full parts capture belongs in phase two.",
+      "goodAnswer": "A short, agreed list of what is captured on every job, and a named consumer for each item.",
       "redFlags": [
-        { "answer": "\"We reconcile at the end of the month.\"", "signals": "Parts are invisible to billing. Unbilled completed work is likely high." },
-        { "answer": "\"Techs fill out a sheet when they restock.\"", "signals": "Consumption is recorded after the fact and detached from the job." }
+        {
+          "answer": "\"They write it on the paper ticket and billing figures it out.\"",
+          "signals": "Parts are invisible to billing. Unbilled work is likely high."
+        },
+        {
+          "answer": "\"We need full truck inventory at go-live.\"",
+          "signals": "Full inventory is a phase-two scope. Ask what decision it enables at go-live."
+        }
       ]
     },
     {
       "id": "pi-2",
       "area": "parts-inventory",
-      "question": "How often does a technician arrive without the part the job needs?",
-      "whyWeAsk": "Missing parts are a leading cause of low first-time fix in equipment-centric service.",
-      "goodAnswer": "It is tracked, and likely parts are suggested from the asset's fault history before dispatch.",
+      "question": "Do you ever send a technician to diagnose a problem before the parts are confirmed?",
+      "whyWeAsk": "Parts availability as a hard stop blocks diagnostic visits. This decides how the follow-up visit works.",
+      "goodAnswer": "Yes. The diagnostic visit is scheduled, parts are identified on site, and a follow-up booking is created from the same work order.",
       "redFlags": [
-        { "answer": "\"We don't really track that.\"", "signals": "First-time fix cannot be explained yet. Baseline measurement is a Tier 1 need." }
+        {
+          "answer": "\"We wait until the parts are in before we go.\"",
+          "signals": "Customers wait longer than they need to. Check whether the delay is policy or habit."
+        }
       ]
     },
     {
       "id": "pi-3",
       "area": "parts-inventory",
-      "question": "Who owns van stock levels, and how are they replenished?",
-      "whyWeAsk": "It decides whether replenishment belongs in Tier 2 and who the process owner is.",
-      "goodAnswer": "A named role owns stock levels per van, and replenishment is driven by recorded consumption.",
+      "question": "Who knows what is on each truck right now?",
+      "whyWeAsk": "Truck stock accuracy decides whether parts capture can drive replenishment later.",
+      "goodAnswer": "A named role owns stock levels per truck, and counts are trusted enough to act on.",
       "redFlags": [
-        { "answer": "\"Each tech manages their own truck.\"", "signals": "No inventory accountability. Stock accuracy will need a clean-up before go-live." }
+        {
+          "answer": "\"Each tech manages their own truck.\"",
+          "signals": "No inventory accountability. Stock data will need a clean-up before phase two."
+        }
       ]
     },
     {
       "id": "we-1",
       "area": "work-execution",
-      "question": "What does a technician know about the machine before they arrive?",
-      "whyWeAsk": "Missing asset history is the second named cause of Meridian's low first-time fix.",
-      "goodAnswer": "Prior faults, parts replaced, open cases, and the covering contract are on the mobile work order.",
+      "question": "What does a technician need on the phone before they drive to a job?",
+      "whyWeAsk": "The mobile screen should carry the minimum, not everything. Too much on it slows adoption.",
+      "goodAnswer": "Address and route, contact, work type, the machine and its history, and any customer instructions.",
       "redFlags": [
-        { "answer": "\"They call the last tech who worked on it.\"", "signals": "History lives with people, so it leaves when they do." }
+        {
+          "answer": "\"Everything we have today, plus a few more fields.\"",
+          "signals": "Mobile scope creep. Ask which fields are used on every job."
+        },
+        {
+          "answer": "\"They don't really use the tablet.\"",
+          "signals": "Adoption risk. Plan a hands-on mobile walkthrough before design sign-off."
+        }
       ]
     },
     {
       "id": "we-2",
       "area": "work-execution",
-      "question": "What does a technician have to record before a job can be closed?",
-      "whyWeAsk": "Completion rules decide whether billing and history get clean data.",
-      "goodAnswer": "Labor, parts, resolution code, and customer sign-off are required to complete.",
+      "question": "When a job cannot be finished, what reasons do you actually see?",
+      "whyWeAsk": "Hold reasons turn \"still open\" into something dispatch can act on.",
+      "goodAnswer": "A short list of real reasons, such as waiting on parts, customer, or approval, each with a next step.",
       "redFlags": [
-        { "answer": "\"They can close it and fill in the details later.\"", "signals": "Data quality depends on goodwill. Invoicing will lag and history will be thin." }
+        {
+          "answer": "\"It just stays open until someone notices.\"",
+          "signals": "Stalled work is invisible. Carryover and missed commitments are likely higher than anyone thinks."
+        }
       ]
     },
     {
       "id": "we-3",
       "area": "work-execution",
-      "question": "When a technician spots out-of-contract work or a lapsed contract on site, what happens?",
-      "whyWeAsk": "In a profit-center cell, the technician is also a sales channel.",
-      "goodAnswer": "The technician can flag or quote it on the spot, and it reaches sales or the branch as a lead.",
+      "question": "Can a technician decline a job that dispatch has assigned?",
+      "whyWeAsk": "It decides how bookings are confirmed and who holds the schedule.",
+      "goodAnswer": "No, but a technician can flag a problem and dispatch reassigns, with the reason recorded.",
       "redFlags": [
-        { "answer": "\"That's not their job.\"", "signals": "Revenue on the installed base is left on the table. Tier 2 sell-from-field may need change management." }
+        {
+          "answer": "\"Yes, they turn down what they don't want.\"",
+          "signals": "Dispatch does not control the schedule. Expect a governance conversation before configuration."
+        }
       ]
     },
     {
       "id": "bc-1",
       "area": "billing-close",
-      "question": "How long after a job is complete does the customer get an invoice, and what happens in between?",
-      "whyWeAsk": "Slow invoicing is a named pain point. The steps in between are where the delay lives.",
-      "goodAnswer": "Completion triggers a billing review with pricing already applied, and the invoice goes out within a set target.",
+      "question": "Who reviews completed work before it is billed, and what do they usually fix?",
+      "whyWeAsk": "The review step is a Tier 1 control. What reviewers fix shows which close rules are missing.",
+      "goodAnswer": "A named reviewer checks every job at first, and the most common corrections become required fields.",
       "redFlags": [
-        { "answer": "\"Paperwork comes back from the branch at the end of the week.\"", "signals": "Batch, paper-driven close. Days from completion to invoice is likely long and variable." },
-        { "answer": "\"Billing re-keys it into the ERP.\"", "signals": "Manual re-entry between systems. Expect an integration scope question." }
+        {
+          "answer": "\"Billing fixes it when the customer complains.\"",
+          "signals": "Errors reach the invoice. Complete-at-close is likely low."
+        }
       ]
     },
     {
       "id": "bc-2",
       "area": "billing-close",
-      "question": "Who sets the price on billable service work, and where do they get it?",
-      "whyWeAsk": "Pricing from the contract and price list is a Tier 1 job. Exceptions here become Modifications.",
-      "goodAnswer": "Prices come from the agreement and the price list; discounts need approval.",
+      "question": "Should technicians be able to change prices or costs on a job?",
+      "whyWeAsk": "Pricing authority in the field varies margin by who shows up.",
+      "goodAnswer": "Prices come from the price list. Technicians flag exceptions, and a manager approves them.",
       "redFlags": [
-        { "answer": "\"Each tech has their own rates.\"", "signals": "Likely request for custom pricing per technician. Ask what business rule it really serves." }
+        {
+          "answer": "\"They need to, because the price list is never right.\"",
+          "signals": "The price list is the real problem. Fix it rather than opening every price to change."
+        },
+        {
+          "answer": "\"Each tech has their own rates for certain customers.\"",
+          "signals": "Likely request for custom pricing rules. Ask what business rule it really serves."
+        }
       ]
     },
     {
       "id": "bc-3",
       "area": "billing-close",
-      "question": "How do you see service margin by branch today?",
-      "whyWeAsk": "It shows whether the margin-line ambition can be measured and who assembles the numbers.",
-      "goodAnswer": "One report, filtered by branch, built from system data.",
+      "question": "How is service priced when the same customer buys in different regions?",
+      "whyWeAsk": "Customer and regional pricing decides the price-list model, and it is often unresolved at kickoff.",
+      "goodAnswer": "One pricing hierarchy, written down, with the drivers named: customer tier, region, and work type.",
       "redFlags": [
-        { "answer": "\"Each branch manager has their own spreadsheet.\"", "signals": "Expect a request for a bespoke report per branch. One filtered view is the blueprint answer." }
+        {
+          "answer": "\"It varies; the account manager knows.\"",
+          "signals": "Pricing is undefined. Keep it in phase two and name an owner for the decision."
+        },
+        {
+          "answer": "\"Every customer has its own mileage and travel rules.\"",
+          "signals": "Travel-charge automation is a phase-two candidate. Start with standard charges."
+        }
       ]
     },
     {
       "id": "ah-1",
       "area": "asset-history",
-      "question": "Where is the list of every unit you have installed, and how accurate is it?",
-      "whyWeAsk": "The installed base is the foundation of this cell. Its data quality sets the migration effort.",
-      "goodAnswer": "One installed-base list with serial numbers, locations, and owners, maintained when units move.",
+      "question": "What is the minimum you need to know about a customer's machine?",
+      "whyWeAsk": "It sets the required asset fields and how much data work sits in front of go-live.",
+      "goodAnswer": "Make, model, serial number, and location for every machine, captured at installation.",
       "redFlags": [
-        { "answer": "\"Between the ERP, the warranty tool, and the branches, we could piece it together.\"", "signals": "The installed base needs consolidation before go-live. Plan data work, not just configuration." }
+        {
+          "answer": "\"Between the ERP, the warranty system, and the branches, we could piece it together.\"",
+          "signals": "The installed base needs consolidation. Plan data work, not just configuration."
+        }
       ]
     },
     {
       "id": "ah-2",
       "area": "asset-history",
-      "question": "When a unit moves to a new site or a new owner, how does service find out?",
-      "whyWeAsk": "Stale asset records break dispatch, entitlement, and contract renewals.",
-      "goodAnswer": "There is a defined trigger, from sales or the technician, that updates the asset record.",
+      "question": "When a machine leaves the customer site for repair, how do you track it?",
+      "whyWeAsk": "Off-site custody is a common gap. Without it, history and accountability break.",
+      "goodAnswer": "The machine's location and custody change are recorded, so anyone can see where it is.",
       "redFlags": [
-        { "answer": "\"When the tech shows up at the old address.\"", "signals": "No asset lifecycle process. Asset-history updates must be part of work-order close." }
+        {
+          "answer": "\"We just know which shop it went to.\"",
+          "signals": "No custody process. Treat it as a later-phase design item."
+        }
       ]
     },
     {
       "id": "ah-3",
       "area": "asset-history",
-      "question": "Which machines generate the most repeat visits, and how do you know?",
-      "whyWeAsk": "It tests whether fault history is usable for first-time fix and for product feedback.",
-      "goodAnswer": "Resolution codes are captured consistently, so repeat faults can be reported by model.",
+      "question": "How far back can a technician see this machine's service history today?",
+      "whyWeAsk": "History on site is the fastest route to first-time fix.",
+      "goodAnswer": "Every prior visit on this machine, whoever performed it, visible on mobile.",
       "redFlags": [
-        { "answer": "\"Everyone knows which ones.\"", "signals": "No structured fault data. Resolution codes need to be defined early." }
+        {
+          "answer": "\"Only their own jobs.\"",
+          "signals": "History is siloed by technician. Visibility and security need to be designed together."
+        },
+        {
+          "answer": "\"It's in the other system.\"",
+          "signals": "Split system of record. Decide which system owns the technician's work before go-live."
+        }
       ]
     }
   ],
@@ -373,15 +505,60 @@
     "label": "Aligned to vendor standard process catalogs.",
     "note": "Platform-agnostic. Each step lists the control the blueprint puts in place.",
     "steps": [
-      { "id": "request", "name": "Request", "description": "Customer, portal, or alert raises a service request.", "guardrail": "Customer and serialized asset identified." },
-      { "id": "entitlement", "name": "Entitlement check", "description": "Coverage, response commitment, and covered parts confirmed.", "guardrail": "Billable versus covered decided before scheduling." },
-      { "id": "schedule", "name": "Schedule", "description": "Job booked against skills, territory, and the response commitment.", "guardrail": "At-risk jobs visible on the board." },
-      { "id": "dispatch", "name": "Dispatch", "description": "Work order sent to the technician's mobile device.", "guardrail": "Asset history and likely parts attached." },
-      { "id": "execute", "name": "Execute", "description": "Technician diagnoses and repairs on site.", "guardrail": "Out-of-contract work flagged and approved." },
-      { "id": "parts", "name": "Parts", "description": "Parts used are recorded against the job.", "guardrail": "Van stock decremented at the time of use." },
-      { "id": "complete", "name": "Complete", "description": "Labor, parts, resolution code, and sign-off captured.", "guardrail": "Job cannot close with missing data." },
-      { "id": "invoice", "name": "Invoice", "description": "Billable work priced from contract and price list and invoiced.", "guardrail": "Completion triggers billing review automatically." },
-      { "id": "asset-update", "name": "Asset-history update", "description": "Fault, fix, and parts written back to the asset record.", "guardrail": "Next technician starts with the full history." }
+      {
+        "id": "request",
+        "name": "Request and qualify",
+        "description": "A request from any channel becomes a work order with the minimum data.",
+        "guardrail": "Required intake fields enforced at creation."
+      },
+      {
+        "id": "entitlement",
+        "name": "Entitlement check",
+        "description": "Warranty and contract coverage checked against the machine.",
+        "guardrail": "Covered versus billable decided before scheduling."
+      },
+      {
+        "id": "schedule",
+        "name": "Schedule",
+        "description": "Booked from one queue by priority, territory, hours, and travel.",
+        "guardrail": "Urgent and aging work surfaced first."
+      },
+      {
+        "id": "dispatch",
+        "name": "Dispatch",
+        "description": "The booking reaches the technician's mobile day.",
+        "guardrail": "One owner and a visible status for every job."
+      },
+      {
+        "id": "execute",
+        "name": "Execute",
+        "description": "The technician diagnoses and repairs on site.",
+        "guardrail": "Hold reasons recorded when work cannot finish."
+      },
+      {
+        "id": "parts",
+        "name": "Parts",
+        "description": "Parts used are recorded against the job.",
+        "guardrail": "Covered or billed, never lost."
+      },
+      {
+        "id": "complete",
+        "name": "Complete",
+        "description": "Findings, asset identity, and sign-off captured; follow-up work stays open.",
+        "guardrail": "Job cannot close with required fields missing."
+      },
+      {
+        "id": "invoice",
+        "name": "Review and invoice",
+        "description": "A manager reviews the job, then billable work is priced and invoiced.",
+        "guardrail": "Nothing posts without review."
+      },
+      {
+        "id": "asset-update",
+        "name": "Asset-history update",
+        "description": "Findings and parts written back to the machine's record.",
+        "guardrail": "The next technician starts with the full history."
+      }
     ]
   }
 }
