@@ -1,11 +1,8 @@
 import { place, PlacementError } from "./placement";
-import { verifyAccessJwt } from "./access";
 import type { PlacementRequest } from "../shared/api";
 
 interface Env {
   ASSETS: Fetcher;
-  ACCESS_TEAM_DOMAIN?: string;
-  ACCESS_AUD?: string;
 }
 
 const json = (body: unknown, status = 200) =>
@@ -14,30 +11,8 @@ const json = (body: unknown, status = 200) =>
     headers: { "content-type": "application/json", "cache-control": "no-store" },
   });
 
-const LOCAL_HOSTS = new Set(["localhost", "127.0.0.1", "[::1]"]);
-
-// Fails closed: outside local dev, a request is served only with a valid Access token.
-async function isAuthorized(request: Request, env: Env): Promise<boolean> {
-  const teamDomain = env.ACCESS_TEAM_DOMAIN?.trim();
-  const audience = env.ACCESS_AUD?.trim();
-  if (!teamDomain || !audience) return LOCAL_HOSTS.has(new URL(request.url).hostname);
-  const token =
-    request.headers.get("cf-access-jwt-assertion") ??
-    request.headers.get("cookie")?.match(/(?:^|;\s*)CF_Authorization=([^;]+)/)?.[1];
-  if (!token) return false;
-  try {
-    return await verifyAccessJwt(token, teamDomain, audience);
-  } catch {
-    return false;
-  }
-}
-
 export default {
   async fetch(request, env): Promise<Response> {
-    if (!(await isAuthorized(request, env))) {
-      return new Response("Forbidden", { status: 403 });
-    }
-
     const url = new URL(request.url);
     if (url.pathname === "/api/place") {
       if (request.method !== "POST") return json({ error: "Method not allowed" }, 405);

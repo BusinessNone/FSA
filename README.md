@@ -11,40 +11,27 @@ npm install
 npm run dev        # validates content, then serves app + Worker at http://localhost:5173
 ```
 
-The dev server runs the real Worker (via `@cloudflare/vite-plugin`), so placement works exactly as it does in production. Access checks are skipped locally.
-
+The dev server runs the real Worker (via `@cloudflare/vite-plugin`), so placement works exactly as it does in production. 
 Other scripts:
 
 | Command | What it does |
 |---|---|
 | `npm run validate` | Validates every `/content` file against its zod schema, checks cross-references, and confirms the rubric still places Meridian in the deep cell. |
 | `npm run build` | Validate, typecheck, build, then fail if any scoring data appears in `dist/client`. |
-| `npm test` | Unit tests for placement, the API response shape, the Access guard, and the Markdown export. |
-| `npm run deploy` | Build, configure Cloudflare Access, then deploy. See below. |
+| `npm test` | Unit tests for placement, the API response shape, and the Markdown export. |
+| `npm run deploy` | Build, then deploy with Wrangler. See below. |
 
 ## Deploy
 
-The repo is connected to the `fsa` Worker in Cloudflare Workers Builds, and `wrangler.toml` already names that Worker, its account, and the `fsa.benvollmer.net` custom domain. `wrangler deploy` runs `npm run build` first (via `[build]` in `wrangler.toml`), so Workers Builds works with no build command set in the dashboard.
+The repo is connected to the `fsa` Worker in Cloudflare Workers Builds. Every push to `main` builds and deploys to the public custom domain `fsa.benvollmer.net`, with no login in front of it. `wrangler.toml` names the Worker, its account, and the route. `wrangler deploy` runs `npm run build` first (via `[build]`), so Workers Builds needs no build command in the dashboard.
 
-**The Worker fails closed.** Until the Access team domain and audience are set, it answers every non-local request with 403, so the demo is never served unprotected. Set them once with the command below; `keep_vars` preserves them across later Workers Builds deploys.
-
-One-time setup:
-
-1. Make sure Cloudflare Zero Trust has a team set up on the account.
-2. Create `.env.deploy.local` (git-ignored):
-
-   ```bash
-   CLOUDFLARE_API_TOKEN=...   # Workers Scripts Edit, Workers Custom Domains Edit, Access: Apps and Policies Edit
-   ACCESS_ALLOWED_EMAILS=ben@example.com,jesse@example.com,brian@example.com
-   ```
-
-Then deploy from your machine:
+To deploy by hand instead (after `npx wrangler login`):
 
 ```bash
 npm run deploy
 ```
 
-`scripts/deploy.ts` creates or updates the Access application for the route **before** uploading the Worker, then runs `wrangler deploy` with the Access team domain and audience injected, so the Worker also verifies the Access token on every request (static assets included, via `run_worker_first`). Re-run it whenever the allowlist changes. If you manage Access yourself, set `SKIP_ACCESS_SETUP=1` and add `ACCESS_TEAM_DOMAIN` and `ACCESS_AUD` as variables on the Worker in the dashboard.
+The page carries a `noindex` tag, so search engines are asked not to list it, but anyone with the link can open it.
 
 ## Edit the content
 

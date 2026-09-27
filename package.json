@@ -9,7 +9,7 @@
     "typecheck": "tsc -b",
     "build": "npm run validate && tsc -b && vite build && tsx scripts/check-no-rubric.ts",
     "preview": "npm run build && vite preview",
-    "deploy": "npm run build && tsx scripts/deploy.ts",
+    "deploy": "npm run build && wrangler deploy",
     "test": "vitest run",
     "check": "npm run build && npm test"
   },
