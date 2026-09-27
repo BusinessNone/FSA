@@ -1,6 +1,7 @@
 // Defense in depth behind Cloudflare Access. Access blocks unauthenticated requests at the
 // edge; this check makes sure a request that reached the Worker carries a valid Access token
-// for this application. Skipped when ACCESS_TEAM_DOMAIN or ACCESS_AUD is unset (local dev).
+// for this application. When ACCESS_TEAM_DOMAIN or ACCESS_AUD is unset, worker/index.ts only
+// serves local requests.
 
 interface Jwk extends JsonWebKey {
   kid: string;

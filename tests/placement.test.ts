@@ -36,7 +36,7 @@ describe("placement", () => {
 describe("POST /api/place", () => {
   const env = { ASSETS: { fetch: async () => new Response("asset") } } as never;
   const call = (body: unknown) =>
-    worker.fetch!(new Request("https://x/api/place", { method: "POST", body: JSON.stringify(body) }) as never, env, {} as never);
+    worker.fetch!(new Request("http://localhost/api/place", { method: "POST", body: JSON.stringify(body) }) as never, env, {} as never);
 
   it("responds with only { cell, rationale }", async () => {
     const res = await call({ answers: meridian });
@@ -48,6 +48,11 @@ describe("POST /api/place", () => {
     const res = await call({ answers: { "job-mix": "mostly-remote" } });
     expect(res.status).toBe(400);
     expect(await res.json()).toEqual({ error: "Incomplete or unknown answers" });
+  });
+
+  it("refuses non-local requests when Access is not configured", async () => {
+    const res = await worker.fetch!(new Request("https://fsa.benvollmer.net/") as never, env, {} as never);
+    expect(res.status).toBe(403);
   });
 
   it("refuses requests without an Access token when Access is configured", async () => {

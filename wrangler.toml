@@ -1,14 +1,12 @@
 # Cloudflare Worker config for the Service Blueprint Demo.
-# Replace the account_id placeholder below before running `npm run deploy`.
+# `name` must match the Worker connected to this repo in Workers Builds.
 
-name = "service-blueprint-demo"
+name = "fsa"
 main = "./worker/index.ts"
 compatibility_date = "2026-09-01"
+account_id = "4f71b3830952e38da14477525d6a6989"
 
-# PLACEHOLDER: your Cloudflare account ID (Dashboard > Workers & Pages > Account ID).
-account_id = "REPLACE_WITH_CLOUDFLARE_ACCOUNT_ID"
-
-# The hostname the demo is served on (custom domain on the benvollmer.net zone).
+# Served on a custom domain in the benvollmer.net zone.
 routes = [
   { pattern = "fsa.benvollmer.net", custom_domain = true }
 ]
@@ -16,15 +14,20 @@ routes = [
 workers_dev = false
 preview_urls = false
 
+# ACCESS_TEAM_DOMAIN and ACCESS_AUD are deliberately not declared here. `npm run deploy`
+# sets them from the Access application it provisions; keep_vars preserves them (and any set
+# in the dashboard) across later deploys, including Workers Builds. Without them the Worker
+# refuses every non-local request, so the demo is never served unprotected.
+keep_vars = true
+
+# Lets a bare `wrangler deploy` (e.g. Workers Builds with no build command) build first.
+[build]
+command = "npm run build"
+
 [assets]
+directory = "./dist/client"
 binding = "ASSETS"
 not_found_handling = "single-page-application"
 # The Worker runs first so it can verify the Cloudflare Access token on every request,
 # including static assets, before anything is served.
 run_worker_first = true
-
-[vars]
-# `npm run deploy` fills both at deploy time from the Access application it provisions.
-# Left empty here so local dev (`npm run dev`) skips the Worker's own token check.
-ACCESS_TEAM_DOMAIN = ""
-ACCESS_AUD = ""
