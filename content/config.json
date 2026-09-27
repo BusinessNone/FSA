@@ -22,7 +22,7 @@
     },
     {
       "term": "Grid",
-      "meaning": "The TOM for field service: service motivation (rows) by service scenario (columns)."
+      "meaning": "The TOM for field service: business model (rows) by service scenario (columns)."
     },
     {
       "term": "Cell",

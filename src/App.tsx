@@ -126,13 +126,13 @@ export default function App() {
           <div className="mx-auto max-w-[110rem] px-4 py-6 sm:px-8 lg:px-10">
             <header className="mb-6 flex flex-wrap items-start justify-between gap-4">
               <div>
-                <div className="text-sm font-semibold text-accent">
+                <div className="text-sm font-semibold text-accent-text">
                   Beat {current.beat} · {current.beatLabel}
                 </div>
                 <h1 className="mt-1 text-3xl font-semibold tracking-tight">{current.title}</h1>
                 {mode === "guided" && <p className="mt-2 max-w-3xl text-muted">{current.talkTrack}</p>}
                 {cueText && (
-                  <p key={cueText} className="mt-3 flex max-w-3xl items-center gap-2 text-sm font-medium text-accent animate-rise" role="status">
+                  <p key={cueText} className="mt-3 flex max-w-3xl items-center gap-2 text-sm font-medium text-accent-text animate-rise" role="status">
                     <span className="cue-dot" aria-hidden />
                     {cueText}
                   </p>

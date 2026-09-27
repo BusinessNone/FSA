@@ -61,8 +61,12 @@ export const clientSchema = z.object({
 // ---------- grid.json ----------
 export const depthSchema = z.enum(["deep", "contrast", "coming"]);
 
+export const coherenceSchema = z.enum(["aligned", "transitional", "incoherent", "trap"]);
+
 export const gridSchema = z.object({
   title: text,
+  thesis: text,
+  howToRead: text,
   rowAxisLabel: text,
   columnAxisLabel: text,
   columnSource: text,
@@ -75,10 +79,13 @@ export const gridSchema = z.object({
         column: id,
         depth: depthSchema,
         oneLiner: text,
+        coherence: coherenceSchema,
+        signal: text,
       }),
     )
     .length(12),
   comingLabel: text,
+  coherence: z.array(z.object({ id: coherenceSchema, label: text, description: text })).length(4),
 });
 
 // ---------- intake.json ----------
@@ -239,6 +246,7 @@ export type CueId = z.infer<typeof cueIdSchema>;
 export type Client = z.infer<typeof clientSchema>;
 export type Grid = z.infer<typeof gridSchema>;
 export type Depth = z.infer<typeof depthSchema>;
+export type Coherence = z.infer<typeof coherenceSchema>;
 export type Intake = z.infer<typeof intakeSchema>;
 export type DeepBlueprint = z.infer<typeof deepBlueprintSchema>;
 export type ContrastBlueprint = z.infer<typeof contrastBlueprintSchema>;

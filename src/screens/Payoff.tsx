@@ -11,7 +11,7 @@ export function Payoff({ guided }: { guided?: boolean }) {
         <div className="grid grid-cols-[minmax(9rem,0.7fr)_minmax(0,1fr)_minmax(0,1fr)] text-sm">
           <div className="border-b border-line bg-surface-2 p-3" />
           <div className="border-b border-l border-line bg-surface-2 p-3 font-semibold">{payoff.sides.blankPage}</div>
-          <div className="border-b border-l border-line bg-accent-soft p-3 font-semibold text-accent">{payoff.sides.blueprint}</div>
+          <div className="border-b border-l border-line bg-accent-soft p-3 font-semibold text-accent-text">{payoff.sides.blueprint}</div>
           {payoff.comparison.map((row, i) => (
             <div key={row.id} className="contents">
               <div className={cx("p-3 font-semibold", i > 0 && "border-t border-line")}>{row.dimension}</div>
@@ -36,7 +36,7 @@ export function Payoff({ guided }: { guided?: boolean }) {
           <div className="mt-4 grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-x-4 gap-y-1.5">
             <div className="mb-1 text-center text-sm font-semibold">{payoff.sides.blankPage}</div>
             <div />
-            <div className="mb-1 text-center text-sm font-semibold text-accent">{payoff.sides.blueprint}</div>
+            <div className="mb-1 text-center text-sm font-semibold text-accent-text">{payoff.sides.blueprint}</div>
             {payoff.staffing.levels.map((l) => (
               <div key={l.role} className="contents">
                 <div className="flex justify-center">

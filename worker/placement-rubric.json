@@ -208,7 +208,7 @@
     "row": {
       "cost-center": "Service is run to protect the product sale and is measured on cost and satisfaction rather than margin, which places Meridian in the Cost Center row.",
       "profit-center": "Service leadership runs service as its own margin line, priced separately from the equipment on customer-specific price lists and owned by a leader with a P&L, which places Meridian in the Profit Center row.",
-      "servitization": "Service is sold as a promised result such as uptime or output rather than as labor and parts, which places Meridian in the Servitization row."
+      "servitization": "Service is sold as a promised result such as uptime or output rather than as labor and parts, which places Meridian in the Servitizing row."
     },
     "column": {
       "appointment": "Most work is booked visits to a location, and a good visit means arriving in the window, which is the Appointment-Centric scenario.",
@@ -223,7 +223,7 @@
     "labels": {
       "cost-center": "Cost Center",
       "profit-center": "Profit Center",
-      "servitization": "Servitization",
+      "servitization": "Servitizing",
       "appointment": "Appointment-Centric",
       "equipment": "Equipment-Centric",
       "knowledge": "Knowledge-Centric",

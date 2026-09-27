@@ -188,7 +188,7 @@ function Questions() {
               aria-current={area === a.id}
               className={cx(
                 "flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-sm font-medium transition",
-                area === a.id ? "bg-accent-soft text-accent" : "text-muted hover:bg-surface-2 hover:text-ink",
+                area === a.id ? "bg-accent-soft text-accent-text" : "text-muted hover:bg-surface-2 hover:text-ink",
               )}
             >
               {a.label}
@@ -230,7 +230,7 @@ function Questions() {
                       <p className="mt-1 text-sm">{q.whyWeAsk}</p>
                     </div>
                     <div>
-                      <div className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-accent">
+                      <div className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-accent-text">
                         <Icon name="check" className="h-3.5 w-3.5" /> What a good answer sounds like
                       </div>
                       <p className="mt-1 text-sm">{q.goodAnswer}</p>
@@ -280,7 +280,7 @@ function Process() {
               </div>
               <p className="mt-2 flex-1 text-sm text-muted">{s.description}</p>
               <div className="mt-3 flex gap-1.5 border-t border-line pt-2.5 text-xs">
-                <Icon name="shield" className="mt-px h-3.5 w-3.5 shrink-0 text-accent" />
+                <Icon name="shield" className="mt-px h-3.5 w-3.5 shrink-0 text-accent-text" />
                 <span>{s.guardrail}</span>
               </div>
             </Card>
