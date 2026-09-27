@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { config, deviations } from "../content";
 import type { DeviationRequest } from "../../shared/schema";
 import { Button, Card, cx, Icon, IllustrativeTag, SectionLabel, Tag } from "../components/ui";
+import { cueRing, useCues } from "../lib/cues";
 
 export type Decision = "accept" | "hold" | "defer";
 export type Decisions = Record<string, Decision | undefined>;
@@ -40,6 +41,10 @@ interface Props {
 
 export function Deviation({ decisions, setDecisions, guided }: Props) {
   const t = tally(decisions);
+  const { active, complete } = useCues();
+  useEffect(() => {
+    if (t.allAccepted) complete("accept-all");
+  }, [t.allAccepted, complete]);
   const decide = (id: string, d: Decision) => setDecisions({ ...decisions, [id]: decisions[id] === d ? undefined : d });
   const acceptAll = () => setDecisions(Object.fromEntries(deviations.requests.map((r) => [r.id, "accept" as Decision])));
 
@@ -48,7 +53,9 @@ export function Deviation({ decisions, setDecisions, guided }: Props) {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <p className="max-w-3xl text-muted">{guided ? "" : deviations.intro}</p>
         <div className="flex gap-2">
-          <Button onClick={acceptAll}>Accept all</Button>
+          <Button className={cueRing(active, "accept-all")} onClick={acceptAll}>
+            Accept all
+          </Button>
           <Button variant="ghost" onClick={() => setDecisions({})}>
             <Icon name="reset" /> Reset
           </Button>
@@ -64,8 +71,8 @@ export function Deviation({ decisions, setDecisions, guided }: Props) {
       )}
 
       <div className="grid gap-4 lg:grid-cols-2 2xl:grid-cols-3">
-        {deviations.requests.map((r) => (
-          <RequestCard key={r.id} r={r} decision={decisions[r.id]} onDecide={(d) => decide(r.id, d)} />
+        {deviations.requests.map((r, i) => (
+          <RequestCard key={r.id} r={r} decision={decisions[r.id]} onDecide={(d) => decide(r.id, d)} cueTarget={i === 0} />
         ))}
       </div>
     </div>
@@ -114,8 +121,19 @@ function Stat({ label, value, emphasize }: { label: string; value: number; empha
   );
 }
 
-function RequestCard({ r, decision, onDecide }: { r: DeviationRequest; decision?: Decision; onDecide: (d: Decision) => void }) {
+function RequestCard({
+  r,
+  decision,
+  onDecide,
+  cueTarget,
+}: {
+  r: DeviationRequest;
+  decision?: Decision;
+  onDecide: (d: Decision) => void;
+  cueTarget?: boolean;
+}) {
   const [askWhy, setAskWhy] = useState(false);
+  const { active, complete } = useCues();
   const effortTone = r.effort === "High" ? "danger" : r.effort === "Med" ? "warn" : "neutral";
   return (
     <Card
@@ -157,7 +175,15 @@ function RequestCard({ r, decision, onDecide }: { r: DeviationRequest; decision?
       </dl>
 
       <div className="mt-4">
-        <button type="button" onClick={() => setAskWhy((a) => !a)} aria-expanded={askWhy} className="inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:underline">
+        <button
+          type="button"
+          onClick={() => {
+            setAskWhy((a) => !a);
+            complete("ask-why");
+          }}
+          aria-expanded={askWhy}
+          className={cx("inline-flex items-center gap-1.5 rounded-md px-1 -mx-1 text-sm font-medium text-accent hover:underline", cueTarget && cueRing(active, "ask-why"))}
+        >
           <Icon name="question" /> Ask why
         </button>
         {askWhy && (

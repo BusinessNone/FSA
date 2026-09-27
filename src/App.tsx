@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { client, config, deepCell, meridianAnswers, cellById, contrastCell } from "./content";
 import { usePlacement } from "./lib/usePlacement";
 import { useTheme } from "./lib/theme";
@@ -7,9 +7,20 @@ import { Blueprint, type BlueprintTab } from "./screens/Blueprint";
 import { Deviation, type Decisions } from "./screens/Deviation";
 import { Payoff } from "./screens/Payoff";
 import { Button, cx, FictionalBadge, Icon } from "./components/ui";
+import { CueContext, cueRing, type ActiveCue } from "./lib/cues";
+import type { CueId } from "../shared/schema";
 
 type Mode = "guided" | "explore";
 const tour = config.tour;
+
+const HINTS_KEY = "sbd-hints";
+function readHints(): boolean {
+  try {
+    return localStorage.getItem(HINTS_KEY) !== "off";
+  } catch {
+    return true;
+  }
+}
 
 function stepFromHash(): number {
   const id = location.hash.replace(/^#\/?/, "");
@@ -24,6 +35,9 @@ export default function App() {
   const [decisions, setDecisions] = useState<Decisions>({});
   const placement = usePlacement(answers);
   const { theme, toggle } = useTheme();
+  const [hints, setHints] = useState(readHints);
+  const [cuesDone, setCuesDone] = useState<ReadonlySet<CueId>>(new Set());
+  const [dwellStep, setDwellStep] = useState(-1);
 
   const current = tour[step];
   const setStep = useCallback((i: number) => {
@@ -57,13 +71,55 @@ export default function App() {
     return () => window.removeEventListener("hashchange", onHash);
   }, []);
 
+  useEffect(() => {
+    try {
+      localStorage.setItem(HINTS_KEY, hints ? "on" : "off");
+    } catch {
+      /* storage unavailable; the setting still applies for this session */
+    }
+  }, [hints]);
+
+  const complete = useCallback(
+    (id: CueId) => setCuesDone((done) => (done.has(id) ? done : new Set(done).add(id))),
+    [],
+  );
+
+  // Placement cues complete when the placement itself lands in the cell the cue points to.
+  const placedDepth = placement.result ? cellById(placement.result.cell)?.depth : undefined;
+  useEffect(() => {
+    if (placedDepth === "contrast") complete("try-contrast");
+    if (placedDepth === "coming") complete("try-coming");
+    if (placedDepth === "deep" && cuesDone.has("try-contrast") && cuesDone.has("try-coming")) complete("return-meridian");
+  }, [placedDepth, cuesDone, complete]);
+
+  // Steps without cues suggest Next after a short pause, so the hint never rushes the room.
+  useEffect(() => {
+    const t = setTimeout(() => setDwellStep(step), 4000);
+    return () => clearTimeout(t);
+  }, [step]);
+
+  const nextCue = current.cues?.find((c) => !cuesDone.has(c.id));
+  const hasNext = step < tour.length - 1;
+  const active: ActiveCue =
+    mode !== "guided" || !hints ? null : nextCue ? nextCue.id : hasNext && (current.cues?.length || dwellStep === step) ? "next" : null;
+  const cueText = !active ? undefined : nextCue ? nextCue.text : config.continueCue.replace("{title}", tour[step + 1].title);
+  const cues = useMemo(() => ({ active, complete }), [active, complete]);
+
+  const restart = () => {
+    setAnswers({ ...meridianAnswers });
+    setDecisions({});
+    setCuesDone(new Set());
+    setStep(0);
+  };
+
   const goTab = (tab: BlueprintTab) => setStep(tour.findIndex((t) => t.blueprintTab === tab));
   const placedCell = placement.result ? cellById(placement.result.cell) : undefined;
   const offDeep = current.beat > 1 && placedCell && placedCell.id !== deepCell.id;
 
   return (
+    <CueContext.Provider value={cues}>
     <div className="flex h-dvh flex-col bg-bg text-ink lg:flex-row">
-      <Sidebar mode={mode} setMode={setMode} step={step} setStep={setStep} theme={theme} toggleTheme={toggle} />
+      <Sidebar mode={mode} setMode={setMode} step={step} setStep={setStep} theme={theme} toggleTheme={toggle} hints={hints} setHints={setHints} />
 
       <div className="flex min-h-0 min-w-0 flex-1 flex-col">
         <main id="main" className="min-h-0 flex-1 overflow-y-auto">
@@ -75,6 +131,12 @@ export default function App() {
                 </div>
                 <h1 className="mt-1 text-3xl font-semibold tracking-tight">{current.title}</h1>
                 {mode === "guided" && <p className="mt-2 max-w-3xl text-muted">{current.talkTrack}</p>}
+                {cueText && (
+                  <p key={cueText} className="mt-3 flex max-w-3xl items-center gap-2 text-sm font-medium text-accent animate-rise" role="status">
+                    <span className="cue-dot" aria-hidden />
+                    {cueText}
+                  </p>
+                )}
               </div>
               <FictionalBadge />
             </header>
@@ -102,9 +164,10 @@ export default function App() {
           </div>
         </main>
 
-        {mode === "guided" && <TourBar step={step} setStep={setStep} />}
+        {mode === "guided" && <TourBar step={step} setStep={setStep} onRestart={restart} active={active} />}
       </div>
     </div>
+    </CueContext.Provider>
   );
 }
 
@@ -115,6 +178,8 @@ function Sidebar({
   setStep,
   theme,
   toggleTheme,
+  hints,
+  setHints,
 }: {
   mode: Mode;
   setMode: (m: Mode) => void;
@@ -122,6 +187,8 @@ function Sidebar({
   setStep: (i: number) => void;
   theme: string;
   toggleTheme: () => void;
+  hints: boolean;
+  setHints: (h: boolean) => void;
 }) {
   const beats = [1, 2, 3, 4].map((b) => ({ beat: b, steps: tour.map((t, i) => ({ ...t, index: i })).filter((t) => t.beat === b) }));
   const current = tour[step];
@@ -208,7 +275,15 @@ function Sidebar({
             );
           })}
         </ol>
-        {!explore && <p className="mt-3 px-2 text-xs text-side-muted">Use Next, Back, or the arrow keys. Switch to Explore to jump anywhere.</p>}
+        {!explore && (
+          <>
+            <p className="mt-3 px-2 text-xs text-side-muted">Use Next, Back, or the arrow keys. Switch to Explore to jump anywhere.</p>
+            <label className="mt-3 flex cursor-pointer items-center justify-between gap-2 rounded-lg px-2 py-1.5 text-xs text-side-muted hover:text-side-ink">
+              <span>Hints for the next move</span>
+              <input type="checkbox" checked={hints} onChange={(e) => setHints(e.target.checked)} className="h-4 w-4 cursor-pointer accent-[var(--accent)]" />
+            </label>
+          </>
+        )}
       </nav>
 
       <div className="space-y-3 px-5 py-3 lg:border-t lg:border-side-line lg:py-4">
@@ -246,7 +321,7 @@ function Sidebar({
   );
 }
 
-function TourBar({ step, setStep }: { step: number; setStep: (i: number) => void }) {
+function TourBar({ step, setStep, onRestart, active }: { step: number; setStep: (i: number) => void; onRestart: () => void; active: ActiveCue }) {
   const last = step === tour.length - 1;
   return (
     <div className="border-t border-line bg-surface px-4 py-3 sm:px-8">
@@ -266,7 +341,7 @@ function TourBar({ step, setStep }: { step: number; setStep: (i: number) => void
         </ol>
         <div className="flex-1 md:hidden" />
         <span className="hidden shrink-0 text-xs text-muted 2xl:inline">← → keys</span>
-        <Button variant="primary" className="shrink-0" onClick={() => setStep(last ? 0 : step + 1)}>
+        <Button variant="primary" className={cx("shrink-0", cueRing(active, "next"))} onClick={() => (last ? onRestart() : setStep(step + 1))}>
           {last ? "Restart tour" : "Next"} <Icon name={last ? "reset" : "arrowRight"} />
         </Button>
       </div>

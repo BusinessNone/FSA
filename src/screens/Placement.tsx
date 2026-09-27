@@ -3,6 +3,13 @@ import { cellById, client, contrastBlueprint, grid, intake, meridianAnswers, typ
 import type { PlacementState } from "../lib/usePlacement";
 import { GridView } from "../components/GridView";
 import { Button, Card, cx, Icon, SectionLabel, Tag } from "../components/ui";
+import { cueRing, useCues, type ActiveCue } from "../lib/cues";
+
+const presetCue: Record<string, ActiveCue> = {
+  "visit-operator": "try-contrast",
+  "uptime-operator": "try-coming",
+  meridian: "return-meridian",
+};
 
 interface Props {
   answers: Record<string, string>;
@@ -13,6 +20,7 @@ interface Props {
 
 export function Placement({ answers, setAnswers, placement, onOpenBlueprint }: Props) {
   const placed = placement.result ? cellById(placement.result.cell) : undefined;
+  const { active: cue } = useCues();
   const [inspectId, setInspectId] = useState<string | undefined>();
   const edited = intake.questions.some((q) => answers[q.id] !== meridianAnswers[q.id]);
 
@@ -47,6 +55,7 @@ export function Placement({ answers, setAnswers, placement, onOpenBlueprint }: P
                 aria-pressed={active}
                 className={cx(
                   "rounded-full border px-3 py-1 text-xs font-medium transition",
+                  cueRing(cue, presetCue[p.id] ?? null),
                   active ? "border-accent bg-accent-soft text-accent" : "border-line text-muted hover:text-ink",
                 )}
               >
@@ -124,6 +133,7 @@ function PlacementResult({
   onOpenBlueprint: () => void;
   onRestore: () => void;
 }) {
+  const { active } = useCues();
   return (
     <Card className="animate-rise p-5" key={cell.id}>
       <div className="flex flex-wrap items-center gap-2">
@@ -137,7 +147,7 @@ function PlacementResult({
 
       {cell.depth === "deep" && (
         <div className="mt-4">
-          <Button variant="primary" onClick={onOpenBlueprint}>
+          <Button variant="primary" className={cueRing(active, "next")} onClick={onOpenBlueprint}>
             Open the blueprint <Icon name="arrowRight" />
           </Button>
         </div>
@@ -174,7 +184,7 @@ function PlacementResult({
               </ul>
             </div>
           </div>
-          <Button onClick={onRestore}>
+          <Button className={cueRing(active, "return-meridian")} onClick={onRestore}>
             <Icon name="reset" /> Return to {client.shortName}'s answers
           </Button>
         </div>
@@ -186,7 +196,7 @@ function PlacementResult({
           <p className="text-sm">
             The blueprint for this cell is in development. The method is the same; the pre-built content is not ready yet.
           </p>
-          <Button onClick={onRestore}>
+          <Button className={cueRing(active, "return-meridian")} onClick={onRestore}>
             <Icon name="reset" /> Return to {client.shortName}'s cell
           </Button>
         </div>

@@ -3,6 +3,7 @@ import { client, contrastBlueprint, contrastCell, deepBlueprint as bp, deepCell 
 import type { Kpi } from "../../shared/schema";
 import { copyText, downloadText, questionSetMarkdown } from "../lib/markdown";
 import { Button, Card, cx, Icon, SectionLabel, Tag } from "../components/ui";
+import { cueRing, useCues } from "../lib/cues";
 
 export type BlueprintTab = "jobs" | "kpis" | "questions" | "process";
 
@@ -100,11 +101,19 @@ function Direction({ kpi }: { kpi: Kpi }) {
 
 function Kpis() {
   const [compare, setCompare] = useState(false);
+  const { active, complete } = useCues();
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <p className="text-sm text-muted">Definitions and direction only. No benchmark values.</p>
-        <Button onClick={() => setCompare((c) => !c)} aria-pressed={compare}>
+        <Button
+          className={cueRing(active, "compare-kpis")}
+          onClick={() => {
+            setCompare((c) => !c);
+            complete("compare-kpis");
+          }}
+          aria-pressed={compare}
+        >
           {compare ? "Hide comparison" : `Compare with ${contrastCell.title}`}
         </Button>
       </div>
@@ -155,12 +164,14 @@ function Kpis() {
 function Questions() {
   const [area, setArea] = useState<string>(bp.processAreas[0].id);
   const [copied, setCopied] = useState<"idle" | "ok" | "fail">("idle");
+  const { active, complete } = useCues();
   const markdown = () => questionSetMarkdown(bp, client.name, client.fictionalBadge.toLowerCase());
   const numbered = bp.processAreas.flatMap((a) => bp.questionSet.filter((q) => q.area === a.id));
   const shown = area === "all" ? numbered : numbered.filter((q) => q.area === area);
 
   const copy = async () => {
     setCopied((await copyText(markdown())) ? "ok" : "fail");
+    complete("copy-questions");
     setTimeout(() => setCopied("idle"), 2200);
   };
 
@@ -186,11 +197,17 @@ function Questions() {
           );
         })}
         <div className="space-y-2 pt-4">
-          <Button variant="primary" onClick={copy} className="w-full">
+          <Button variant="primary" onClick={copy} className={cx("w-full", cueRing(active, "copy-questions"))}>
             <Icon name={copied === "ok" ? "check" : "copy"} />
             {copied === "ok" ? "Copied as Markdown" : copied === "fail" ? "Copy blocked; use Download" : "Copy question set"}
           </Button>
-          <Button onClick={() => downloadText("question-set-profit-center-equipment.md", markdown())} className="w-full">
+          <Button
+            onClick={() => {
+              downloadText("question-set-profit-center-equipment.md", markdown());
+              complete("copy-questions");
+            }}
+            className="w-full"
+          >
             <Icon name="download" /> Download .md
           </Button>
         </div>

@@ -6,16 +6,40 @@
   "crim": {
     "acronym": "CRIM",
     "expansion": "Customization, Report, Integration, or Modification",
-    "types": ["Customization", "Report", "Integration", "Modification"]
+    "types": [
+      "Customization",
+      "Report",
+      "Integration",
+      "Modification"
+    ]
   },
   "illustrativeLabel": "Illustrative",
+  "continueCue": "Continue to {title}",
   "vocabulary": [
-    { "term": "Total Operating Model (TOM)", "meaning": "RSM's full map of the kinds of service operator a client could be. Rendered as the grid." },
-    { "term": "Grid", "meaning": "The TOM for field service: service motivation (rows) by service scenario (columns)." },
-    { "term": "Cell", "meaning": "One position on the grid." },
-    { "term": "Blueprint", "meaning": "Everything a cell pre-loads: jobs to be done, KPIs, question set, baseline process. The TOM is the map; the blueprint is the pin." },
-    { "term": "Off-blueprint", "meaning": "A client request that leaves the cell's baseline." },
-    { "term": "CRIM", "meaning": "Customization, Report, Integration, or Modification created by an off-blueprint request." }
+    {
+      "term": "Total Operating Model (TOM)",
+      "meaning": "RSM's full map of the kinds of service operator a client could be. Rendered as the grid."
+    },
+    {
+      "term": "Grid",
+      "meaning": "The TOM for field service: service motivation (rows) by service scenario (columns)."
+    },
+    {
+      "term": "Cell",
+      "meaning": "One position on the grid."
+    },
+    {
+      "term": "Blueprint",
+      "meaning": "Everything a cell pre-loads: jobs to be done, KPIs, question set, baseline process. The TOM is the map; the blueprint is the pin."
+    },
+    {
+      "term": "Off-blueprint",
+      "meaning": "A client request that leaves the cell's baseline."
+    },
+    {
+      "term": "CRIM",
+      "meaning": "Customization, Report, Integration, or Modification created by an off-blueprint request."
+    }
   ],
   "tour": [
     {
@@ -23,7 +47,21 @@
       "beat": 1,
       "beatLabel": "Placement",
       "title": "Place the client on the grid",
-      "talkTrack": "A short set of plain-language questions puts Meridian in one cell. The scoring stays behind the curtain; the associate only sees the answers and the result."
+      "talkTrack": "A short set of plain-language questions puts Meridian in one cell. The scoring stays behind the curtain; the associate only sees the answers and the result.",
+      "cues": [
+        {
+          "id": "try-contrast",
+          "text": "Try a different client: click “A booked-visit operator run to cost” and watch the placement move."
+        },
+        {
+          "id": "try-coming",
+          "text": "Now try “An operator selling uptime”, a cell whose blueprint is still in development."
+        },
+        {
+          "id": "return-meridian",
+          "text": "Return to Meridian's answers to pick the walkthrough back up."
+        }
+      ]
     },
     {
       "id": "jobs",
@@ -39,7 +77,13 @@
       "beatLabel": "Blueprint",
       "title": "KPIs for this cell",
       "talkTrack": "The measures that matter for a profit-center equipment operator. A cost-center appointment operator gets a different list.",
-      "blueprintTab": "kpis"
+      "blueprintTab": "kpis",
+      "cues": [
+        {
+          "id": "compare-kpis",
+          "text": "Compare these KPIs with the contrast cell's list."
+        }
+      ]
     },
     {
       "id": "questions",
@@ -47,7 +91,13 @@
       "beatLabel": "Blueprint",
       "title": "The question set",
       "talkTrack": "This is what an associate takes onto the call: the question, why we ask it, what good sounds like, and what a red flag signals.",
-      "blueprintTab": "questions"
+      "blueprintTab": "questions",
+      "cues": [
+        {
+          "id": "copy-questions",
+          "text": "Copy the question set. It pastes as a ready-to-use call script."
+        }
+      ]
     },
     {
       "id": "process",
@@ -62,7 +112,17 @@
       "beat": 3,
       "beatLabel": "Deviation",
       "title": "Make the cost of deviation visible",
-      "talkTrack": "Each off-blueprint request shows what it creates and what it costs to carry. Accept them all and watch the risk climb."
+      "talkTrack": "Each off-blueprint request shows what it creates and what it costs to carry. Accept them all and watch the risk climb.",
+      "cues": [
+        {
+          "id": "ask-why",
+          "text": "Open “Ask why” on the first request to see how to test it with the client."
+        },
+        {
+          "id": "accept-all",
+          "text": "Now accept every request and watch the delivery risk."
+        }
+      ]
     },
     {
       "id": "payoff",

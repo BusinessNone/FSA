@@ -126,3 +126,37 @@ body {
     animation: none;
   }
 }
+
+/* Guided Tour cues: a soft pulsing ring on the suggested control, and a matching dot. */
+@keyframes cue-pulse {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent);
+  }
+  70% {
+    box-shadow: 0 0 0 8px color-mix(in srgb, var(--accent) 0%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 0%, transparent);
+  }
+}
+.cue-ring {
+  animation: cue-pulse 1.8s ease-out infinite;
+}
+.cue-dot {
+  flex-shrink: 0;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+  background: var(--accent);
+  animation: cue-pulse 1.8s ease-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .cue-ring,
+  .cue-dot {
+    animation: none;
+  }
+  .cue-ring {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+}
