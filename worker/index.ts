@@ -14,10 +14,13 @@ const json = (body: unknown, status = 200) =>
     headers: { "content-type": "application/json", "cache-control": "no-store" },
   });
 
+const LOCAL_HOSTS = new Set(["localhost", "127.0.0.1", "[::1]"]);
+
+// Fails closed: outside local dev, a request is served only with a valid Access token.
 async function isAuthorized(request: Request, env: Env): Promise<boolean> {
   const teamDomain = env.ACCESS_TEAM_DOMAIN?.trim();
   const audience = env.ACCESS_AUD?.trim();
-  if (!teamDomain || !audience) return true;
+  if (!teamDomain || !audience) return LOCAL_HOSTS.has(new URL(request.url).hostname);
   const token =
     request.headers.get("cf-access-jwt-assertion") ??
     request.headers.get("cookie")?.match(/(?:^|;\s*)CF_Authorization=([^;]+)/)?.[1];
