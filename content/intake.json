@@ -5,6 +5,24 @@
     "prompt": "Where does the client say they are?",
     "help": "Capture the client's own description first, before the behavior questions.",
     "rowPrompt": "Business model they describe",
+    "rowHelp": "Read the three statements under each model and pick the set that sounds most like the client.",
+    "selfRating": [
+      {
+        "id": "goals",
+        "short": "Goals",
+        "prompt": "How does your service organization support your business goals?"
+      },
+      {
+        "id": "success",
+        "short": "Success",
+        "prompt": "How do you define success for your service organization?"
+      },
+      {
+        "id": "pricing",
+        "short": "Pricing",
+        "prompt": "How does your organization price the service you deliver?"
+      }
+    ],
     "columnPrompt": "Service scenario they describe",
     "meridian": {
       "row": "servitization",

@@ -42,8 +42,8 @@ All words on screen live in `/content/*.json`. Edit the JSON, run `npm run valid
 |---|---|
 | `config.json` | App title, the CRIM expansion string, vocabulary, and the Guided Tour steps with their talk tracks. |
 | `client.json` | Meridian's fictional profile and pain points. |
-| `grid.json` | Rows, columns, and all 12 cells with depth (`deep`, `contrast`, `coming`) and one-line descriptions. |
-| `intake.json` | Placement questions, Meridian's default answers, and the answer presets. |
+| `grid.json` | Rows (each with its conversation guide: audience, self-rating statements, cares, challenges, conversation starters), columns, all 12 cells with depth and coherence, and the linked sources for both axes. |
+| `intake.json` | The claim step (including the three self-rating questions), placement questions, Meridian's default answers, and the answer presets. |
 | `blueprint-profit-center__equipment.json` | The deep cell: tiered jobs, KPIs, question set, baseline process. |
 | `blueprint-cost-center__appointment.json` | The contrast cell: summary, focus jobs, KPIs. |
 | `deviations.json` | Off-blueprint requests, CRIM types, effort, ongoing burden, "Ask why" prompts, risk levels, punchline. |
@@ -56,6 +56,13 @@ The schemas are in `shared/schema.ts`. Validation fails with a precise path if s
 The scoring weights and rationale sentences are in `worker/placement-rubric.json`, imported only by the Worker. Never import anything from `/worker` in `/src`; the build fails if rubric text or weight data reaches `dist/client`. The API returns `{ cell, rationale }` and nothing else.
 
 If you add an intake question or option, add its signals to the rubric too; `npm run validate` flags any gap and re-checks that Meridian's defaults still land the deep cell, and that the presets land the contrast cell and a coming cell.
+
+## Sources
+
+The grid's two axes are cited on screen under the grid (**Sources**) and in each conversation guide. The references live in `grid.json` under `sources`.
+
+- **Rows (business model):** TSIA's research on field services moving from cost center to profit engine ([Field Services as a Profit Engine](https://www.tsia.com/blog/field-services-profit-engine-healthcare-industrial-technology), 2026; [State of Field Services 2025](https://www.tsia.com/blog/state-of-field-services-2025)) and the four supplier levels in TSIA's *B4B* ([summary](https://www.tsia.com/blog/success-in-the-new-b4b-era)). The self-rating statements and conversation guides are adapted from Microsoft Dynamics 365 Field Service sales guidance ([cost vs. profit center](https://www.microsoft.com/en-us/dynamics-365/blog/business-leader/2016/04/13/defining-39-profit-center-39-and-39-cost-center-39-for-field-service-management/), [servitization](https://www.microsoft.com/en-us/dynamics-365/blog/business-leader/2018/04/26/building-a-servitization-mindset-to-transform-your-field-service-organization/)). The coherence band is RSM analysis.
+- **Columns (service scenario):** Gartner, [The Future of Field Service Management](https://www.gartner.com/en/documents/3975996) (2019), for the four scenarios. Gartner, [Critical Capabilities for Field Service Management](https://www.gartner.com/en/documents/4007807) (November 2021), scored three of them as use cases (appointment-, equipment-, outcome-centric); knowledge-centric is from the 2019 scenarios only. Gartner retired the Magic Quadrant and Critical Capabilities for this market after 2022; current coverage is the [Market Guide](https://www.gartner.com/en/documents/6311147) (2025). Gartner documents need a subscription.
 
 ## Customer records
 
@@ -78,6 +85,7 @@ The view opens with a fictional sample set across every industry and maturity le
 
 - **Guided Tour** (default): Next and Back, or the arrow keys (PageUp and PageDown work for clickers). Each step shows a one-line talk track.
 - **Explore**: jump anywhere from the sidebar; click grid cells to inspect them.
+- **Conversation guide**: click a row label on the grid (or the link on the claim step) for that business model's likely audience, what it cares about, its challenges, and questions to open with.
 - **Hints** (Guided Tour only): one suggested next move at a time, shown under the step title with a soft pulse on the control. Cue text lives in `content/config.json` (`tour[].cues`, `continueCue`). Turn them off with **Hints for the next move** in the sidebar; the setting is remembered per browser. **Restart tour** resets answers, decisions, and hints.
 - The theme toggle is at the bottom of the sidebar. Tuned for 1920×1080 on a shared screen and readable on a laptop.
 - Deep links: `/#/placement`, `/#/jobs`, `/#/kpis`, `/#/questions`, `/#/process`, `/#/deviation`, `/#/payoff`.

@@ -1,6 +1,8 @@
 import { cells, grid, type GridCell } from "../content";
 import type { Coherence } from "../../shared/schema";
+import { useState } from "react";
 import { cx, Icon } from "./ui";
+import { ModelGuide, Sources } from "./ModelGuide";
 
 const depthLabel: Record<GridCell["depth"], string> = {
   deep: "Blueprint built",
@@ -29,6 +31,7 @@ interface Props {
 
 // The TOM grid: business model (rows, top to bottom) by service scenario (columns).
 export function GridView({ placedId, claimedId, selectedId, onSelect, pending }: Props) {
+  const [guideRow, setGuideRow] = useState<string>();
   return (
     <div className="w-full">
       {/* On narrow screens the grid scrolls inside its card instead of widening the page. */}
@@ -41,7 +44,7 @@ export function GridView({ placedId, claimedId, selectedId, onSelect, pending }:
           </div>
         ))}
         {grid.rows.map((r) => (
-          <Row key={r.id} rowId={r.id} label={r.label} description={r.description} placedId={placedId} claimedId={claimedId} selectedId={selectedId} onSelect={onSelect} pending={pending} />
+          <Row key={r.id} rowId={r.id} label={r.label} description={r.description} onOpenGuide={() => setGuideRow(r.id)} placedId={placedId} claimedId={claimedId} selectedId={selectedId} onSelect={onSelect} pending={pending} />
         ))}
         <div />
         <div className="col-span-4 pt-1 text-center text-[0.7rem] font-semibold uppercase tracking-wider text-muted">{grid.columnAxisLabel} →</div>
@@ -68,16 +71,27 @@ export function GridView({ placedId, claimedId, selectedId, onSelect, pending }:
           where its answers place it
         </span>
       </div>
+      <div className="mt-3 grid gap-2 sm:grid-cols-2">
+        <Sources set={grid.sources.rows} label={`Sources: ${grid.rowAxisLabel.toLowerCase()} (rows)`} />
+        <Sources set={grid.sources.columns} label="Sources: service scenarios (columns)" />
+      </div>
+      {guideRow && <ModelGuide rowId={guideRow} onClose={() => setGuideRow(undefined)} onSwitch={setGuideRow} />}
     </div>
   );
 }
 
-function Row({ rowId, label, description, placedId, claimedId, selectedId, onSelect, pending }: Props & { rowId: string; label: string; description: string }) {
+function Row({ rowId, label, description, onOpenGuide, placedId, claimedId, selectedId, onSelect, pending }: Props & { rowId: string; label: string; description: string; onOpenGuide: () => void }) {
   return (
     <>
-      <div className="flex items-center rounded-lg bg-grid-head px-2 text-sm font-semibold leading-tight text-grid-head-ink" title={description}>
+      <button
+        type="button"
+        onClick={onOpenGuide}
+        title={`${description} Open the conversation guide.`}
+        className="group flex flex-col items-start justify-center rounded-lg bg-grid-head px-2 text-left text-sm font-semibold leading-tight text-grid-head-ink hover:opacity-90"
+      >
         {label}
-      </div>
+        <span className="mt-1 text-[0.65rem] font-medium opacity-75 group-hover:underline">Conversation guide</span>
+      </button>
       {cells
         .filter((c) => c.row === rowId)
         .map((c) => {

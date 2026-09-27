@@ -4,6 +4,7 @@ import { cellId } from "../../shared/api";
 import type { CellRef } from "../lib/record";
 import type { PlacementState } from "../lib/usePlacement";
 import { GridView } from "../components/GridView";
+import { ModelGuide, modelsByMaturity } from "../components/ModelGuide";
 import { Button, Card, cx, Icon, SectionLabel, Tag } from "../components/ui";
 import { cueRing, useCues, type ActiveCue } from "../lib/cues";
 
@@ -272,6 +273,7 @@ function IntakeStepper({
 }) {
   const [index, setIndex] = useState(0);
   const [showFacts, setShowFacts] = useState(false);
+  const [guideRow, setGuideRow] = useState<string>();
   const total = intake.questions.length + 1;
   const last = index === total - 1;
   const q = index > 0 ? intake.questions[index - 1] : undefined;
@@ -311,20 +313,55 @@ function IntakeStepper({
           <div className="text-xs font-semibold uppercase tracking-wide text-accent-text">{claim.short}</div>
           <p className="mt-1 text-lg font-bold leading-snug text-ink">{claim.prompt}</p>
           <p className="mt-1 text-sm text-muted">{claim.help}</p>
-          <div className="mt-3 grid gap-4 sm:grid-cols-2">
-            <div role="radiogroup" aria-label={claim.rowPrompt}>
-              <div className="mb-1 px-1.5 text-xs font-semibold text-muted">{claim.rowPrompt}</div>
-              {grid.rows.map((r) =>
-                choice("claim-row", r.id, claimed.row === r.id, r.label, () => setClaimed({ ...claimed, row: r.id }), r.id === claim.meridian.row && claimed.row !== r.id ? `${client.shortName}` : undefined),
-              )}
+          <div role="radiogroup" aria-label={claim.rowPrompt} className="mt-3">
+            <div className="flex flex-wrap items-baseline justify-between gap-2 px-1.5">
+              <span className="text-xs font-semibold text-muted">{claim.rowPrompt}</span>
+              <button type="button" onClick={() => setGuideRow(claimed.row)} className="text-xs font-semibold text-accent-text hover:underline">
+                Conversation guide: {grid.rows.find((r) => r.id === claimed.row)?.profile.model}
+              </button>
             </div>
-            <div role="radiogroup" aria-label={claim.columnPrompt}>
-              <div className="mb-1 px-1.5 text-xs font-semibold text-muted">{claim.columnPrompt}</div>
+            <p className="mt-0.5 px-1.5 text-xs text-muted">{claim.rowHelp}</p>
+            <div className="mt-2 space-y-2">
+              {modelsByMaturity.map((r) => {
+                const checked = claimed.row === r.id;
+                return (
+                  <label
+                    key={r.id}
+                    className={cx(
+                      "flex cursor-pointer items-start gap-2.5 rounded-lg border px-3 py-2.5 transition",
+                      checked ? "border-accent bg-accent-soft" : "border-line hover:bg-surface-2",
+                    )}
+                  >
+                    <input type="radio" name="claim-row" value={r.id} checked={checked} onChange={() => setClaimed({ ...claimed, row: r.id })} className="mt-1 h-4 w-4 shrink-0 accent-[var(--accent-text)]" />
+                    <span className="min-w-0 flex-1">
+                      <span className="flex flex-wrap items-baseline justify-between gap-2">
+                        <span className={cx("text-sm text-ink", checked ? "font-bold" : "font-semibold")}>
+                          {r.profile.model} <span className="font-normal text-muted">({r.label})</span>
+                        </span>
+                        {r.id === claim.meridian.row && !checked && <span className="text-[0.7rem] text-muted">{client.shortName}</span>}
+                      </span>
+                      <span className="mt-1 grid gap-1 text-xs leading-snug text-ink sm:grid-cols-3 sm:gap-3">
+                        {claim.selfRating.map((q) => (
+                          <span key={q.id} title={q.prompt}>
+                            <span className="block text-[0.65rem] font-semibold uppercase tracking-wide text-muted">{q.short}</span>“{r.profile.says[q.id]}”
+                          </span>
+                        ))}
+                      </span>
+                    </span>
+                  </label>
+                );
+              })}
+            </div>
+          </div>
+          <div role="radiogroup" aria-label={claim.columnPrompt} className="mt-4">
+            <div className="mb-1 px-1.5 text-xs font-semibold text-muted">{claim.columnPrompt}</div>
+            <div className="grid sm:grid-cols-2">
               {grid.columns.map((c) =>
                 choice("claim-col", c.id, claimed.column === c.id, c.label, () => setClaimed({ ...claimed, column: c.id }), c.id === claim.meridian.column && claimed.column !== c.id ? `${client.shortName}` : undefined),
               )}
             </div>
           </div>
+          {guideRow && <ModelGuide rowId={guideRow} onClose={() => setGuideRow(undefined)} onSwitch={setGuideRow} />}
         </fieldset>
       ) : (
         <fieldset key={q.id} className="animate-rise px-4 pb-4 pt-4">

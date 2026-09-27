@@ -75,14 +75,32 @@ export const depthSchema = z.enum(["deep", "contrast", "coming"]);
 
 export const coherenceSchema = z.enum(["aligned", "transitional", "incoherent", "trap"]);
 
+const sourceSetSchema = z.object({
+  summary: text,
+  refs: z
+    .array(z.object({ publisher: text, title: text, year: text.optional(), url: z.string().url().optional(), note: text.optional() }))
+    .min(1),
+});
+
+// How a customer in each business model talks, what it cares about, and how to open the conversation.
+const modelProfileSchema = z.object({
+  model: text,
+  headline: text,
+  audience: text,
+  says: z.record(z.string(), text),
+  caresAbout: z.array(z.object({ lead: text, items: z.array(text).min(1) })).min(1),
+  challenges: z.array(text).min(1),
+  starters: z.array(text).min(1),
+});
+
 export const gridSchema = z.object({
   title: text,
   thesis: text,
   howToRead: text,
   rowAxisLabel: text,
   columnAxisLabel: text,
-  columnSource: text,
-  rows: z.array(z.object({ id, label: text, description: text })).length(3),
+  sources: z.object({ rows: sourceSetSchema, columns: sourceSetSchema }),
+  rows: z.array(z.object({ id, label: text, description: text, profile: modelProfileSchema })).length(3),
   columns: z.array(z.object({ id, label: text, description: text })).length(4),
   cells: z
     .array(
@@ -110,6 +128,8 @@ export const intakeSchema = z.object({
     prompt: text,
     help: text,
     rowPrompt: text,
+    rowHelp: text,
+    selfRating: z.array(z.object({ id, short: text, prompt: text })).length(3),
     columnPrompt: text,
     meridian: cellRefSchema,
     gapText: text,
